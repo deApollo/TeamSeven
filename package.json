@@ -1,0 +1,15 @@
+{
+  "name": "TeamSeven",
+  "version": "1.0.0",
+  "description": "TeamSeven Semester project",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deApollo/TeamSeven.git"
+  },
+  "homepage": "https://github.com/Hitman666/MEAN_MVC_2ndTutorial",
+  "dependencies": {
+    "ejs": "latest",
+    "express": "latest"
+  }
+}
