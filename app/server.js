@@ -12,7 +12,8 @@ db.connect('mongodb://localhost:' + mongoPort + '/' + dbname, function(err) {
   } else {
     app.listen(serverPort, function() {
       console.log('Listening on port 1337...');
-	  module.exports = app;
-    })
+    });
   }
-})
+});
+
+module.exports = app;
