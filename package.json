@@ -10,6 +10,7 @@
   "homepage": "https://github.com/deApollo/TeamSeven",
   "dependencies": {
     "ejs": "latest",
-    "express": "latest"
+    "express": "latest",
+	"mongodb" : "latest"
   }
 }
