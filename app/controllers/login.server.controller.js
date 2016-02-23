@@ -47,13 +47,8 @@ exports.login = function(req, res) {
 };
 
 exports.logout = function(req, res){
-    if(req.session.loggedin = true){
-        req.session.username = "";
-        req.session.loggedin = false;
-        req.session.message = "You have been logged out!";
-    } else {
-        req.session.message = "You aren't even logged in!";
-    }
+    req.session.loggedin = false;
+    req.session.message = "You have been logged out!";
     res.redirect("/");
 };
 

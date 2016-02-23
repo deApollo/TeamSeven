@@ -9,7 +9,7 @@ module.exports = function(app) {
     app.get('/data/getActivities',login.validate, data.getActivities);
 
     app.post('/login', login.login);
-    app.post('/logout', login.logout);
+    app.post('/logout', login.validate, login.logout);
     app.post('/register', login.register);
     app.post('/data/addActivity', login.validate, data.addActivity);
     app.post('/data/removeActivity', login.validate, data.removeActivity);
