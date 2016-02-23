@@ -20,11 +20,11 @@
         </form>
         <h2><%= message %></h2>
         <% if(loggedin) { %>
+            <a href="upage">User Area</a>
             <form method="post" action="logout">
                 <input type="submit" value="Logout">
             </form>
         <% } %>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script src="js/client.js"></script>
     </body>
 </html>
