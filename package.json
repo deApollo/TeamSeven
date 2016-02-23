@@ -11,6 +11,9 @@
   "dependencies": {
     "ejs": "latest",
     "express": "latest",
-	"mongodb" : "latest"
+	"mongodb" : "latest",
+    "body-parser" : "latest",
+    "password-hash" : "latest",
+    "express-session" : "latest"
   }
 }
