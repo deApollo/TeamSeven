@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+    </head>
+    <body>
+        <h1><%= title %></h1>
+        <h2>Welcome <%=username%>, to the page only users get to see!</h2>
+        <div>
+            <p>Feel free to add your activities below!</p>
+            <form id="inputForm">
+                <input type="text" id="activityName" name="activityName" placeholder="Activity Name">
+                <input type="text" id="activityDesc" name="activityDesc" placeholder="Activity Description">
+                <input type="button" value="Add" id="addActButton">
+            </form>
+        </div>
+        <div>
+            <ul id="activityList">
+            </ul>
+        </div>
+        <div id="output"></div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="js/client.js"></script>
+    </body>
+</html>
