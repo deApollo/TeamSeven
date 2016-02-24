@@ -1,4 +1,4 @@
-var serverPort = 1337;
+var serverPort = 80;
 var mongoPort = 27017;
 var dbname = 'teamseven';
 var express = require('../config/express');
