@@ -11,12 +11,12 @@ exports.register = function(req, res) {
             req.session.loggedin = true;
             req.session.username = user;
             req.session.message = "Successfully registered user: " + user;
-            res.redirect("/t7/upage");
+            res.redirect("/upage");
         }
         else {
             req.session.loggedin = false;
             req.session.message = "A user with username: " + user + " already exists!";
-            res.redirect("/t7");
+            res.redirect("/");
         }
     });
 };
@@ -32,16 +32,16 @@ exports.login = function(req, res) {
                 req.session.loggedin = true;
                 req.session.username = user;
                 req.session.message = "Welcome " + user + ", you have been logged in!";
-                res.redirect("/t7/upage");
+                res.redirect("/upage");
             }else{
                 req.session.loggedin = false;
                 req.session.message = "Invalid username or password!";
-                res.redirect("/t7");
+                res.redirect("/");
             }
         } else {
             req.session.loggedin = false;
             req.session.message = "Invalid username or password!";
-            res.redirect("/t7");
+            res.redirect("/");
         }
     });
 };
@@ -49,13 +49,13 @@ exports.login = function(req, res) {
 exports.logout = function(req, res){
     req.session.loggedin = false;
     req.session.message = "You have been logged out!";
-    res.redirect("/t7");
+    res.redirect("/");
 };
 
 exports.validate = function(req,res,next){
     if(req.session.loggedin){
         next();
     } else {
-        res.redirect("/t7");
+        res.redirect("/");
     }
 };
