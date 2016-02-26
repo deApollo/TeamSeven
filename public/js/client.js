@@ -23,7 +23,7 @@ function addActivity(){
     var actDesc = $("#activityDesc").val();
     $.ajax({
         dataType: "json",
-        url: "data/addActivity",
+        url: "t7/data/addActivity",
         method: 'POST',
         data: {activityName : actName, activityDesc : actDesc},
         success: addActivityCallback
@@ -40,7 +40,7 @@ function removeActivity(){
     var actName = elementUID.split("-",3)[2];
     $.ajax({
         dataType: "json",
-        url: "data/removeActivity",
+        url: "t7/data/removeActivity",
         method: 'POST',
         data: {activityName : actName},
         success: removeActivityCallback

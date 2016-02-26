@@ -1,4 +1,4 @@
-var serverPort = 80;
+var serverPort = 1337;
 var mongoPort = 27017;
 var dbname = 'teamseven';
 var express = require('../config/express');
@@ -11,7 +11,7 @@ db.connect('mongodb://localhost:' + mongoPort + '/' + dbname, function(err) {
     process.exit(1);
   } else {
     app.listen(serverPort, function() {
-      console.log('Listening on port 1337...');
+      console.log('Listening on port ' + serverPort);
     });
   }
 });
