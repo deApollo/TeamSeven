@@ -245,3 +245,9 @@ ul.alert-dropdown {
 .panel-yellow > a:hover {
     color: #df8a13;
 }
+
+/* Preferences Page */
+
+.preferences-form {
+    margin-top: 20px;
+}
