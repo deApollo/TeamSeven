@@ -1,34 +1,110 @@
-var db = require('../db');
+var mongoose = require('mongoose');
 
-exports.getActivities = function(req, res){
-    var cursor = db.get().collection('activities').find({"username" : req.session.username},{"_id" : 0});
-    cursor.toArray(function(err,items){
-        res.json(items);
-    });
-};
-
-exports.addActivity = function(req, res) {
-    var actName = req.body.activityName;
-    var actDesc = req.body.activityDesc;
-
-    var cursor = db.get().collection('activities').find({"actname" : actName, "username" : req.session.username});
-    cursor.toArray(function(err,items){
-        if(items.length == 0){
-            db.get().collection('activities').insertOne({
-                "username" : req.session.username,
-                "actname" : actName,
-                "actdesc" : actDesc
+exports.getExercises = function(req, res) {
+    Exercise.find({
+        username: req.session.username
+    }, function(err, obj) {
+        if (err) {
+            res.json({
+                responseCode: 0,
+                data: err
             });
-            res.json({responseCode : 1, responseDescription: "Activity added"});
         } else {
-            res.json({responseCode : 0, responseDescription: "Activity already exists"});
+            res.json({
+                responseCode: 1,
+                data: obj
+            });
         }
     });
 };
 
-exports.removeActivity = function(req, res){
-    var actName = req.body.activityName;
-    db.get().collection('activities').deleteOne({"actname" : actName, "username" : req.session.username}, function(error, result){
-        res.json({responseCode : 1, numberDeleted : result.deletedCount});
+exports.addExercise = function(req, res) {
+    var exName = req.body.exerciseName;
+    var exDesc = req.body.exerciseDesc;
+    Exercise.create({
+        username: req.session.username,
+        excercisename: exName,
+        excercisedesc: exDesc
+    }, function(err, obj) {
+        if (err) {
+            res.json({
+                responseCode: 0,
+                error: err
+            });
+        } else {
+            res.json({
+                responseCode: 1
+            });
+        }
+    });
+};
+
+exports.removeExercise = function(req, res) {
+    var exName = req.body.exerciseName;
+    Exercise.remove({
+        username: req.session.username,
+        exercisename: exName
+    }, function(err) {
+        if (err) {
+            res.json({
+                responseCode: 0,
+                error: err
+            });
+        } else {
+            res.json({
+                responseCode: 1
+            });
+        }
+    });
+}
+
+exports.getWorkouts = function(req, res) {
+    Workout.find({
+        username: req.session.username
+    }, function(err, obj) {
+        if (err) {
+            res.json({
+                responseCode: 0,
+                data: err
+            });
+        } else {
+            res.json({
+                responseCode: 1,
+                data: obj
+            });
+        }
+    });
+};
+
+exports.addWorkout = function(req, res) {
+    var wName = req.body.workoutName;
+    var wDesc = req.body.activityDesc;
+    var wExer = req.body.exercises;
+
+    var workout = new Workout();
+    workout.workoutname = wName;
+    workout.workoutdesc = wDesc;
+    workout.username = req.session.username;
+    for (var i = 0; i < wExer.length; i++) {
+        workout.exercises.push(wExer[i]);
+    }
+};
+
+exports.removeWorkout = function(req, res) {
+    var wName = req.body.workoutName;
+    Workout.remove({
+        username: req.session.username,
+        workoutname: wName
+    }, function(err) {
+        if (err) {
+            res.json({
+                responseCode: 0,
+                error: err
+            });
+        } else {
+            res.json({
+                responseCode: 1
+            });
+        }
     });
 };

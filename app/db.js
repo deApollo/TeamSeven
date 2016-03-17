@@ -1,29 +1,37 @@
-var MongoClient = require('mongodb').MongoClient;
+// Bring Mongoose into the app
+var mongoose = require('mongoose');
 
-var state = {
-  db : null
-}
+// Build the connection string
+var mongoPort = 27017;
+var dbname = 'teamseven';
+var dbURI = 'mongodb://localhost:' + mongoPort + '/' + dbname;
 
-exports.connect = function(url, done) {
-  if (state.db) return done();
+// Create the database connection
+mongoose.connect(dbURI);
 
-  MongoClient.connect(url, function(err, db) {
-    if (err) return done(err);
-    state.db = db;
-    done();
-  })
-}
+// CONNECTION EVENTS
+// When successfully connected
+mongoose.connection.on('connected', function() {
+    console.log('Mongoose default connection open to ' + dbURI);
+});
 
-exports.get = function() {
-  return state.db;
-}
+// If the connection throws an error
+mongoose.connection.on('error', function(err) {
+    console.log('Mongoose connection error: ' + err);
+});
 
-exports.close = function(done) {
-  if (state.db) {
-    state.db.close(function(err, result) {
-      state.db = null;
-      state.mode = null;
-      done(err);
+// When the connection is disconnected
+mongoose.connection.on('disconnected', function() {
+    console.log('Mongoose connection disconnected');
+});
+
+// If the Node process ends, close the Mongoose connection
+process.on('SIGINT', function() {
+    mongoose.connection.close(function() {
+        console.log('Mongoose default connection disconnected through app termination');
+        process.exit(0);
     });
-  }
-}
+});
+
+
+require('./schema.js');
