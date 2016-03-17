@@ -6,11 +6,14 @@ module.exports = function(app) {
 
     app.get('/', index.render);
     app.get('/upage', login.validate, upage.render);
-    app.get('/data/getActivities',login.validate, data.getActivities);
+    app.get('/data/getExercises',login.validate, data.getExercises);
+    app.get('/data/getWorkouts',login.validate, data.getWorkouts);
 
     app.post('/login', login.login);
     app.post('/logout', login.validate, login.logout);
     app.post('/register', login.register);
-    app.post('/data/addActivity', login.validate, data.addActivity);
-    app.post('/data/removeActivity', login.validate, data.removeActivity);
+    app.post('/data/addWorkout', login.validate, data.addWorkout);
+    app.post('/data/removeWorkout', login.validate, data.removeWorkout);
+    app.post('/data/addExercise', login.validate, data.addExercise);
+    app.post('/data/removeExercise', login.validate, data.removeExercise);
 };
