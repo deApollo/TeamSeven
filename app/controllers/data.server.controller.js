@@ -88,6 +88,7 @@ exports.addWorkout = function(req, res) {
     for (var i = 0; i < wExer.length; i++) {
         workout.exercises.push(wExer[i]);
     }
+    workout.save();
 };
 
 exports.removeWorkout = function(req, res) {
