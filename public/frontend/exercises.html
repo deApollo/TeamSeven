@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<head>
+	<!-- Angular -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
+
+
+    <!-- Sockets -->
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+
+    <!-- jQuery Version 1.11.1 -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+
+ 
+	
+</head>
+
+<body ng-app="Workout", ng-controller="WorkoutCtrl">
+
+    <div class="container">
+        
+        <div class="panel panel-defualt" ng-repeat="workout in workouts">
+            <div class="panel-heading">
+                <input type="text" ng-model="workout.name" placeholder="Workout Name">
+            </div>
+
+            <div class="panel-body">
+                <div ng-repeat="excercise in workout.exercises">
+                    <div class="row" ng-if="excercise.type == 'Interval' "> 
+                        <div class="col-lg-2">
+                            Name
+                            <input type="text" ng-model="excercise.name" placeholder="Excercise Name">
+                        </div>
+                        
+                        <div class="col-lg-2">
+                            Sets
+                            <input type="text" ng-model="excercise.data.sets" placeholder="Sets">
+                        </div>
+
+                        <div class="col-lg-2">
+                            Time
+                            <input type="text" ng-model="excercise.data.time" placeholder="Time">
+                        </div>
+                    </div>
+
+
+                    <div class="row" ng-if="excercise.type == 'Reps' "> 
+                        <div class="col-lg-2">
+                            Name
+                            <input type="text" ng-model="excercise.name" placeholder="Excercise Name">
+                        </div>
+                        <div class="col-lg-2">
+                            Sets
+                            <input type="text" ng-model="excercise.data.sets" placeholder="Sets">
+                        </div>
+                        <div class="col-lg-2">
+                            Reps
+                            <input type="text" ng-model="excercise.data.reps" placeholder="Reps">
+                        </div>
+                        <div class="col-lg-2">
+                            Weight
+                            <input type="text" ng-model="excercise.data.weight" placeholder="Weight">
+                        </div>
+                        
+                    </div>
+                    <br>
+                </div> 
+
+                <br>
+                <select ng-model="selectionType">
+                    <option>Interval</option>
+                    <option>Reps</option>
+                </select>
+                <button ng-click="newExcercise(workout, selectionType)">New Excercise</button>
+            </div>
+
+            
+        </div>
+
+
+        <button ng-click="newWorkout()">New Workout</button>
+
+    </div>
+
+    
+	<script> 
+		var app = angular.module("Workout", ["ngRoute"]);
+		//var socket = io.connect("http://localhost:3000/");
+
+
+
+        // The Workout Object: A container for Excercise Objects
+        function Workout($rootScope){
+            this.$rootScope = $rootScope;
+            this.name = "";
+            this.exercises = [];
+        }
+
+        Workout.prototype.getName = function (){
+            return this.name;
+        };
+
+
+        app.factory("Workout", function($injector){
+            return function(name, exercises) {return $injector.instantiate(Workout, {name: name, exercises: exercises}); };
+        });
+
+
+
+
+
+
+        // The Excercise Object: Has a name and a type. Depending on the type, the data will change.
+        function Excercise($rootScope, type){
+            this.$rootScope = $rootScope;
+            this.name = "";
+            this.type = type;
+            this.data = {};
+            if (type == "Interval"){
+                this.data = new IntervalData;
+            }
+            if (type == "Reps"){
+                this.data = new RepData;
+            }
+        }
+
+        app.factory("Excercise", function($injector){
+            return function(name, type, data) {return $injector.instantiate(Excercise, {name: name, type: type, data: data}); };
+        });
+
+
+
+
+        // Various Excercise data types 
+        function IntervalData($rootScope){
+            this.$rootScope = $rootScope;
+            this.sets = 0;
+            this.time = 0;
+        }
+        app.factory("IntervalData", function($injector){
+            return function(sets, time) {return $injector.instantiate(Excercise, {sets: sets, time: time}); };
+        });
+
+        function RepData($rootScope){
+            this.$rootScope = $rootScope;
+            this.sets = 0;
+            this.reps = 0;
+            this.weight = 0;
+        }
+        app.factory("RepData", function($injector){
+            return function(sets, reps, weight) {return $injector.instantiate(Excercise, {sets: sets, reps: reps, weight: weight}); };
+        });
+
+
+
+
+
+		app.controller("WorkoutCtrl", function($scope, $http, Workout){
+            $scope.workouts = [];
+
+
+            $scope.newWorkout = function (){
+                $scope.workouts.push(new Workout(this) );
+                console.log($scope.workouts);
+            }
+
+            $scope.newExcercise = function (workout, type){
+                if (type == "Interval" || type == "Reps"){
+                     workout.exercises.push(new Excercise(this, type) );
+                }
+                console.log(type, workout.exercises);
+            }
+
+			
+		});
+
+	</script>
+</body>
