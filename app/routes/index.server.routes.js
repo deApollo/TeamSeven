@@ -1,11 +1,13 @@
 module.exports = function(app) {
     var index = require('../controllers/index.server.controller');
+    var preferences = require('../controllers/preferences.server.controller');
+    var changepassword = require('../controllers/index.server.controller');
     var login = require('../controllers/login.server.controller');
-    var upage = require("../controllers/upage.server.controller");
     var data = require("../controllers/data.server.controller");
 
     app.get('/', index.render);
-    app.get('/upage', login.validate, upage.render);
+    app.get('/preferences', login.validate, preferences.render);
+    app.get('/changepassword', login.validate, changepassword.render);
     app.get('/data/getExercises',login.validate, data.getExercises);
     app.get('/data/getWorkouts',login.validate, data.getWorkouts);
 
