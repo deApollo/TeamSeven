@@ -30,7 +30,7 @@ var WorkoutSchema = new mongoose.Schema({
     workoutname : String,
     workoutdesc : String,
     username : String,
-    exercises : [{type : Schema.Types.ObjectId, ref : "Exercise"}]
+    exercises : [{type : mongoose.Schema.Types.ObjectId, ref : "Exercise"}]
 });
 
 WorkoutSchema.index({workoutname : 1, username : 1}, {unique : true});
