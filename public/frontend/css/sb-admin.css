@@ -154,6 +154,26 @@ ul.alert-dropdown {
     color: #fff;
 }
 
+.user-side-image {
+    margin-top: 40px;
+    margin-left: 60px;
+    margin-bottom: 20px;
+}
+
+.user-side-image img {
+    width: 100px;
+    height: 100px;
+}
+
+.user-side-name h3 {
+    color: white;
+    margin-left: 49px;
+}
+
+.user-side-name {
+    margin-bottom: 15px;
+}
+
 /* Flot Chart Containers */
 
 .flot-chart {
@@ -224,4 +244,14 @@ ul.alert-dropdown {
 
 .panel-yellow > a:hover {
     color: #df8a13;
+}
+
+/* Preferences Page */
+
+.preferences-form {
+    margin-top: 20px;
+}
+
+.radio {
+    margin-top: -30px;
 }
