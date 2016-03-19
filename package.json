@@ -14,6 +14,7 @@
     "body-parser" : "latest",
     "password-hash" : "latest",
     "express-session" : "latest",
-    "mongoose" : "latest"
+    "mongoose" : "latest",
+    "connect-mongo" : "latest"
   }
 }
