@@ -6,60 +6,50 @@ $(function() {
     Morris.Area({
         element: 'morris-area-chart',
         data: [{
-            period: '2010 Q1',
-            iphone: 2666,
-            ipad: null,
-            itouch: 2647
+            date: '2016-01-15',
+            squat: 4750,
+            bench: 3450
         }, {
-            period: '2010 Q2',
-            iphone: 2778,
-            ipad: 2294,
-            itouch: 2441
+            date: '2016-01-16',
+            squat: 5000,
+            bench: 3500
         }, {
-            period: '2010 Q3',
-            iphone: 4912,
-            ipad: 1969,
-            itouch: 2501
+            date: '2016-01-17',
+            squat: 5150,
+            bench: 3500
         }, {
-            period: '2010 Q4',
-            iphone: 3767,
-            ipad: 3597,
-            itouch: 5689
+            date: '2016-01-18',
+            squat: 5300,
+            bench: 3550
         }, {
-            period: '2011 Q1',
-            iphone: 6810,
-            ipad: 1914,
-            itouch: 2293
+            date: '2016-01-19',
+            squat: 5400,
+            bench: 3650
         }, {
-            period: '2011 Q2',
-            iphone: 5670,
-            ipad: 4293,
-            itouch: 1881
+            date: '2016-01-20',
+            squat: 5400,
+            bench: 3750
         }, {
-            period: '2011 Q3',
-            iphone: 4820,
-            ipad: 3795,
-            itouch: 1588
+            date: '2016-01-21',
+            squat: 5550,
+            bench: 3750
         }, {
-            period: '2011 Q4',
-            iphone: 15073,
-            ipad: 5967,
-            itouch: 5175
+            date: '2016-01-22',
+            squat: 5600,
+            bench: 3800
         }, {
-            period: '2012 Q1',
-            iphone: 10687,
-            ipad: 4460,
-            itouch: 2028
+            date: '2016-01-23',
+            squat: 5650,
+            bench: 3750
         }, {
-            period: '2012 Q2',
-            iphone: 8432,
-            ipad: 5713,
-            itouch: 1791
+            date: '2016-01-24',
+            squat: 5700,
+            bench: 3800
         }],
-        xkey: 'period',
-        ykeys: ['iphone', 'ipad', 'itouch'],
-        labels: ['iPhone', 'iPad', 'iPod Touch'],
-        pointSize: 2,
+        xkey: 'date',
+        ykeys: ['squat', 'bench'],
+        labels: ['Squats', 'Bench Press'],
+        pointSize: 3,
         hideHover: 'auto',
         resize: true
     });
@@ -196,22 +186,22 @@ $(function() {
     Morris.Bar({
         element: 'morris-bar-chart',
         data: [{
-            device: 'iPhone',
+            device: 'squat',
             geekbench: 136
         }, {
-            device: 'iPhone 3G',
+            device: 'squat 3G',
             geekbench: 137
         }, {
-            device: 'iPhone 3GS',
+            device: 'squat 3GS',
             geekbench: 275
         }, {
-            device: 'iPhone 4',
+            device: 'squat 4',
             geekbench: 380
         }, {
-            device: 'iPhone 4S',
+            device: 'squat 4S',
             geekbench: 655
         }, {
-            device: 'iPhone 5',
+            device: 'squat 5',
             geekbench: 1571
         }],
         xkey: 'device',
