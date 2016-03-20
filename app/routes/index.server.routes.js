@@ -18,4 +18,5 @@ module.exports = function(app) {
     app.post('/data/removeWorkout', login.validate, data.removeWorkout);
     app.post('/data/addExercise', login.validate, data.addExercise);
     app.post('/data/removeExercise', login.validate, data.removeExercise);
+    app.post('/data/changeUserPreference', login.validate, data.changeUserPreference);
 };
