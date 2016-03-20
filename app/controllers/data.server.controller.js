@@ -1,5 +1,25 @@
 var mongoose = require('mongoose');
 
+exports.changeUserPreference = function(req, res){
+    var field = req.body.field;
+    var value = req.body.value;
+    var update = {};
+    update[field] =  value;
+    User.update({username : req.session.username}, { $set: update},function(err, raw){
+        if(err) {
+            res.json({
+                responseCode: 0,
+                data: err
+            });
+        } else {
+            res.json({
+                responseCode: 1,
+                data: raw
+            });
+        }
+    });
+}
+
 exports.getExercises = function(req, res) {
     Exercise.find({
         username: req.session.username
