@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 exports.getUserPreferences = function(req, res){
-    User.findOne({username : req.session.username}, , function(err, obj){
+    User.findOne({username : req.session.username}, 'firstname lastname profile_url preferred_units email', function(err, obj){
         if(err) {
             res.json({
                 responseCode: 0,
