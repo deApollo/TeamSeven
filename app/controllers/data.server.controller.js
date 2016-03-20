@@ -1,11 +1,7 @@
 var mongoose = require('mongoose');
 
-exports.changeUserPreference = function(req, res){
-    var field = req.body.field;
-    var value = req.body.value;
-    var update = {};
-    update[field] =  value;
-    User.update({username : req.session.username}, { $set: update},function(err, raw){
+exports.getUserPreferences = function(req, res){
+    User.findOne({username : req.session.username}, , function(err, obj){
         if(err) {
             res.json({
                 responseCode: 0,
@@ -14,7 +10,27 @@ exports.changeUserPreference = function(req, res){
         } else {
             res.json({
                 responseCode: 1,
-                data: raw
+                data: obj
+            });
+        }
+    });
+}
+
+exports.changeUserPreference = function(req, res){
+    var field = req.body.field;
+    var value = req.body.value;
+    var update = {};
+    update[field] =  value;
+    User.update({username : req.session.username}, { $set: update},function(err, obj){
+        if(err) {
+            res.json({
+                responseCode: 0,
+                data: err
+            });
+        } else {
+            res.json({
+                responseCode: 1,
+                data: obj
             });
         }
     });
