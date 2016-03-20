@@ -17,7 +17,7 @@ module.exports = function() {
       secret: 'We so sneaky',
       resave: false,
       saveUninitialized: true,
-      store: new MongoStore({ mongooseConnection: mongoose.connection});
+      store: new MongoStore({ mongooseConnection: mongoose.connection})
     }));
 
     require('../app/routes/index.server.routes.js')(app);
