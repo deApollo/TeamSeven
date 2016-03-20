@@ -14,7 +14,7 @@ UserSchema.methods.getWorkouts = function(callback){
     return this.model('Workout').find({username : this.username},callback);
 }
 
-var User = module.exports = mongoose.model('User',UserSchema);
+var User = mongoose.model('User',UserSchema);
 
 var ExerciseSchema = new mongoose.Schema({
     username : String,
@@ -24,7 +24,7 @@ var ExerciseSchema = new mongoose.Schema({
 
 ExerciseSchema.index({username : 1, excercisename : 1}, {unique : true});
 
-var Exercise = module.exports = mongoose.model('Exercise', ExerciseSchema)
+var Exercise = mongoose.model('Exercise', ExerciseSchema)
 
 var WorkoutSchema = new mongoose.Schema({
     workoutname : String,
@@ -35,4 +35,10 @@ var WorkoutSchema = new mongoose.Schema({
 
 WorkoutSchema.index({workoutname : 1, username : 1}, {unique : true});
 
-var Workout = module.exports = mongoose.model('Workout', WorkoutSchema)
+var Workout = mongoose.model('Workout', WorkoutSchema)
+
+module.exports = {
+    User : User,
+    Exercise : Exercise,
+    Workout : Workout
+}

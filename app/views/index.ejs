@@ -61,19 +61,20 @@
             <div class="container-fluid">
 
             <h3>LOGIN</h3>
+            <h4><%=message%></h4>
+            <form method="POST" action="login">
                 <div class="input-group">
                   <span class="input-group-addon" id="sizing-addon2">Username</span>
-                  <input type="text" class="form-control" placeholder="swolebro234" aria-describedby="sizing-addon2">
-                                                
+                  <input type="text" class="form-control" placeholder="swolebro234" aria-describedby="sizing-addon2" name="username" id="username">
                 </div>
                 <div class="input-group">
                   <span class="input-group-addon" id="sizing-addon2">Password</span>
-                  <input type="text" class="form-control" placeholder="* * * * * * *" aria-describedby="sizing-addon2">
+                  <input type="text" class="form-control" placeholder="* * * * * * *" aria-describedby="sizing-addon2" name="password" id="password">
                 </div>
+                <input type="Submit" class="btn btn-default" value="Login">
+            </form>
+            <p> Not a member? Register <a href="/register">here.</a> </p>
 
-                <button type="button" class="btn btn-default">Login</button>
-            <p> Not a member? Register <a href="#">here.</a> </p>
-                                
 
             </div>
             <!-- /.container-fluid -->

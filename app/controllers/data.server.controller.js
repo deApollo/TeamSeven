@@ -1,4 +1,7 @@
 var mongoose = require('mongoose');
+var User = require('./../schema.js').User;
+var Exercise = require('./../schema.js').Exercise;
+var Workout = require('./../schema.js').Workout;
 
 exports.getUserPreferences = function(req, res){
     User.findOne({username : req.session.username}, 'firstname lastname profile_url preferred_units email', function(err, obj){

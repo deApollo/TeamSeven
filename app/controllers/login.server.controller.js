@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var User = require('./../schema.js').User;
 var passwordHash = require('password-hash');
 
 exports.register = function(req, res) {
@@ -13,16 +14,18 @@ exports.register = function(req, res) {
             res.redirect("/");
         } else {
             var pwordHash = passwordHash.generate(pword);
-            User.create({firstname : fname, lastname : lname, username : user, password : pword}, function(err, obj){
+            User.create({firstname : fname, lastname : lname, username : user, password : pwordHash}, function(err, obj){
                 if(err){
                     req.session.loggedin = false;
                     req.session.message = "A problem occured creating your account, " + err;
                     res.redirect("/");
                 } else {
+                    console.log("Added user " + user + " with password " + pword + " hashed as "  + pwordHash);
                     req.session.loggedin = true;
                     req.session.username = user;
                     req.session.message = "Successfully registered user: " + user;
-                    res.redirect("/upage");
+                    req.session.name = fname + ' ' + lname;
+                    res.redirect("/dashboard");
                 }
             });
         }
@@ -32,22 +35,28 @@ exports.register = function(req, res) {
 exports.login = function(req, res) {
     var user = req.body.username;
     var pword = req.body.password;
-    User.findOne({username : user} , 'firstname password', function(err, person){
+    console.log("Attempting to find user " + user + " with password " + pword)
+    User.findOne({username : user} , 'firstname lastname password', function(err, person){
         if(err){
             req.session.loggedin = false;
             req.session.message = "Invalid username or password!";
             res.redirect("/");
-        } else {
-            if(passwordHash.verify(person.password,pword)){
+        } else if(person != null){
+            if(passwordHash.verify(pword,person.password)){
                 req.session.loggedin = true;
                 req.session.username = user;
+                req.session.name = person.firstname + ' ' + person.lastname;
                 req.session.message = "Welcome " + person.firstname + ", you have been logged in!";
-                res.redirect("/upage");
+                res.redirect("/dashboard");
             } else {
                 req.session.loggedin = false;
                 req.session.message = "Invalid username or password!";
                 res.redirect("/");
             }
+        } else {
+            req.session.loggedin = false;
+            req.session.message = "Invalid username or password!";
+            res.redirect("/");
         }
     });
 };
