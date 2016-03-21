@@ -17,6 +17,15 @@ body {
     }
 }
 
+.headerLogin {
+    float: center;
+}
+
+#loginbox{
+    background-color: gainsboro;
+    line-height: 15px;
+    border-radius: 10px;
+}
 .ng-scope {
     padding: 5px;
 }
