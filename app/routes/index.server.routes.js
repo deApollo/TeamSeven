@@ -44,7 +44,7 @@ module.exports = function(app) {
 
     app.post('/login', login.login);
     app.post('/logout', login.validate, login.logout);
-    app.post('/register', upload.single('avatar') ,login.register);
+    app.post('/register', login.register);
     app.post('/data/addWorkout', login.validate, data.addWorkout);
     app.post('/data/removeWorkout', login.validate, data.removeWorkout);
     app.post('/data/addExercise', login.validate, data.addExercise);

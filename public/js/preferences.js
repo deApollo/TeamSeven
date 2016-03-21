@@ -1,9 +1,11 @@
 function handleUpdateSuccess(response) {
     $("#response").append(response);
+    location.reload();
 }
 
 function handleUpdateFailure(response) {
     $("#response").append(response);
+    location.reload();
 }
 
 function updateField(fieldname, fieldval) {
@@ -33,14 +35,17 @@ function updatePicture(picture) {
     });
 }
 
+var curVal;
 
 $(document).ready(function() {
+    curVal = $("input:radio[name='optionsRadios']").val();
     $("#submitButton").click(function() {
         var formRes = {};
         formRes['firstname'] = $("#firstname").val();
         formRes['lastname'] = $("#lastname").val();
         formRes['email'] = $("#email").val();
-        formRes['preferred_units'] = $("input:radio[name='optionsRadios']").val();
+        if(curVal != $("input:radio[name='optionsRadios']").val())
+            formRes['preferred_units'] = $("input:radio[name='optionsRadios']").val();
         formRes['picture'] = $("#avatar").val();
         for (var key in formRes) {
             if (formRes.hasOwnProperty(key)) {

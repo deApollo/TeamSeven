@@ -10,7 +10,6 @@ exports.register = function(req, res) {
     var pword = req.body.password;
     var uemail = req.body.email
     var upreferred_units = req.body.units
-    var image = req.files;
     User.find({username : user}, function(err, docs){
         if(docs.length){
             req.session.loggedin = false;
@@ -19,20 +18,15 @@ exports.register = function(req, res) {
         } else {
             var pwordHash = passwordHash.generate(pword);
             var image_URI = "./../default";
-            if(image)
-                image_URI = user;
             User.create({firstname : fname, lastname : lname, username : user, password : pwordHash, email : uemail, preferred_units : upreferred_units, picture_uri : image_URI}, function(err, obj){
                 if(err){
                     req.session.loggedin = false;
-                    req.session.message = "A problem occured creating your account, " + err;
                     fs.unlinkSync('./../public/images/userimages' + username + '.jpg');
                     res.redirect("/");
                 } else {
                     console.log("Added user " + user + " with password " + pword + " hashed as "  + pwordHash);
                     req.session.loggedin = true;
                     req.session.username = user;
-                    req.session.message = "Successfully registered user: " + user;
-                    req.session.name = fname + ' ' + lname;
                     res.redirect("/dashboard");
                 }
             });
@@ -47,23 +41,18 @@ exports.login = function(req, res) {
     User.findOne({username : user} , 'firstname lastname password', function(err, person){
         if(err){
             req.session.loggedin = false;
-            req.session.message = "Invalid username or password!";
             res.redirect("/");
         } else if(person != null){
             if(passwordHash.verify(pword,person.password)){
                 req.session.loggedin = true;
                 req.session.username = user;
-                req.session.name = person.firstname + ' ' + person.lastname;
-                req.session.message = "Welcome " + person.firstname + ", you have been logged in!";
                 res.redirect("/dashboard");
             } else {
                 req.session.loggedin = false;
-                req.session.message = "Invalid username or password!";
                 res.redirect("/");
             }
         } else {
             req.session.loggedin = false;
-            req.session.message = "Invalid username or password!";
             res.redirect("/");
         }
     });
@@ -71,7 +60,6 @@ exports.login = function(req, res) {
 
 exports.logout = function(req, res){
     req.session.loggedin = false;
-    req.session.message = "You have been logged out!";
     req.session.destroy();
     res.redirect("/");
 };
