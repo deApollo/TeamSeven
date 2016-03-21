@@ -7,6 +7,8 @@ exports.register = function(req, res) {
     var lname = req.body.lname;
     var user = req.body.username;
     var pword = req.body.password;
+    var uemail = req.body.email
+    var upreferred_units = req.body.units
     User.find({username : user}, function(err, docs){
         if(docs.length){
             req.session.loggedin = false;
@@ -14,7 +16,7 @@ exports.register = function(req, res) {
             res.redirect("/");
         } else {
             var pwordHash = passwordHash.generate(pword);
-            User.create({firstname : fname, lastname : lname, username : user, password : pwordHash}, function(err, obj){
+            User.create({firstname : fname, lastname : lname, username : user, password : pwordHash, email : uemail, preferred_units : upreferred_units}, function(err, obj){
                 if(err){
                     req.session.loggedin = false;
                     req.session.message = "A problem occured creating your account, " + err;
@@ -69,8 +71,10 @@ exports.logout = function(req, res){
 
 exports.validate = function(req,res,next){
     if(req.session.loggedin){
+        console.log("Login validated for user: " + req.session.username);
         next();
     } else {
+        console.log("Login validation failed!");
         res.redirect("/");
     }
 };

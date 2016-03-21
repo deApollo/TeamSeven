@@ -24,6 +24,7 @@ exports.changeUserPreference = function(req, res){
     var value = req.body.value;
     var update = {};
     update[field] =  value;
+    console.log("Changing user preference " + field + " to " + value);
     User.update({username : req.session.username}, { $set: update},function(err, obj){
         if(err) {
             res.json({

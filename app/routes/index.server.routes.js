@@ -4,7 +4,7 @@ module.exports = function(app) {
     var register = require('../controllers/register.server.controller');
     var dashboard = require('../controllers/dashboard.server.controller');
     var workouts = require('../controllers/workouts.server.controller');
-    var changepassword = require('../controllers/index.server.controller');
+    var changepassword = require('../controllers/changepassword.server.controller');
     var login = require('../controllers/login.server.controller');
     var data = require("../controllers/data.server.controller");
 
