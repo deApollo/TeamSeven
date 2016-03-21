@@ -3,6 +3,12 @@ var User = require('./../schema.js').User;
 var Exercise = require('./../schema.js').Exercise;
 var Workout = require('./../schema.js').Workout;
 
+exports.changeUserPicture = function(req,res){
+    res.json({
+        responseCode: 1
+    });
+}
+
 exports.getUserPreferences = function(req, res){
     User.findOne({username : req.session.username}, 'firstname lastname profile_url preferred_units email', function(err, obj){
         if(err) {

@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var User = require('./../schema.js').User;
 var passwordHash = require('password-hash');
+var fs = require('fs');
 
 exports.register = function(req, res) {
     var fname = req.body.fname;
@@ -20,6 +21,7 @@ exports.register = function(req, res) {
                 if(err){
                     req.session.loggedin = false;
                     req.session.message = "A problem occured creating your account, " + err;
+                    fs.unlinkSync('./../public/images/userimages' + username + '.jpg');
                     res.redirect("/");
                 } else {
                     console.log("Added user " + user + " with password " + pword + " hashed as "  + pwordHash);

@@ -9,7 +9,8 @@ exports.render = function(req, res) {
             lastname : obj.lastname,
             profile_url : obj.profile_url,
             preferred_units : obj.preferred_units,
-            email : obj.email
+            email : obj.email,
+            username : req.session.username
         });
     });
 };

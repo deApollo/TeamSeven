@@ -1,3 +1,24 @@
+var multer = require('multer');
+var fs = require('fs');
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './../public/images/userimages')
+  },
+  filename: function (req, file, cb) {
+    if(req.body.username) {
+        cb(null, req.body.username + '.jpg');
+    } else {
+        cb(null,req.session.username + '.jpg');
+    }
+  }
+});
+
+function deleteOldPicture(req,res,next){
+    fs.unlinkSync('./../public/images/userimages/' + req.session.username + '.jpg');
+    next();
+}
+var upload = multer({ storage: storage });
+
 module.exports = function(app) {
     var index = require('../controllers/index.server.controller');
     var preferences = require('../controllers/preferences.server.controller');
@@ -20,10 +41,11 @@ module.exports = function(app) {
 
     app.post('/login', login.login);
     app.post('/logout', login.validate, login.logout);
-    app.post('/register', login.register);
+    app.post('/register', upload.single('avatar') ,login.register);
     app.post('/data/addWorkout', login.validate, data.addWorkout);
     app.post('/data/removeWorkout', login.validate, data.removeWorkout);
     app.post('/data/addExercise', login.validate, data.addExercise);
     app.post('/data/removeExercise', login.validate, data.removeExercise);
     app.post('/data/changeUserPreference', login.validate, data.changeUserPreference);
+    app.post('/data/changeUserPicture', login.validate, deleteOldPicture, upload.single('avatar'), data.changeUserPicture);
 };

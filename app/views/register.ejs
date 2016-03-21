@@ -62,7 +62,7 @@
             <div class="container-fluid">
 
             <h3>Welcome! Register here:</h3>
-            <form method="POST" action="register">
+            <form method="POST" action="register" enctype="multipart/form-data">
                 <div class="input-group">
                   <span class="input-group-addon" id="sizing-addon2">Desired username</span>
                   <input type="text" class="form-control" placeholder="swolebro234" aria-describedby="sizing-addon2" name="username" id="username">
@@ -83,6 +83,7 @@
                   <span class="input-group-addon" id="sizing-addon2">Email</span>
                   <input type="text" class="form-control" placeholder="swolebro234@swolelife.gg" aria-describedby="sizing-addon2" name="email" id="email">
                 </div>
+                Photo <input type="file" id="avatar" name="avatar">
                 <div class="form-group">
                     <label class="control-label">Preferred Units</label>
                     <input type="radio" name="units" id="optionsRadios1" value="pounds"> Pounds
