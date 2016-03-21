@@ -8,13 +8,30 @@
 
 body {
     margin-top: 100px;
-    background-color: #222;
+    background-color: #FFF;
 }
 
 @media(min-width:768px) {
     body {
         margin-top: 50px;
     }
+}
+
+.ng-scope {
+    padding: 5px;
+}
+
+.navbar-inverse {
+    background-color: black;
+}
+
+#dropdown {
+    width: 100px;
+    display: inline-block;
+}
+
+.activitySelect {
+    display: inline-block;
 }
 
 #wrapper {
