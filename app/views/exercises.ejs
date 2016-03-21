@@ -1,183 +1,187 @@
 <!DOCTYPE html>
+<html lang="en">
+
 <head>
-	<!-- Angular -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
 
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
 
-    <!-- Sockets -->
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+	<title>Team Seven</title>
 
-    <!-- jQuery Version 1.11.1 -->
-    <script src="js/jquery.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+	<!-- Bootstrap Core CSS -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/bootstrap.css">
+	<!-- Custom CSS -->
+	<link href="css/sb-admin.css" rel="stylesheet">
 
- 
-	
+	<!-- Morris Charts CSS -->
+	<link href="css/plugins/morris.css" rel="stylesheet">
+
+	<!-- Custom Fonts -->
+	<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
 </head>
 
-<body ng-app="Workout", ng-controller="WorkoutCtrl">
+<body ng-app="Workout" , ng-controller="WorkoutCtrl">
 
-    <div class="container">
-        
-        <div class="panel panel-defualt" ng-repeat="workout in workouts">
-            <div class="panel-heading">
-                <input type="text" ng-model="workout.name" placeholder="Workout Name">
-            </div>
+	<div id="wrapper">
 
-            <div class="panel-body">
-                <div ng-repeat="excercise in workout.exercises">
-                    <div class="row" ng-if="excercise.type == 'Interval' "> 
-                        <div class="col-lg-2">
-                            Name
-                            <input type="text" ng-model="excercise.name" placeholder="Excercise Name">
-                        </div>
-                        
-                        <div class="col-lg-2">
-                            Sets
-                            <input type="text" ng-model="excercise.data.sets" placeholder="Sets">
-                        </div>
-
-                        <div class="col-lg-2">
-                            Time
-                            <input type="text" ng-model="excercise.data.time" placeholder="Time">
-                        </div>
-                    </div>
+		<!-- Navigation -->
+		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">Team Seven Workout App</a>
+			</div>
 
 
-                    <div class="row" ng-if="excercise.type == 'Reps' "> 
-                        <div class="col-lg-2">
-                            Name
-                            <input type="text" ng-model="excercise.name" placeholder="Excercise Name">
-                        </div>
-                        <div class="col-lg-2">
-                            Sets
-                            <input type="text" ng-model="excercise.data.sets" placeholder="Sets">
-                        </div>
-                        <div class="col-lg-2">
-                            Reps
-                            <input type="text" ng-model="excercise.data.reps" placeholder="Reps">
-                        </div>
-                        <div class="col-lg-2">
-                            Weight
-                            <input type="text" ng-model="excercise.data.weight" placeholder="Weight">
-                        </div>
-                        
-                    </div>
-                    <br>
-                </div> 
-
-                <br>
-                <select ng-model="selectionType">
-                    <option>Interval</option>
-                    <option>Reps</option>
-                </select>
-                <button ng-click="newExcercise(workout, selectionType)">New Excercise</button>
-            </div>
-
-            
-        </div>
+			<!-- Top Menu Items -->
+			<ul class="nav navbar-right top-nav">
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i><%=name%><b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li>
+							<a href="/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
 
 
-        <button ng-click="newWorkout()">New Workout</button>
+			<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+				<ul class="nav navbar-nav side-nav">
+					<li class="user-side-image">
+						<img src="../../images/default.png" class="img-circle" alt="" />
+					</li>
+					<li class="user-side-name">
+						<h3><%=name%></h3>
+					</li>
+					<li>
+						<a href="/dashboard"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+					</li>
+					<li>
+						<a href="/preferences"><i class="fa fa-fw fa-edit"></i> Preferences</a>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Progress</a>
+					</li>
+					<li class="active">
+						<a href="/workouts"><i class="fa fa-fw fa-table"></i> Workouts</a>
+					</li>
+				</ul>
+			</div>
+			<!-- /.navbar-collapse -->
+		</nav>
 
-    </div>
+		<div id="page-wrapper">
 
-    
-	<script> 
-		var app = angular.module("Workout", ["ngRoute"]);
-		//var socket = io.connect("http://localhost:3000/");
+			<div class="container-fluid">
 
+				<div class="container">
 
+					<div class="panel panel-defualt" ng-repeat="workout in workouts">
+						<div class="panel-heading">
+							<input type="text" ng-model="workout.name" placeholder="Workout Name">
+						</div>
 
-        // The Workout Object: A container for Excercise Objects
-        function Workout($rootScope){
-            this.$rootScope = $rootScope;
-            this.name = "";
-            this.exercises = [];
-        }
+						<div class="panel-body">
+							<div ng-repeat="excercise in workout.exercises">
+								<div class="row" ng-if="excercise.type == 'Interval' ">
+									<div class="col-lg-2">
+										Name
+										<input type="text" ng-model="excercise.name" placeholder="Excercise Name">
+									</div>
 
-        Workout.prototype.getName = function (){
-            return this.name;
-        };
+									<div class="col-lg-2">
+										Sets
+										<input type="text" ng-model="excercise.data.sets" placeholder="Sets">
+									</div>
 
-
-        app.factory("Workout", function($injector){
-            return function(name, exercises) {return $injector.instantiate(Workout, {name: name, exercises: exercises}); };
-        });
-
-
-
-
-
-
-        // The Excercise Object: Has a name and a type. Depending on the type, the data will change.
-        function Excercise($rootScope, type){
-            this.$rootScope = $rootScope;
-            this.name = "";
-            this.type = type;
-            this.data = {};
-            if (type == "Interval"){
-                this.data = new IntervalData;
-            }
-            if (type == "Reps"){
-                this.data = new RepData;
-            }
-        }
-
-        app.factory("Excercise", function($injector){
-            return function(name, type, data) {return $injector.instantiate(Excercise, {name: name, type: type, data: data}); };
-        });
-
-
-
-
-        // Various Excercise data types 
-        function IntervalData($rootScope){
-            this.$rootScope = $rootScope;
-            this.sets = 0;
-            this.time = 0;
-        }
-        app.factory("IntervalData", function($injector){
-            return function(sets, time) {return $injector.instantiate(Excercise, {sets: sets, time: time}); };
-        });
-
-        function RepData($rootScope){
-            this.$rootScope = $rootScope;
-            this.sets = 0;
-            this.reps = 0;
-            this.weight = 0;
-        }
-        app.factory("RepData", function($injector){
-            return function(sets, reps, weight) {return $injector.instantiate(Excercise, {sets: sets, reps: reps, weight: weight}); };
-        });
+									<div class="col-lg-2">
+										Time
+										<input type="text" ng-model="excercise.data.time" placeholder="Time">
+									</div>
+								</div>
 
 
+								<div class="row" ng-if="excercise.type == 'Reps' ">
+									<div class="col-lg-2">
+										Name
+										<input type="text" ng-model="excercise.name" placeholder="Excercise Name">
+									</div>
+									<div class="col-lg-2">
+										Sets
+										<input type="text" ng-model="excercise.data.sets" placeholder="Sets">
+									</div>
+									<div class="col-lg-2">
+										Reps
+										<input type="text" ng-model="excercise.data.reps" placeholder="Reps">
+									</div>
+									<div class="col-lg-2">
+										Weight
+										<input type="text" ng-model="excercise.data.weight" placeholder="Weight">
+									</div>
+
+								</div>
+								<br>
+							</div>
+
+							<br>
+							<select ng-model="selectionType">
+								<option>Interval</option>
+								<option>Reps</option>
+							</select>
+							<button ng-click="newExcercise(workout, selectionType)">New Excercise</button>
+						</div>
 
 
-
-		app.controller("WorkoutCtrl", function($scope, $http, Workout){
-            $scope.workouts = [];
+					</div>
 
 
-            $scope.newWorkout = function (){
-                $scope.workouts.push(new Workout(this) );
-                console.log($scope.workouts);
-            }
+					<button ng-click="newWorkout()">New Workout</button>
 
-            $scope.newExcercise = function (workout, type){
-                if (type == "Interval" || type == "Reps"){
-                     workout.exercises.push(new Excercise(this, type) );
-                }
-                console.log(type, workout.exercises);
-            }
+				</div>
 
-			
-		});
+			</div>
+			<!-- /.container-fluid -->
 
-	</script>
+		</div>
+		<!-- /#page-wrapper -->
+
+	</div>
+	<!-- /#wrapper -->
+
+	<!-- jQuery -->
+	<script src="js/jquery.js"></script>
+
+	<!-- Bootstrap Core JavaScript -->
+	<script src="js/bootstrap.min.js"></script>
+
+	<!-- Morris Charts JavaScript -->
+	<script src="js/plugins/morris/raphael.min.js"></script>
+	<script src="js/plugins/morris/morris.min.js"></script>
+	<script src="js/plugins/morris/morris-data.js"></script>
+
 </body>
+<script src="js/exercises.js"></script>
+
+</html>
