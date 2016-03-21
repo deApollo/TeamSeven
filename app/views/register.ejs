@@ -32,20 +32,12 @@
 
 </head>
 
-<body>
-
-    <div id="wrapper">
+<body id="loginPage">
 
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
                 <a class="navbar-brand" href="/">Team Seven Workout App</a>
             </div>
         </nav>
@@ -54,47 +46,50 @@
 
             <div class="container-fluid">
 
+            <div class="col-md-6 col-centered" id="loginbox">
+
+            <div class="loginContent">
+
             <h3>Welcome! Register here:</h3>
             <form method="POST" action="register" enctype="multipart/form-data">
                 <div class="input-group">
-                  <span class="input-group-addon" id="sizing-addon2">Desired username</span>
+                  <span class="input-group-addon" id="sizing-addon2">Username</span>
                   <input type="text" class="form-control" placeholder="swolebro234" aria-describedby="sizing-addon2" name="username" id="username">
                 </div>
                 <div class="input-group">
-                  <span class="input-group-addon" id="sizing-addon2">Desired password</span>
+                  <span class="input-group-addon" id="sizing-addon2">Password</span>
                   <input type="password" class="form-control" placeholder="* * * * * * *" aria-describedby="sizing-addon2" name="password" id="password">
                 </div>
                 <div class="input-group">
-                  <span class="input-group-addon" id="sizing-addon2">First name</span>
-                  <input type="text" class="form-control" placeholder="swole" aria-describedby="sizing-addon2" name="fname" id="fname">
+                  <span class="input-group-addon" id="sizing-addon2">First Name</span>
+                  <input type="text" class="form-control" placeholder="John" aria-describedby="sizing-addon2" name="fname" id="fname">
                 </div>
                 <div class="input-group">
-                  <span class="input-group-addon" id="sizing-addon2">Last name</span>
-                  <input type="text" class="form-control" placeholder="bro" aria-describedby="sizing-addon2" name="lname" id="lname">
+                  <span class="input-group-addon" id="sizing-addon2">Last Name</span>
+                  <input type="text" class="form-control" placeholder="Doe" aria-describedby="sizing-addon2" name="lname" id="lname">
                 </div>
                 <div class="input-group">
                   <span class="input-group-addon" id="sizing-addon2">Email</span>
                   <input type="text" class="form-control" placeholder="swolebro234@swolelife.gg" aria-describedby="sizing-addon2" name="email" id="email">
-                </div>
-                Photo <input type="file" id="avatar" name="avatar">
+                </div><br>
                 <div class="form-group">
                     <label class="control-label">Preferred Units</label>
                     <input type="radio" name="units" id="optionsRadios1" value="pounds"> Pounds
                     <input type="radio" name="units" id="optionsRadios2" value="kilograms"> Kilograms
                 </div>
-                <input type="Submit" class="btn btn-default" value="Register">
+                <input type="Submit" class="btn btn-success" value="Register">
             </form>
-            <p> Already a member? Sign in <a href="#">here.</a> </p>
+            <p><br> Already a member? Sign in <a href="#">here.</a> </p>
 
 
+            </div>
+            </div>
             </div>
             <!-- /.container-fluid -->
 
         </div>
         <!-- /#page-wrapper -->
 
-    </div>
-    <!-- /#wrapper -->
 
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
