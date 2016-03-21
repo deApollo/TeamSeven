@@ -4,8 +4,18 @@ var Exercise = require('./../schema.js').Exercise;
 var Workout = require('./../schema.js').Workout;
 
 exports.changeUserPicture = function(req,res){
-    res.json({
-        responseCode: 1
+    User.update({username : req.session.username}, { $set: {picture_uri : req.session.username}},function(err, obj){
+        if(err) {
+            res.json({
+                responseCode: 0,
+                data: err
+            });
+        } else {
+            res.json({
+                responseCode: 1,
+                data: obj
+            });
+        }
     });
 }
 

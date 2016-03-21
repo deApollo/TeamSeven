@@ -10,6 +10,7 @@ exports.register = function(req, res) {
     var pword = req.body.password;
     var uemail = req.body.email
     var upreferred_units = req.body.units
+    var image = req.files;
     User.find({username : user}, function(err, docs){
         if(docs.length){
             req.session.loggedin = false;
@@ -17,7 +18,10 @@ exports.register = function(req, res) {
             res.redirect("/");
         } else {
             var pwordHash = passwordHash.generate(pword);
-            User.create({firstname : fname, lastname : lname, username : user, password : pwordHash, email : uemail, preferred_units : upreferred_units}, function(err, obj){
+            var image_URI = "./../default";
+            if(image)
+                image_URI = user;
+            User.create({firstname : fname, lastname : lname, username : user, password : pwordHash, email : uemail, preferred_units : upreferred_units, picture_uri : image_URI}, function(err, obj){
                 if(err){
                     req.session.loggedin = false;
                     req.session.message = "A problem occured creating your account, " + err;
@@ -68,6 +72,7 @@ exports.login = function(req, res) {
 exports.logout = function(req, res){
     req.session.loggedin = false;
     req.session.message = "You have been logged out!";
+    req.session.destroy();
     res.redirect("/");
 };
 
