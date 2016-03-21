@@ -14,8 +14,11 @@ var storage = multer.diskStorage({
 });
 
 function deleteOldPicture(req,res,next){
-    fs.unlinkSync('./../public/images/userimages/' + req.session.username + '.jpg');
-    next();
+    fs.stat('foo.txt', function(err, stat) {
+        if(err == null)
+            fs.unlinkSync('./../public/images/userimages/' + req.session.username + '.jpg');
+        next();
+    });
 }
 var upload = multer({ storage: storage });
 
