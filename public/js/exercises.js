@@ -62,7 +62,6 @@ app.factory("RepData", function($injector){
 app.controller("WorkoutCtrl", function($scope, $http, Workout){
     $scope.workouts = [];
 
-
     $scope.newWorkout = function (){
         $scope.workouts.push(new Workout(this) );
         console.log($scope.workouts);
