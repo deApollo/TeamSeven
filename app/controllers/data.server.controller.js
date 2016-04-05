@@ -89,17 +89,18 @@ exports.addExercise = function(req, res) {
             });
         } else {
             res.json({
-                responseCode: 1
+                responseCode: 1,
+                id: obj.id
             });
         }
     });
 };
 
 exports.removeExercise = function(req, res) {
-    var exName = req.body.exerciseName;
+    var eID = req.body.id;
     Exercise.remove({
         username: req.session.username,
-        exercisename: exName
+        id: eID
     }, function(err) {
         if (err) {
             res.json({
@@ -144,14 +145,26 @@ exports.addWorkout = function(req, res) {
     for (var i = 0; i < wExer.length; i++) {
         workout.exercises.push(wExer[i]);
     }
-    workout.save();
+    workout.save(function(err, obj){
+        if (err) {
+            res.json({
+                responseCode: 0,
+                data: err
+            });
+        } else {
+            res.json({
+                responseCode: 1,
+                id: obj.id
+            });
+        }
+    });
 };
 
 exports.removeWorkout = function(req, res) {
-    var wName = req.body.workoutName;
+    var wID = req.body.id;
     Workout.remove({
         username: req.session.username,
-        workoutname: wName
+        id: wID
     }, function(err) {
         if (err) {
             res.json({
