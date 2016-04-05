@@ -21,7 +21,6 @@ exports.register = function(req, res) {
             User.create({firstname : fname, lastname : lname, username : user, password : pwordHash, email : uemail, preferred_units : upreferred_units, picture_uri : image_URI}, function(err, obj){
                 if(err){
                     req.session.loggedin = false;
-                    fs.unlinkSync('./../public/images/userimages' + username + '.jpg');
                     res.redirect("/");
                 } else {
                     console.log("Added user " + user + " with password " + pword + " hashed as "  + pwordHash);
