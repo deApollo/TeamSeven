@@ -8,8 +8,15 @@ exports.register = function(req, res) {
     var lname = req.body.lname;
     var user = req.body.username;
     var pword = req.body.password;
-    var uemail = req.body.email
-    var upreferred_units = req.body.units
+    var uemail = req.body.email;
+    var upreferred_units = req.body.units;
+    var email_pattern = new RegExp("\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b");
+    var email_valid = email_pattern.test(uemail);
+    if(!email_valid){
+        req.session.loggedin = false;
+        req.session.message = "Please enter a valid email address";
+        res.redirect("/");
+    }
     User.find({username : user}, function(err, docs){
         if(docs.length){
             req.session.loggedin = false;
