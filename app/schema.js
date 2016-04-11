@@ -19,7 +19,19 @@ var User = mongoose.model('User',UserSchema);
 var ExerciseSchema = new mongoose.Schema({
     username : String,
     excercisename : String,
-    excercisedesc : String
+    excercisedesc : {
+        type: String,
+        get: function(data) {
+            try {
+                return JSON.parse(data);
+            } catch (err) {
+                return data;
+            }
+        },
+        set: function(data) {
+            return JSON.stringify(data);
+        }
+    }
 });
 
 ExerciseSchema.index({username : 1, excercisename : 1}, {unique : true});
