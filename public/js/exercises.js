@@ -31,6 +31,8 @@ function Excercise($rootScope, type){
     if (type == "Reps"){
         this.data = new RepData;
     }
+    this.eids = [];
+    this.id = null;
 }
 
 app.factory("Excercise", function($injector){
@@ -62,6 +64,45 @@ app.factory("RepData", function($injector){
 app.controller("WorkoutCtrl", function($scope, $http, Workout){
     $scope.workouts = [];
 
+    function objToJSON(obj){
+        if(obj.weight){
+            return  {"sets" : obj.sets, "reps" : obj.reps : "weight" : obj.weight}
+        } else {
+            return {"sets" : obj.sets, "reps" : obj.reps }
+        }
+    }
+
+    function addExercise(exercise, workoutIndex){
+        $http({
+            method: 'POST',
+            url: '/data/addExercise',
+            data: {
+                exerciseName: exercise.name,
+                exerciseDesc: objToJSON(exercise.data)
+            }
+        }).then(function successCallback(response) {
+            $scope.workouts[workoutIndex].eids.push(response.data);
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+    }
+
+    function addWorkout(workout, workoutIndex){
+        $http({
+            method: 'POST',
+            url: '/data/addWorkout',
+            data: {
+                workoutName: workout.name,
+                activityDesc : "",
+                exercises: workout.eids;
+            }
+        }).then(function successCallback(response) {
+            $scope.workouts[workoutIndex].id = response.data.id;
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+    }
+
     $scope.newWorkout = function (){
         $scope.workouts.push(new Workout(this) );
         console.log($scope.workouts);
@@ -72,6 +113,17 @@ app.controller("WorkoutCtrl", function($scope, $http, Workout){
              workout.exercises.push(new Excercise(this, type) );
         }
         console.log(type, workout.exercises);
+    }
+
+    $scope.saveWorkouts = function(){
+        var wLocal = $scope.workouts;
+        for(var  i = 0; i < wLocal.length; i++){
+            var curW = wLocal[i];
+            for(var j = 0; j < curW.exercises.lenth; j++){
+                addExercise(curW.exercises[j],i);
+            }
+            addWorkout(wLocal[i],i);
+        }
     }
 
 

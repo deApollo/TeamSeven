@@ -32,7 +32,7 @@ module.exports = function(app) {
     var login = require('../controllers/login.server.controller');
     var data = require("../controllers/data.server.controller");
 
-    app.get('/', login.validate, index.render);
+    app.get('/', login.indexRedir, index.render);
     app.get('/logout', login.validate, login.logout);
     app.get('/register', register.render);
     app.get('/dashboard', login.validate, dashboard.render);

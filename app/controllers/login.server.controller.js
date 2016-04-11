@@ -10,25 +10,26 @@ exports.register = function(req, res) {
     var pword = req.body.password;
     var uemail = req.body.email;
     var upreferred_units = req.body.units;
-    var email_pattern = new RegExp("\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b");
+    var email_pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var email_valid = email_pattern.test(uemail);
     if(!email_valid){
         req.session.loggedin = false;
         req.session.message = "Please enter a valid email address";
-        res.redirect("/");
+        res.redirect("/register");
+        return;
     }
     User.find({username : user}, function(err, docs){
         if(docs.length){
             req.session.loggedin = false;
             req.session.message = "A user with username: " + user + " already exists!";
-            res.redirect("/");
+            res.redirect("/register");
         } else {
             var pwordHash = passwordHash.generate(pword);
             var image_URI = "./../default";
             User.create({firstname : fname, lastname : lname, username : user, password : pwordHash, email : uemail, preferred_units : upreferred_units, picture_uri : image_URI}, function(err, obj){
                 if(err){
                     req.session.loggedin = false;
-                    res.redirect("/");
+                    res.redirect("/register");
                 } else {
                     console.log("Added user " + user + " with password " + pword + " hashed as "  + pwordHash);
                     req.session.loggedin = true;
@@ -79,3 +80,11 @@ exports.validate = function(req,res,next){
         res.redirect("/");
     }
 };
+
+exports.indexRedir = function(req,res,next){
+    if(req.session.loggedin){
+        res.redirect("/dashboard");
+    } else {
+        next();
+    }
+}
