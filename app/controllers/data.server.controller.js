@@ -77,11 +77,13 @@ exports.getExercises = function(req, res) {
 exports.addExercise = function(req, res) {
     var exName = req.body.exerciseName;
     var exDesc = req.body.exerciseDesc;
+    var exType = req.body.exerciseType;
     console.log("Attempting to add exercise with name: " + exName + " and data: " + exDesc);
     Exercise.create({
         username: req.session.username,
-        excercisename: exName,
-        excercisedesc: exDesc
+        exercisename: exName,
+        exercisedesc: exDesc,
+        exercisetype : exType
     }, function(err, obj) {
         if (err) {
             res.json({

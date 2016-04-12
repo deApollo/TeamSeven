@@ -18,8 +18,9 @@ var User = mongoose.model('User',UserSchema);
 
 var ExerciseSchema = new mongoose.Schema({
     username : String,
-    excercisename : String,
-    excercisedesc : {
+    exercisename : String,
+    exercisetype : String,
+    exercisedesc : {
         type: String,
         get: function(data) {
             try {
@@ -34,8 +35,6 @@ var ExerciseSchema = new mongoose.Schema({
     }
 });
 
-ExerciseSchema.index({username : 1, excercisename : 1}, {unique : true});
-
 var Exercise = mongoose.model('Exercise', ExerciseSchema)
 
 var WorkoutSchema = new mongoose.Schema({
@@ -44,8 +43,6 @@ var WorkoutSchema = new mongoose.Schema({
     username : String,
     exercises : [{type : mongoose.Schema.Types.ObjectId, ref : "Exercise"}]
 });
-
-WorkoutSchema.index({workoutname : 1, username : 1}, {unique : true});
 
 var Workout = mongoose.model('Workout', WorkoutSchema)
 

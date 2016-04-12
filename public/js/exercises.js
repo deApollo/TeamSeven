@@ -11,6 +11,17 @@ app.controller("WorkoutCtrl", function($scope, $http){
             url: '/data/getWorkouts'
         }).then(function successCallback(response){
             console.log(response.data);
+            for(var i = 0; i < response.data.data.length; i++){
+                var curW = response.data.data[i];
+                var exerciseArr = [];
+                var eids = [];
+                for(var j = 0; j < curW.exercises.length; j++){
+                    var curE = curW.exercises[j];
+                    exerciseArr.push({name : curE.exercisename, id : curE._id, type: curE.exercisetype, data : JSON.parse(curE.exercisedesc)});
+                    eids.push(curE._id);
+                }
+                $scope.workouts.push({name : curW.workoutname, id : curW._id, eids: eids, exercises : exerciseArr});
+            }
         }, function errorCallback(response) {
             console.log(response);
         });
@@ -33,7 +44,8 @@ app.controller("WorkoutCtrl", function($scope, $http){
             url: '/data/addExercise',
             data: {
                 exerciseName: exercise.name,
-                exerciseDesc: exercise.data
+                exerciseDesc: exercise.data,
+                exerciseType: exercise.type
             }
         }).then(function successCallback(response) {
             console.log(response.data)
