@@ -57,6 +57,7 @@ exports.changeUserPreference = function(req, res){
 }
 
 exports.getExercises = function(req, res) {
+    console.log("Getting list of exercises for user: " + req.session.username);
     Exercise.find({
         username: req.session.username
     }, function(err, obj) {
@@ -101,9 +102,10 @@ exports.addExercise = function(req, res) {
 
 exports.removeExercise = function(req, res) {
     var eID = req.body.id;
+    console.log("Attempting to remove an exercise with id: " + eID);
     Exercise.remove({
         username: req.session.username,
-        id: eID
+        _id: mongoose.Types.ObjectId(eID)
     }, function(err) {
         if (err) {
             res.json({
@@ -141,6 +143,7 @@ exports.updateExercise = function(req, res) {
 };
 
 exports.getWorkouts = function(req, res) {
+    console.log("Attempting to get list of workouts for user: " + req.session.username);
     Workout.find({ username: req.session.username })
     .populate('exercises')
     .exec(function(err, obj) {
@@ -189,8 +192,10 @@ exports.addWorkout = function(req, res) {
 
 exports.removeWorkout = function(req, res) {
     var wID = req.body.id;
+    console.log("Attempting to remove workout with id: " + wID);
     Workout.remove({
-        _id: wID
+        username: req.session.username,
+        _id: mongoose.Types.ObjectId(wID)
     }, function(err) {
         if (err) {
             res.json({
@@ -210,6 +215,8 @@ exports.updateWorkout = function(req, res){
     var wName = req.body.workoutName;
     var wDesc = req.body.activityDesc;
     var wExer = req.body.exercises;
+
+    console.log("Attempting to update workout with id: " + wID + "name: " + wName + " description: " + wDesc + " exercises: " + wExer);
 
     var objIDArr = [];
     for (var i = 0; i < wExer.length; i++) {

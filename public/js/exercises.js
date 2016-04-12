@@ -136,6 +136,51 @@ app.controller("WorkoutCtrl", function($scope, $http){
         });
     }
 
+
+    $scope.removeWorkout = function(workout){
+        if(workout.id){
+            $http({
+                method: 'POST',
+                url: '/data/removeWorkout',
+                data: {
+                    id : workout.id
+                }
+            }).then(function successCallback(response) {
+                if(response.data.responseCode == 1){
+                    $scope.serverMsg += "\nWorkout removed successfully!";
+                } else {
+                    $scope.serverMsg += "\nThere was an issue removing a workout!";
+                }
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+        }
+        $scope.workouts.splice($scope.workouts.indexOf(workout),1);
+    }
+
+    $scope.removeExercise = function(workout,exercise){
+        var wIndex = $scope.workouts.indexOf(workout);
+        var eIndex = $scope.workouts[wIndex].exercises.indexOf(exercise);
+        if(exercise.id){
+            $http({
+                method: 'POST',
+                url: '/data/removeExercise',
+                data: {
+                    id : exercise.id
+                }
+            }).then(function successCallback(response) {
+                if(response.data.responseCode == 1){
+                    $scope.serverMsg += "\Exercise removed successfully!";
+                } else {
+                    $scope.serverMsg += "\nThere was an issue removing a exercise!";
+                }
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+        }
+        $scope.workouts[wIndex].exercises.splice(eIndex,1);
+    }
+
     $scope.newWorkout = function (){
         $scope.workouts.push({name : "", id : null, eids: [], exercises : [], modified : false});
     }

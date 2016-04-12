@@ -98,6 +98,7 @@
 					<div class="input-group">
 						<span class="input-group-addon" id="basic-addon1">Workout Name: </span>
 						<input type="text" class="form-control" placeholder="Leg Day" aria-describedby="basic-addon1" ng-model="workout.name" ng-blur="modify(workout)">
+						<button class="btn btn-default" ng-click="removeWorkout(workout)">Remove</button>
 					</div>
 					<div class="panel-body">
 						<div ng-repeat="exercise in workout.exercises">
@@ -117,6 +118,7 @@
 										<label for="intervalTime">Interval</label>
 										<input type="text" class="form-control" id="intervalTime" ng-model="exercise.data.time" placeholder="145" ng-blur="modify(exercise)">
 									</div>
+									<button class="btn btn-default" ng-click="removeExercise(workout,exercise)">Remove</button>
 								</form>
 							</div>
 							<div class="row" ng-if="exercise.type == 'Reps' " id="exerciseInputBlock">
@@ -140,6 +142,7 @@
 										<label for="startWeight">Starting Weight</label>
 										<input type="text" class="form-control" id="startWeight" ng-model="exercise.data.weight" placeholder="145" ng-blur="modify(exercise)">
 									</div>
+									<button class="btn btn-default" ng-click="removeExercise(workout,exercise)">Remove</button>
 							</div>
 							</form>
 						</div>
