@@ -91,76 +91,58 @@
 			</div>
 			<!-- /.navbar-collapse -->
 		</nav>
-
 		<div id="page-wrapper">
-
 			<div class="container-fluid">
-
 				<!-- workout creation -->
 				<div class="panel panel-defualt" ng-repeat="workout in workouts">
 					<div class="input-group">
 						<span class="input-group-addon" id="basic-addon1">Workout Name: </span>
 						<input type="text" class="form-control" placeholder="Leg Day" aria-describedby="basic-addon1" ng-model="workout.name">
 					</div>
-
 					<div class="panel-body">
 						<div ng-repeat="excercise in workout.exercises">
 							<div class="row" ng-if="excercise.type == 'Interval' ">
-
-
 								<form class="form-inline">
-
 									<div class="form-group col-xs-3">
 										<label for="exerciseName">Name</label>
-										<input type="text" class="form-control" id="exerciseName" ng-model="excercise.name" placeholder="Front Squat">
+										<input type="text" class="form-control" id="exerciseName" ng-model="excercise.name" placeholder="Front Squat" ng-change="modify(exercise)">
 									</div>
 
 									<div class="form-group col-xs-3">
 										<label for="numSets">Sets</label>
-										<input type="text" class="form-control" id="numSets" ng-model="excercise.data.sets" placeholder="3">
+										<input type="text" class="form-control" id="numSets" ng-model="excercise.data.sets" placeholder="3" ng-change="modify(exercise)">
 									</div>
 
 									<div class="form-group col-xs-3">
 										<label for="intervalTime">Interval</label>
-										<input type="text" class="form-control" id="intervalTime" ng-model="excercise.data.time" placeholder="145">
+										<input type="text" class="form-control" id="intervalTime" ng-model="excercise.data.time" placeholder="145" ng-change="modify(exercise)">
 									</div>
-
 								</form>
-
-
 							</div>
-
-
 							<div class="row" ng-if="excercise.type == 'Reps' " id="exerciseInputBlock">
-
-
-
 								<form class="form-inline">
-
 									<div class="form-group col-xs-3">
 										<label for="exerciseName2">Name</label>
-										<input type="text" class="form-control" id="exerciseName2" ng-model="excercise.name" placeholder="Front Squat">
+										<input type="text" class="form-control" id="exerciseName2" ng-model="excercise.name" placeholder="Front Squat" ng-change="modify(exercise)">
 									</div>
 
 									<div class="form-group col-xs-3">
 										<label for="numSets2">Sets</label>
-										<input type="text" class="form-control" id="numSets2" ng-model="excercise.data.sets" placeholder="3">
+										<input type="text" class="form-control" id="numSets2" ng-model="excercise.data.sets" placeholder="3" ng-change="modify(exercise)">
 									</div>
 
 									<div class="form-group col-xs-3">
 										<label for="numReps">Reps</label>
-										<input type="text" class="form-control" id="numReps" ng-model="excercise.data.reps" placeholder="5">
+										<input type="text" class="form-control" id="numReps" ng-model="excercise.data.reps" placeholder="5" ng-change="modify(exercise)">
 									</div>
 
 									<div class="form-group col-xs-3">
 										<label for="startWeight">Starting Weight</label>
-										<input type="text" class="form-control" id="startWeight" ng-model="excercise.data.weight" placeholder="145">
+										<input type="text" class="form-control" id="startWeight" ng-model="excercise.data.weight" placeholder="145" ng-change="modify(exercise)">
 									</div>
 							</div>
 							</form>
-
 						</div>
-
 						<br>
 						<div class="activitySelect">
 							<select class="form-control" id="dropdown" ng-model="selectionType">
@@ -177,6 +159,7 @@
 
 				<button type="button" class="btn btn-default" ng-click="newWorkout()"> + Custom Workout</button>
 				<button type="button" class="btn btn-default" ng-click="saveWorkouts()">Save Workouts</button>
+				<p>{{serverMsg}}</p>
 
 			</div>
 

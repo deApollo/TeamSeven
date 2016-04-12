@@ -93,7 +93,7 @@ exports.addExercise = function(req, res) {
         } else {
             res.json({
                 responseCode: 1,
-                id: obj.id
+                id: obj._id
             });
         }
     });
@@ -117,6 +117,28 @@ exports.removeExercise = function(req, res) {
         }
     });
 }
+
+exports.updateExercise = function(req, res) {
+    var eID = req.body.id;
+    var exName = req.body.exerciseName;
+    var exDesc = req.body.exerciseDesc;
+    Exercise.update({ _id: eID },
+        { exercisename: exName, exercisedesc: exDesc},
+        {},
+        function (err, raw) {
+            if (err) {
+                res.json({
+                    responseCode: 0,
+                    error: err
+                });
+            } else {
+                res.json({
+                    responseCode: 1
+                });
+            }
+        }
+    );
+};
 
 exports.getWorkouts = function(req, res) {
     Workout.find({ username: req.session.username })
@@ -159,7 +181,7 @@ exports.addWorkout = function(req, res) {
         } else {
             res.json({
                 responseCode: 1,
-                id: obj.id
+                id: obj._id
             });
         }
     });
@@ -168,8 +190,7 @@ exports.addWorkout = function(req, res) {
 exports.removeWorkout = function(req, res) {
     var wID = req.body.id;
     Workout.remove({
-        username: req.session.username,
-        id: wID
+        _id: wID
     }, function(err) {
         if (err) {
             res.json({
@@ -183,3 +204,32 @@ exports.removeWorkout = function(req, res) {
         }
     });
 };
+
+exports.updateWorkout = function(req, res){
+    var wID = req.body.id;
+    var wName = req.body.workoutName;
+    var wDesc = req.body.activityDesc;
+    var wExer = req.body.exercises;
+
+    var objIDArr = [];
+    for (var i = 0; i < wExer.length; i++) {
+        objIDArr.push(mongoose.Types.ObjectId(wExer[i]));
+    }
+
+    Workout.update({ _id: eID },
+        { workoutname : wName, workoutdesc : wDesc, exercises : objIDArr},
+        {},
+        function (err, raw) {
+            if (err) {
+                res.json({
+                    responseCode: 0,
+                    error: err
+                });
+            } else {
+                res.json({
+                    responseCode: 1
+                });
+            }
+        }
+    );
+}
