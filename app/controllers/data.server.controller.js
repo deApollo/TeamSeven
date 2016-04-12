@@ -121,8 +121,8 @@ exports.removeExercise = function(req, res) {
 exports.updateExercise = function(req, res) {
     var eID = req.body.id;
     var exName = req.body.exerciseName;
-    var exDesc = req.body.exerciseDesc;
-    Exercise.update({ _id: eID },
+    var exDesc = JSON.stringify(req.body.exerciseDesc);
+    Exercise.update({ _id: mongoose.Types.ObjectId(eID) },
         { exercisename: exName, exercisedesc: exDesc},
         {},
         function (err, raw) {
@@ -216,7 +216,7 @@ exports.updateWorkout = function(req, res){
         objIDArr.push(mongoose.Types.ObjectId(wExer[i]));
     }
 
-    Workout.update({ _id: eID },
+    Workout.update({ _id: mongoose.Types.ObjectId(wID) },
         { workoutname : wName, workoutdesc : wDesc, exercises : objIDArr},
         {},
         function (err, raw) {

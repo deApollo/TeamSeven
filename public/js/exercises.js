@@ -32,10 +32,13 @@ app.controller("WorkoutCtrl", function($scope, $http){
         var wLocal = $scope.workouts;
         var curW = wLocal[wIndex];
         if(wIndex < $scope.workouts.length && eIndex < curW.exercises.length){
-            if(curW.id == null && curW.modified)
-                addExercise(curW.exercises[eIndex],wIndex,eIndex);
-            else if(curW.id && curW.modified)
-                updateExercise(curW.exercises[eIndex],wIndex,eIndex);
+            var curE = curW.exercises[eIndex];
+            if(curE.id == null && curE.modified)
+                addExercise(curE,wIndex,eIndex);
+            else if(curE.id && curE.modified)
+                updateExercise(curE,wIndex,eIndex);
+            else
+                saveHelper(wIndex,eIndex+1);
         } else if (wIndex < $scope.workouts.length){
             if(wLocal[wIndex].id == null && wLocal[wIndex].modified)
                 addWorkout(wLocal[wIndex],wIndex);
@@ -137,7 +140,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
         $scope.workouts.push({name : "", id : null, eids: [], exercises : [], modified : false});
     }
 
-    $scope.newExcercise = function (workout, wtype){
+    $scope.newExercise = function (workout, wtype){
         workout.exercises.push({name : "", id : null, type: wtype, data : {}, modified : false});
         workout.modified = true;
     }
@@ -146,7 +149,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
         saveHelper(0,0);
     }
 
-    $scope.modifiy = function(item){
+    $scope.modify = function(item){
         item.modified = true;
     }
 });
