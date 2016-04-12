@@ -77,6 +77,7 @@ exports.getExercises = function(req, res) {
 exports.addExercise = function(req, res) {
     var exName = req.body.exerciseName;
     var exDesc = req.body.exerciseDesc;
+    console.log("Attempting to add exercise with name: " + exName + " and data: " + exDesc);
     Exercise.create({
         username: req.session.username,
         excercisename: exName,
@@ -116,9 +117,9 @@ exports.removeExercise = function(req, res) {
 }
 
 exports.getWorkouts = function(req, res) {
-    Workout.find({
-        username: req.session.username
-    }, function(err, obj) {
+    Workout.find({ username: req.session.username })
+    .populate('exercises')
+    .exec(function(err, obj) {
         if (err) {
             res.json({
                 responseCode: 0,
@@ -138,12 +139,14 @@ exports.addWorkout = function(req, res) {
     var wDesc = req.body.activityDesc;
     var wExer = req.body.exercises;
 
+    console.log("Attempting to add workout with name: " + wName + " description: " + wDesc + " exercises: " + wExer);
+
     var workout = new Workout();
     workout.workoutname = wName;
     workout.workoutdesc = wDesc;
     workout.username = req.session.username;
     for (var i = 0; i < wExer.length; i++) {
-        workout.exercises.push(wExer[i]);
+        workout.exercises.push(mongoose.Types.ObjectId(wExer[i]));
     }
     workout.save(function(err, obj){
         if (err) {

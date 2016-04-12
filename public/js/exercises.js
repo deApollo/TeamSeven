@@ -1,91 +1,48 @@
 var app = angular.module("Workout", ["ngRoute"]);
-//var socket = io.connect("http://localhost:3000/");
 
-
-// The Workout Object: A container for Excercise Objects
-function Workout($rootScope){
-    this.$rootScope = $rootScope;
-    this.name = "";
-    this.exercises = [];
-}
-
-Workout.prototype.getName = function (){
-    return this.name;
-};
-
-
-app.factory("Workout", function($injector){
-    return function(name, exercises) {return $injector.instantiate(Workout, {name: name, exercises: exercises}); };
-});
-
-
-// The Excercise Object: Has a name and a type. Depending on the type, the data will change.
-function Excercise($rootScope, type){
-    this.$rootScope = $rootScope;
-    this.name = "";
-    this.type = type;
-    this.data = {};
-    if (type == "Interval"){
-        this.data = new IntervalData;
-    }
-    if (type == "Reps"){
-        this.data = new RepData;
-    }
-    this.eids = [];
-    this.id = null;
-}
-
-app.factory("Excercise", function($injector){
-    return function(name, type, data) {return $injector.instantiate(Excercise, {name: name, type: type, data: data}); };
-});
-
-
-// Various Excercise data types
-function IntervalData($rootScope){
-    this.$rootScope = $rootScope;
-    this.sets = 0;
-    this.time = 0;
-}
-app.factory("IntervalData", function($injector){
-    return function(sets, time) {return $injector.instantiate(Excercise, {sets: sets, time: time}); };
-});
-
-function RepData($rootScope){
-    this.$rootScope = $rootScope;
-    this.sets = 0;
-    this.reps = 0;
-    this.weight = 0;
-}
-app.factory("RepData", function($injector){
-    return function(sets, reps, weight) {return $injector.instantiate(Excercise, {sets: sets, reps: reps, weight: weight}); };
-});
-
-
-app.controller("WorkoutCtrl", function($scope, $http, Workout){
+app.controller("WorkoutCtrl", function($scope, $http){
     $scope.workouts = [];
 
-    function objToJSON(obj){
-        if(obj.weight){
-            return  {"sets" : obj.sets, "reps" : obj.reps : "weight" : obj.weight}
-        } else {
-            return {"sets" : obj.sets, "reps" : obj.reps }
-        }
-    }
+    angular.element(document).ready(getWorkouts);
 
-    function addExercise(exercise, workoutIndex){
+    function getWorkouts(){
+        $http({
+            method: 'GET',
+            url: '/data/getWorkouts'
+        }).then(function successCallback(response){
+            console.log(response.data);
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+    };
+
+    function saveHelper(wIndex,eIndex){
+        var wLocal = $scope.workouts;
+        var curW = wLocal[wIndex];
+        if(wIndex < $scope.workouts.length && eIndex < curW.exercises.length){
+            addExercise(curW.exercises[eIndex],wIndex,eIndex);
+        } else if (wIndex < $scope.workouts.length){
+            addWorkout(wLocal[wIndex],wIndex);
+            saveHelper(wIndex+1,0);
+        }
+    };
+
+    function addExercise(exercise, workoutIndex, eIndex){
         $http({
             method: 'POST',
             url: '/data/addExercise',
             data: {
                 exerciseName: exercise.name,
-                exerciseDesc: objToJSON(exercise.data)
+                exerciseDesc: exercise.data
             }
         }).then(function successCallback(response) {
-            $scope.workouts[workoutIndex].eids.push(response.data);
+            console.log(response.data)
+            $scope.workouts[workoutIndex].eids.push(response.data.id);
+            saveHelper(workoutIndex,eIndex+1);
         }, function errorCallback(response) {
             console.log(response);
         });
-    }
+    };
 
     function addWorkout(workout, workoutIndex){
         $http({
@@ -94,7 +51,7 @@ app.controller("WorkoutCtrl", function($scope, $http, Workout){
             data: {
                 workoutName: workout.name,
                 activityDesc : "",
-                exercises: workout.eids;
+                exercises: workout.eids
             }
         }).then(function successCallback(response) {
             $scope.workouts[workoutIndex].id = response.data.id;
@@ -104,27 +61,14 @@ app.controller("WorkoutCtrl", function($scope, $http, Workout){
     }
 
     $scope.newWorkout = function (){
-        $scope.workouts.push(new Workout(this) );
-        console.log($scope.workouts);
+        $scope.workouts.push({name : "", id : null, eids: [], exercises : []});
     }
 
-    $scope.newExcercise = function (workout, type){
-        if (type == "Interval" || type == "Reps"){
-             workout.exercises.push(new Excercise(this, type) );
-        }
-        console.log(type, workout.exercises);
+    $scope.newExcercise = function (workout, wtype){
+        workout.exercises.push({name : "", id : null, type: wtype, data : {}});
     }
 
     $scope.saveWorkouts = function(){
-        var wLocal = $scope.workouts;
-        for(var  i = 0; i < wLocal.length; i++){
-            var curW = wLocal[i];
-            for(var j = 0; j < curW.exercises.lenth; j++){
-                addExercise(curW.exercises[j],i);
-            }
-            addWorkout(wLocal[i],i);
-        }
+        saveHelper(0,0);
     }
-
-
 });
