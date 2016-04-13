@@ -25,6 +25,7 @@
     </head>
     <body ng-app="performer">
         <div ng-controller="performance">
+            <h2>{{workout.name}}</h2>
             <p>{{serverMsg}}</p>
             <div ng-repeat="exercise in workout.exercises" ng-show="stageCheck(exercise)" class="animate-show">
                 <h4>{{exercise.name}}</h4>
