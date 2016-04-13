@@ -288,7 +288,8 @@ exports.addPerformance = function(req, res){
 exports.getMostRecentPerformance = function(req, res){
     var exerciseID = mongoose.Types.ObjectId(req.query.wid);
     console.log("Attempting to get most recent performance for exercise: " + exerciseID);
-    Performance.findOne({ exercise : exerciseID}, {}, { sort : {'created_at' : -1} }).
+    Performance.findOne({ exercise : exerciseID}).
+    sort({ '_id' : -1}).
     populate("exercise").
     exec(function(err, obj){
         if (err) {

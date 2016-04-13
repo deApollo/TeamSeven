@@ -20,11 +20,13 @@
 
         <!-- Custom Fonts -->
         <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+        <link href="css/perform.css" rel="stylesheet">
     </head>
     <body ng-app="performer">
         <div ng-controller="performance">
             <p>{{serverMsg}}</p>
-            <div ng-repeat="exercise in workout.exercises" ng-show="stageCheck(exercise)">
+            <div ng-repeat="exercise in workout.exercises" ng-show="stageCheck(exercise)" class="animate-show">
                 <h4>{{exercise.name}}</h4>
                 <div ng-if="exercise.type == 'Interval'">
                     <p>Your goal is {{exercise.data.sets}} sets in {{exercise.data.time}} time</p>
