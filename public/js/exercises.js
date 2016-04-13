@@ -186,8 +186,10 @@ app.controller("WorkoutCtrl", function($scope, $http){
     }
 
     $scope.newExercise = function (workout, wtype){
-        workout.exercises.push({name : "", id : null, type: wtype, data : {}, modified : false});
-        workout.modified = true;
+        if(wtype){
+            workout.exercises.push({name : "", id : null, type: wtype, data : {}, modified : false});
+            workout.modified = true;
+        }
     }
 
     $scope.saveWorkouts = function(){
