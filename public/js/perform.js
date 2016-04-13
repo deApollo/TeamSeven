@@ -19,13 +19,20 @@ app.controller("performance", function($scope, $http, $location){
                 var eids = [];
                 for(var j = 0; j < curW.exercises.length; j++){
                     var curE = curW.exercises[j];
-                    exerciseArr.push({name : curE.exercisename, id : curE._id, type: curE.exercisetype, data : JSON.parse(curE.exercisedesc), modified : false, performance : {}});
+                    exerciseArr.push({name : curE.exercisename, id : curE._id, type: curE.exercisetype, data : JSON.parse(curE.exercisedesc), modified : false, performance : {}, last : {avail : false}, ret: false});
                     eids.push(curE._id);
                 }
                 $scope.workout = {name : curW.workoutname, id : curW._id, eids: eids, exercises : exerciseArr, modified : false};
         }, function errorCallback(response) {
             console.log(response);
         });
+    }
+
+    function populateNextBest(exercise,mostrecent){
+        if(mostrecent.responseCode == 1 && mostrecent.data){
+            exercise.last.avail = true;
+            exercise.last.data = JSON.parse(mostrecent.data.pdata);
+        }
     }
 
     function submitPerformance(exercise){
@@ -56,7 +63,7 @@ app.controller("performance", function($scope, $http, $location){
             url: '/data/getMostRecentPerformance?wid='+exerciseID
         }).then(function successCallback(response){
             console.log(response.data);
-            callback(response.data);
+            callback(exercise,response.data);
         }, function errorCallback(response) {
             console.log(response);
         });
@@ -83,8 +90,13 @@ app.controller("performance", function($scope, $http, $location){
 
     $scope.stageCheck = function(exercise){
         var eIndex = $scope.workout.exercises.indexOf(exercise);
-        if($scope.currentExercise == eIndex)
+        if($scope.currentExercise == eIndex){
+            if(exercise.ret == false){
+                getMostRecentPerformance(exercise,populateNextBest);
+                exercise.ret = true;
+            }
             return true;
+        }
         return false;
     }
 
