@@ -112,7 +112,7 @@
 
 									<div class="form-group col-xs-3">
 										<label for="numSets">Sets</label>
-										<input type="number" class="form-control" id="numSets" ng-model="exercise.data.sets" placeholder="3" ng-blur="modify(exercise)">
+										<input type="number" pattern="[0-9]" class="form-control" id="numSets" ng-model="exercise.data.sets" placeholder="3" ng-blur="modify(exercise)">
 									</div>
 
 									<div class="form-group col-xs-3">
