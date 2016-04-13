@@ -99,6 +99,7 @@
 						<span class="input-group-addon" id="basic-addon1">Workout Name: </span>
 						<input type="text" class="form-control" placeholder="Leg Day" aria-describedby="basic-addon1" ng-model="workout.name" ng-blur="modify(workout)">
 						<button class="btn btn-default" ng-click="removeWorkout(workout)">Remove</button>
+						<a ng-href="/perform?wid={{workout.id}}" class="btn btn-default" ng-if="workout.id != null">Perform</a>
 					</div>
 					<div class="panel-body">
 						<div ng-repeat="exercise in workout.exercises">

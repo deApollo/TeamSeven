@@ -44,16 +44,30 @@ var WorkoutSchema = new mongoose.Schema({
     exercises : [{type : mongoose.Schema.Types.ObjectId, ref : "Exercise"}]
 });
 
-WorkoutSchema.pre('remove', function(next) {
-    for(var i = 0; i < this.exercises.length; i++){
-        Exercise.remove({ _id : this.exercises[i]}).exec();
+var Workout = mongoose.model('Workout', WorkoutSchema);
+
+var PerformanceSchema = new mongoose.Schema({
+    exercise : { type : mongoose.Schema.Types.ObjectId, ref : "Exercise" },
+    pdata : {
+        type: String,
+        get: function(data) {
+            try {
+                return JSON.parse(data);
+            } catch (err) {
+                return data;
+            }
+        },
+        set: function(data) {
+            return JSON.stringify(data);
+        }
     }
 });
 
-var Workout = mongoose.model('Workout', WorkoutSchema)
+var Performance = mongoose.model('Performance', PerformanceSchema);
 
 module.exports = {
     User : User,
     Exercise : Exercise,
-    Workout : Workout
+    Workout : Workout,
+    Performance : Performance
 }

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <base href="/">
+
+        <title>Team Seven</title>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+
+        <!-- Bootstrap Core CSS -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="css/sb-admin.css" rel="stylesheet">
+
+        <!-- Custom Fonts -->
+        <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    </head>
+    <body ng-app="performer">
+        <div ng-controller="performance">
+            <p>{{serverMsg}}</p>
+            <div ng-repeat="exercise in workout.exercises" ng-show="stageCheck(exercise)">
+                <h4>{{exercise.name}}</h4>
+                <div ng-if="exercise.type == 'Interval'">
+                    <p>Your goal is {{exercise.data.sets}} sets in {{exercise.data.time}} time</p>
+                    <div>
+                        <input type="text" ng-model="exercise.performance.sets" placeholder="Actual sets">
+                        <input type="text" ng-model="exercise.performance.time" placeholder="Actual time">
+                    </div>
+                </div>
+                <div ng-if="exercise.type == 'Reps'">
+                    <p>Your goal is {{exercise.data.sets}} sets of {{exercise.data.reps}} reps with {{exercise.data.weight}} weight</p>
+                    <div>
+                        <input type="text" class="form-control" ng-model="exercise.performance.sets" placeholder="Actual sets">
+                        <input type="text" class="form-control" ng-model="exercise.performance.reps" placeholder="Actual reps">
+                        <input type="text" class="form-control" ng-model="exercise.performance.weight" placeholder="Actual Weight">
+                    </div>
+                </div>
+                <button class="btn btn-default" ng-click="addPerformance(exercise)">Submit Performance</button>
+            </div>
+            <div ng-show="isDone()">
+                <p>You're all done!</p>
+                <a onclick="window.location = '/dashboard'">Return to dashboard</a>
+            </div>
+        </div>
+    </body>
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/perform.js"></script>
+</html>

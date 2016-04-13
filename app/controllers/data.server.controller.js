@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var User = require('./../schema.js').User;
 var Exercise = require('./../schema.js').Exercise;
 var Workout = require('./../schema.js').Workout;
+var Performance = require('./../schema.js').Performance;
 
 exports.changeUserPicture = function(req,res){
     User.update({username : req.session.username}, { $set: {picture_uri : req.session.username}},function(err, obj){
@@ -124,6 +125,7 @@ exports.updateExercise = function(req, res) {
     var eID = req.body.id;
     var exName = req.body.exerciseName;
     var exDesc = JSON.stringify(req.body.exerciseDesc);
+    console.log("Attempting to update exercise with name: " + exName + " and data: " + exDesc);
     Exercise.update({ _id: mongoose.Types.ObjectId(eID) },
         { exercisename: exName, exercisedesc: exDesc},
         {},
@@ -145,6 +147,26 @@ exports.updateExercise = function(req, res) {
 exports.getWorkouts = function(req, res) {
     console.log("Attempting to get list of workouts for user: " + req.session.username);
     Workout.find({ username: req.session.username })
+    .populate('exercises')
+    .exec(function(err, obj) {
+        if (err) {
+            res.json({
+                responseCode: 0,
+                data: err
+            });
+        } else {
+            res.json({
+                responseCode: 1,
+                data: obj
+            });
+        }
+    });
+};
+
+exports.getWorkout = function(req, res){
+    var workoutID = req.query.wid;
+    console.log("Attempting to find workout with ID: " + workoutID + " for user: "+ req.session.username);
+    Workout.findOne({ username: req.session.username, _id : mongoose.Types.ObjectId(workoutID) })
     .populate('exercises')
     .exec(function(err, obj) {
         if (err) {
@@ -239,4 +261,66 @@ exports.updateWorkout = function(req, res){
             }
         }
     );
+};
+
+exports.addPerformance = function(req, res){
+    var exerciseID = req.body.wid;
+    var performanceData = req.body.pdata;
+    console.log("Attempting to add performance data for exercise: " + exerciseID + " with data: " + performanceData);
+    Performance.create({
+        exercise: mongoose.Types.ObjectId(exerciseID),
+        pdata: performanceData
+    }, function(err, obj) {
+        if (err) {
+            res.json({
+                responseCode: 0,
+                error: err
+            });
+        } else {
+            res.json({
+                responseCode: 1,
+                id: obj._id
+            });
+        }
+    });
+};
+
+exports.getMostRecentPerformance = function(req, res){
+    var exerciseID = mongoose.Types.ObjectId(req.query.wid);
+    console.log("Attempting to get most recent performance for exercise: " + exerciseID);
+    Performance.findOne({ _id : exerciseID}, {}, { sort : {'created_at' : -1} }).
+    populate("exercise").
+    exec(function(err, obj){
+        if (err) {
+            res.json({
+                responseCode: 0,
+                error: err
+            });
+        } else {
+            res.json({
+                responseCode: 1,
+                data : obj
+            });
+        }
+    });
+};
+
+exports.getAllPerformances = function(req, res){
+    var exerciseID = mongoose.Types.ObjectId(req.query.wid);
+    console.log("Attempting to get all performances for exercise: " + exerciseID);
+    Performance.find({ _id : exerciseID}).
+    populate("exercise").
+    exec(function(err, obj){
+        if (err) {
+            res.json({
+                responseCode: 0,
+                error: err
+            });
+        } else {
+            res.json({
+                responseCode: 1,
+                data : obj
+            });
+        }
+    });
 }

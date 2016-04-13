@@ -31,6 +31,7 @@ module.exports = function(app) {
     var changepassword = require('../controllers/changepassword.server.controller');
     var login = require('../controllers/login.server.controller');
     var data = require("../controllers/data.server.controller");
+    var perform = require("../controllers/perform.server.controller");
 
     app.get('/', login.indexRedir, index.render);
     app.get('/logout', login.validate, login.logout);
@@ -39,8 +40,12 @@ module.exports = function(app) {
     app.get('/preferences', login.validate, preferences.render);
     app.get('/changepassword', login.validate, changepassword.render);
     app.get('/workouts', login.validate, workouts.render);
+    app.get('/perform', login.validate, perform.render);
     app.get('/data/getExercises',login.validate, data.getExercises);
     app.get('/data/getWorkouts',login.validate, data.getWorkouts);
+    app.get('/data/getWorkout', login.validate, data.getWorkout);
+    app.get('/data/getMostRecentPerformance', login.validate, data.getMostRecentPerformance);
+    app.get('/data/getAllPerformances', login.validate, data.getAllPerformances)
 
     app.post('/login', login.login);
     app.post('/logout', login.validate, login.logout);
@@ -53,4 +58,5 @@ module.exports = function(app) {
     app.post('/data/removeExercise', login.validate, data.removeExercise);
     app.post('/data/changeUserPreference', login.validate, data.changeUserPreference);
     app.post('/data/changeUserPicture', login.validate, deleteOldPicture, upload.single('avatar'), data.changeUserPicture);
+    app.post('/data/addPerformance', login.validate, data.addPerformance);
 };
