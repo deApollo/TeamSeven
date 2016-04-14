@@ -1,4 +1,4 @@
-mongoose = require('mongoose');
+var mongoose = require("mongoose");
 
 var UserSchema = new mongoose.Schema({
     firstname : String,
@@ -11,10 +11,10 @@ var UserSchema = new mongoose.Schema({
 });
 
 UserSchema.methods.getWorkouts = function(callback){
-    return this.model('Workout').find({username : this.username},callback);
-}
+    return this.model("Workout").find({username : this.username},callback);
+};
 
-var User = mongoose.model('User',UserSchema);
+var User = mongoose.model("User",UserSchema);
 
 var ExerciseSchema = new mongoose.Schema({
     username : String,
@@ -35,12 +35,12 @@ var ExerciseSchema = new mongoose.Schema({
     }
 });
 
-ExerciseSchema.pre('remove', function(next){
+ExerciseSchema.pre("remove", function(next){
     Performance.remove({exercise : this._id}).exec();
     next();
 });
 
-var Exercise = mongoose.model('Exercise', ExerciseSchema)
+var Exercise = mongoose.model("Exercise", ExerciseSchema);
 
 var WorkoutSchema = new mongoose.Schema({
     workoutname : String,
@@ -49,7 +49,7 @@ var WorkoutSchema = new mongoose.Schema({
     exercises : [{type : mongoose.Schema.Types.ObjectId, ref : "Exercise"}]
 });
 
-var Workout = mongoose.model('Workout', WorkoutSchema);
+var Workout = mongoose.model("Workout", WorkoutSchema);
 
 var PerformanceSchema = new mongoose.Schema({
     exercise : { type : mongoose.Schema.Types.ObjectId, ref : "Exercise" },
@@ -68,11 +68,11 @@ var PerformanceSchema = new mongoose.Schema({
     }
 });
 
-var Performance = mongoose.model('Performance', PerformanceSchema);
+var Performance = mongoose.model("Performance", PerformanceSchema);
 
 module.exports = {
     User : User,
     Exercise : Exercise,
     Workout : Workout,
     Performance : Performance
-}
+};

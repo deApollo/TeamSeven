@@ -1,5 +1,5 @@
 exports.render = function(req, res) {
-    res.render('register', {
+    res.render("register", {
         message : req.session.message
     });
 };

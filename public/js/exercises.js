@@ -8,8 +8,8 @@ app.controller("WorkoutCtrl", function($scope, $http){
 
     function getWorkouts(){
         $http({
-            method: 'GET',
-            url: '/data/getWorkouts'
+            method: "GET",
+            url: "/data/getWorkouts"
         }).then(function successCallback(response){
             console.log(response.data);
             for(var i = 0; i < response.data.data.length; i++){
@@ -26,7 +26,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
         }, function errorCallback(response) {
             console.log(response);
         });
-    };
+    }
 
     function saveHelper(wIndex,eIndex){
         var wLocal = $scope.workouts;
@@ -46,19 +46,19 @@ app.controller("WorkoutCtrl", function($scope, $http){
                 updateWorkout(wLocal[wIndex],wIndex);
             saveHelper(wIndex+1,0);
         }
-    };
+    }
 
     function updateExercise(exercise, workoutIndex, eIndex){
         $http({
-            method: 'POST',
-            url: '/data/updateExercise',
+            method: "POST",
+            url: "/data/updateExercise",
             data: {
                 id: exercise.id,
                 exerciseName: exercise.name,
                 exerciseDesc: exercise.data
             }
         }).then(function successCallback(response) {
-            console.log(response.data)
+            console.log(response.data);
             if(response.data.responseCode == 1) {
                 $scope.serverMsg += "\nExercise modified succesfully!";
                 saveHelper(workoutIndex,eIndex+1);
@@ -68,19 +68,19 @@ app.controller("WorkoutCtrl", function($scope, $http){
         }, function errorCallback(response) {
             console.log(response);
         });
-    };
+    }
 
     function addExercise(exercise, workoutIndex, eIndex){
         $http({
-            method: 'POST',
-            url: '/data/addExercise',
+            method: "POST",
+            url: "/data/addExercise",
             data: {
                 exerciseName: exercise.name,
                 exerciseDesc: exercise.data,
                 exerciseType: exercise.type
             }
         }).then(function successCallback(response) {
-            console.log(response.data)
+            console.log(response.data);
             if(response.data.responseCode == 1) {
                 $scope.workouts[workoutIndex].eids.push(response.data.id);
                 $scope.serverMsg += "\nExercise saved succesfully!";
@@ -91,12 +91,12 @@ app.controller("WorkoutCtrl", function($scope, $http){
         }, function errorCallback(response) {
             console.log(response);
         });
-    };
+    }
 
     function addWorkout(workout, workoutIndex){
         $http({
-            method: 'POST',
-            url: '/data/addWorkout',
+            method: "POST",
+            url: "/data/addWorkout",
             data: {
                 workoutName: workout.name,
                 activityDesc : "",
@@ -116,8 +116,8 @@ app.controller("WorkoutCtrl", function($scope, $http){
 
     function updateWorkout(workout, workoutIndex){
         $http({
-            method: 'POST',
-            url: '/data/updateWorkout',
+            method: "POST",
+            url: "/data/updateWorkout",
             data: {
                 id : workout.id,
                 workoutName: workout.name,
@@ -140,8 +140,8 @@ app.controller("WorkoutCtrl", function($scope, $http){
     $scope.removeWorkout = function(workout){
         if(workout.id){
             $http({
-                method: 'POST',
-                url: '/data/removeWorkout',
+                method: "POST",
+                url: "/data/removeWorkout",
                 data: {
                     id : workout.id
                 }
@@ -156,15 +156,15 @@ app.controller("WorkoutCtrl", function($scope, $http){
             });
         }
         $scope.workouts.splice($scope.workouts.indexOf(workout),1);
-    }
+    };
 
     $scope.removeExercise = function(workout,exercise){
         var wIndex = $scope.workouts.indexOf(workout);
         var eIndex = $scope.workouts[wIndex].exercises.indexOf(exercise);
         if(exercise.id){
             $http({
-                method: 'POST',
-                url: '/data/removeExercise',
+                method: "POST",
+                url: "/data/removeExercise",
                 data: {
                     id : exercise.id
                 }
@@ -179,24 +179,24 @@ app.controller("WorkoutCtrl", function($scope, $http){
             });
         }
         $scope.workouts[wIndex].exercises.splice(eIndex,1);
-    }
+    };
 
     $scope.newWorkout = function (){
         $scope.workouts.push({name : "", id : null, eids: [], exercises : [], modified : false});
-    }
+    };
 
     $scope.newExercise = function (workout, wtype){
         if(wtype){
             workout.exercises.push({name : "", id : null, type: wtype, data : {}, modified : false});
             workout.modified = true;
         }
-    }
+    };
 
     $scope.saveWorkouts = function(){
         saveHelper(0,0);
-    }
+    };
 
     $scope.modify = function(item){
         item.modified = true;
-    }
+    };
 });

@@ -1,4 +1,4 @@
 exports.render = function(req, res) {
-    res.render('changepassword', {
+    res.render("changepassword", {
     });
 };

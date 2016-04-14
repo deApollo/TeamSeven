@@ -1,8 +1,8 @@
 exports.render = function(req, res) {
     if(req.session.loggedin) {
-        res.redirect('/dashboard');
+        res.redirect("/dashboard");
     } else {
-        res.render('index', {
+        res.render("index", {
             message : req.session.message
         });
     }

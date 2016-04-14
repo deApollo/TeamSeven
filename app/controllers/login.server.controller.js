@@ -1,7 +1,5 @@
-var mongoose = require('mongoose');
-var User = require('./../schema.js').User;
-var passwordHash = require('password-hash');
-var fs = require('fs');
+var User = require("./../schema.js").User;
+var passwordHash = require("password-hash");
 
 exports.register = function(req, res) {
     var fname = req.body.fname;
@@ -26,7 +24,7 @@ exports.register = function(req, res) {
         } else {
             var pwordHash = passwordHash.generate(pword);
             var image_URI = "./../default";
-            User.create({firstname : fname, lastname : lname, username : user, password : pwordHash, email : uemail, preferred_units : upreferred_units, picture_uri : image_URI}, function(err, obj){
+            User.create({firstname : fname, lastname : lname, username : user, password : pwordHash, email : uemail, preferred_units : upreferred_units, picture_uri : image_URI}, function(err){
                 if(err){
                     req.session.loggedin = false;
                     res.redirect("/register");
@@ -44,8 +42,8 @@ exports.register = function(req, res) {
 exports.login = function(req, res) {
     var user = req.body.username;
     var pword = req.body.password;
-    console.log("Attempting to find user " + user + " with password " + pword)
-    User.findOne({username : user} , 'firstname lastname password', function(err, person){
+    console.log("Attempting to find user " + user + " with password " + pword);
+    User.findOne({username : user} , "firstname lastname password", function(err, person){
         if(err){
             req.session.loggedin = false;
             res.redirect("/");
@@ -87,4 +85,4 @@ exports.indexRedir = function(req,res,next){
     } else {
         next();
     }
-}
+};

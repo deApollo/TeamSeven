@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
-var User = require('./../schema.js').User;
-var Exercise = require('./../schema.js').Exercise;
-var Workout = require('./../schema.js').Workout;
-var Performance = require('./../schema.js').Performance;
+var mongoose = require("mongoose");
+var User = require("./../schema.js").User;
+var Exercise = require("./../schema.js").Exercise;
+var Workout = require("./../schema.js").Workout;
+var Performance = require("./../schema.js").Performance;
 
 exports.changeUserPicture = function(req,res){
     User.update({username : req.session.username}, { $set: {picture_uri : req.session.username}},function(err, obj){
@@ -18,10 +18,10 @@ exports.changeUserPicture = function(req,res){
             });
         }
     });
-}
+};
 
 exports.getUserPreferences = function(req, res){
-    User.findOne({username : req.session.username}, 'firstname lastname profile_url preferred_units email', function(err, obj){
+    User.findOne({username : req.session.username}, "firstname lastname profile_url preferred_units email", function(err, obj){
         if(err) {
             res.json({
                 responseCode: 0,
@@ -34,7 +34,7 @@ exports.getUserPreferences = function(req, res){
             });
         }
     });
-}
+};
 
 exports.changeUserPreference = function(req, res){
     var field = req.body.field;
@@ -55,7 +55,7 @@ exports.changeUserPreference = function(req, res){
             });
         }
     });
-}
+};
 
 exports.getExercises = function(req, res) {
     console.log("Getting list of exercises for user: " + req.session.username);
@@ -119,7 +119,7 @@ exports.removeExercise = function(req, res) {
             });
         }
     });
-}
+};
 
 exports.updateExercise = function(req, res) {
     var eID = req.body.id;
@@ -129,7 +129,7 @@ exports.updateExercise = function(req, res) {
     Exercise.update({ _id: mongoose.Types.ObjectId(eID) },
         { exercisename: exName, exercisedesc: exDesc},
         {},
-        function (err, raw) {
+        function (err) {
             if (err) {
                 res.json({
                     responseCode: 0,
@@ -147,7 +147,7 @@ exports.updateExercise = function(req, res) {
 exports.getWorkouts = function(req, res) {
     console.log("Attempting to get list of workouts for user: " + req.session.username);
     Workout.find({ username: req.session.username })
-    .populate('exercises')
+    .populate("exercises")
     .exec(function(err, obj) {
         if (err) {
             res.json({
@@ -167,7 +167,7 @@ exports.getWorkout = function(req, res){
     var workoutID = req.query.wid;
     console.log("Attempting to find workout with ID: " + workoutID + " for user: "+ req.session.username);
     Workout.findOne({ username: req.session.username, _id : mongoose.Types.ObjectId(workoutID) })
-    .populate('exercises')
+    .populate("exercises")
     .exec(function(err, obj) {
         if (err) {
             res.json({
@@ -248,7 +248,7 @@ exports.updateWorkout = function(req, res){
     Workout.update({ _id: mongoose.Types.ObjectId(wID) },
         { workoutname : wName, workoutdesc : wDesc, exercises : objIDArr},
         {},
-        function (err, raw) {
+        function (err) {
             if (err) {
                 res.json({
                     responseCode: 0,
@@ -289,7 +289,7 @@ exports.getMostRecentPerformance = function(req, res){
     var exerciseID = mongoose.Types.ObjectId(req.query.wid);
     console.log("Attempting to get most recent performance for exercise: " + exerciseID);
     Performance.findOne({ exercise : exerciseID}).
-    sort({ '_id' : -1}).
+    sort({ "_id" : -1}).
     exec(function(err, obj){
         if (err) {
             res.json({
@@ -322,4 +322,4 @@ exports.getAllPerformances = function(req, res){
             });
         }
     });
-}
+};
