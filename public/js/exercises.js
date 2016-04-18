@@ -2,6 +2,8 @@ var app = angular.module("Workout", ["ngRoute"]);
 
 app.controller("WorkoutCtrl", function($scope, $http){
     $scope.workouts = [];
+    $scope.workout = {};
+    $scope.overview = true;
     $scope.serverMsg = "";
 
     angular.element(document).ready(getWorkouts);
@@ -182,7 +184,9 @@ app.controller("WorkoutCtrl", function($scope, $http){
     };
 
     $scope.newWorkout = function (){
-        $scope.workouts.push({name : "", id : null, eids: [], exercises : [], modified : false});
+        var index = $scope.workouts.length;
+        $scope.workouts.push({name : "New Workout", id : null, eids: [], exercises : [], modified : false});
+        $scope.editWorkout(index);
     };
 
     $scope.newExercise = function (workout, wtype){
@@ -199,4 +203,13 @@ app.controller("WorkoutCtrl", function($scope, $http){
     $scope.modify = function(item){
         item.modified = true;
     };
+
+    $scope.editWorkout = function(index){
+        $scope.overview = false;
+        $scope.workout = $scope.workouts[index];
+    }
+
+    $scope.doOverview = function(){
+        $scope.overview = true;
+    }
 });
