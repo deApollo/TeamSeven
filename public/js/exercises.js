@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 var app = angular.module("Workout", ["ngRoute"]);
 
 app.controller("WorkoutCtrl", function($scope, $http){
@@ -202,6 +203,8 @@ app.controller("WorkoutCtrl", function($scope, $http){
     };
 });
 =======
+=======
+>>>>>>> origin/master
 var app = angular.module("Workout", ["ngRoute"]);
 
 app.controller("WorkoutCtrl", function($scope, $http){
@@ -417,4 +420,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
         $scope.overview = true;
     }
 });
+<<<<<<< HEAD
+>>>>>>> origin/master
+=======
 >>>>>>> origin/master
