@@ -185,7 +185,10 @@ app.controller("WorkoutCtrl", function($scope, $http){
 
     $scope.newWorkout = function (){
         var index = $scope.workouts.length;
-        $scope.workouts.push({name : "New Workout", id : null, eids: [], exercises : [], modified : false});
+        var increaseInterval = {sets: 0, interval: 0};
+        var increaseReps = {sets: 0, reps: 0, weight: 0};
+        $scope.workouts.push({name : "New Workout", id : null, eids: [], exercises : [], modified : false, 
+            increase_interval: increaseInterval, increase_reps: increaseReps});
         $scope.editWorkout(index);
     };
 
