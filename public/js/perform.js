@@ -26,18 +26,22 @@ app.controller("performance", function($scope, $http, $location) {
             var eids = [];
             for (var j = 0; j < curW.exercises.length; j++) {
                 var curE = curW.exercises[j];
-                exerciseArr.push({
+                var jsonObj = {
                     name: curE.exercisename,
                     id: curE._id,
                     type: curE.exercisetype,
                     data: JSON.parse(curE.exercisedesc),
                     modified: false,
-                    performance: {},
+                    performances: [],
                     last: {
                         avail: false
                     },
                     ret: false
-                });
+                };
+                for(var i = 0; i < jsonObj.data.sets; i++){
+                    jsonObj.performances.push({});
+                }
+                exerciseArr.push(jsonObj);
                 eids.push(curE._id);
             }
             $scope.workout = {
@@ -47,6 +51,27 @@ app.controller("performance", function($scope, $http, $location) {
                 exercises: exerciseArr,
                 modified: false
             };
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+    }
+
+    function updateExercise(exercise){
+        $http({
+            method: "POST",
+            url: "/data/updateExercise",
+            data: {
+                id: exercise.id,
+                exerciseName: exercise.name,
+                exerciseDesc: exercise.data
+            }
+        }).then(function successCallback(response) {
+            console.log(response.data);
+            if(response.data.responseCode == 1) {
+                $scope.serverMsg += "\nExercise '" + exercise.name + "' modified succesfully!";
+            } else {
+                $scope.serverMsg += "\nThere was an issue modifying the exercise '" + exercise.name + "'!";
+            }
         }, function errorCallback(response) {
             console.log(response);
         });
@@ -65,19 +90,29 @@ app.controller("performance", function($scope, $http, $location) {
             url: "/data/addPerformance",
             data: {
                 wid: exercise.id,
-                pdata: exercise.performance
+                pdata: exercise.performances
             }
         }).then(function successCallback(response) {
             console.log(response.data);
             if (response.data.responseCode == 1) {
-                $scope.serverMsg += "\Performance saved succesfully!";
+                $scope.serverMsg += "\nPerformance saved succesfully!";
+
+                if(exercise.type == "Interval"){
+                    var time = $scope.getBestInterval(exercise.performances);
+                    exercise.data.time = time;
+                } else {
+                    var performance = $scope.getBestRep(exercise.performances);
+                    exercise.data.reps = performance.reps;
+                    exercise.data.weight = performance.weight;
+                }
+                updateExercise(exercise);
+                $scope.currentExercise++;
             } else {
                 $scope.serverMsg += "\nThere was an issue saving a performance!";
             }
         }, function errorCallback(response) {
             console.log(response);
         });
-        $scope.currentExercise++;
     }
 
     function getMostRecentPerformance(exercise, callback) {
@@ -96,17 +131,19 @@ app.controller("performance", function($scope, $http, $location) {
     $scope.addPerformance = function(exercise) {
         var failed = false;
         var pkeyCount = 0;
-        for (var pkey in exercise.performance) {
-            if (exercise.performance.hasOwnProperty(pkey)) {
-                pkeyCount += 1;
-                if (!exercise.performance[pkey]) {
-                    $scope.serverMsg = "You have not filled in " + pkey;
-                    failed = true;
+        for(var i = 0; i < exercise.performances.length; i++){
+            for (var pkey in exercise.performances[i]) {
+                if (exercise.performances[i].hasOwnProperty(pkey)) {
+                    pkeyCount += 1;
+                    if (!exercise.performances[i][pkey]) {
+                        $scope.serverMsg += "You have not filled in " + pkey + " " + i;
+                        failed = true;
+                    }
                 }
             }
         }
         if (pkeyCount < 2) {
-            $scope.serverMsg = "You haven\'t filled in anything!";
+            $scope.serverMsg += "You haven\'t filled things in!";
         } else if (!failed)
             submitPerformance(exercise);
     };
@@ -129,6 +166,38 @@ app.controller("performance", function($scope, $http, $location) {
         }
         return false;
     };
+
+    $scope.getNumber = function(num){
+        var ml = [];
+        for(var i = 0; i < num; i++){
+            ml.push(i);
+        }
+        return ml;
+    };
+
+    $scope.getBestInterval = function(idata){
+        var bestTime = 10000;
+        for(var i = 0; i < idata.length; i++){
+            if(idata[i].time < bestTime)
+                bestTime = idata[i].time;
+        }
+        return bestTime;
+    };
+
+    $scope.getBestRep = function(rdata){
+        var bestRep = {reps: 0 , weight : 0};
+        for(var i = 0; i < rdata.length; i++){
+            var curR = rdata[i];
+            if(curR.reps > bestRep.reps){
+                if(curR.weight > bestRep.weight){
+                    bestRep.reps = curR.reps;
+                    bestRep.weight = curR.weight;
+                }
+            }
+        }
+        return bestRep;
+    };
+
 });
 app.config(function($locationProvider) {
     $locationProvider.html5Mode(true).hashPrefix("!");

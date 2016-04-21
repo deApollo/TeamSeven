@@ -207,9 +207,9 @@ app.controller("WorkoutCtrl", function($scope, $http){
     $scope.editWorkout = function(index){
         $scope.overview = false;
         $scope.workout = $scope.workouts[index];
-    }
+    };
 
     $scope.doOverview = function(){
         $scope.overview = true;
-    }
+    };
 });
