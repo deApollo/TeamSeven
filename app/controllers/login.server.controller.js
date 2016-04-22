@@ -46,18 +46,22 @@ exports.login = function(req, res) {
     User.findOne({username : user} , "firstname lastname password", function(err, person){
         if(err){
             req.session.loggedin = false;
+            req.session.message = "An error occured logging you in";
             res.redirect("/");
         } else if(person != null){
             if(passwordHash.verify(pword,person.password)){
                 req.session.loggedin = true;
                 req.session.username = user;
+                req.session.message = "You have been successfully logged in!";
                 res.redirect("/dashboard");
             } else {
                 req.session.loggedin = false;
+                req.session.message = "Invalid username or password!";
                 res.redirect("/");
             }
         } else {
             req.session.loggedin = false;
+            req.session.message = "Invalid username or password!";
             res.redirect("/");
         }
     });
@@ -65,6 +69,7 @@ exports.login = function(req, res) {
 
 exports.logout = function(req, res){
     req.session.loggedin = false;
+    req.session.message = "You have been logged out!";
     req.session.destroy();
     res.redirect("/");
 };

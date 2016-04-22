@@ -9,7 +9,8 @@ exports.render = function(req, res) {
             preferred_units : obj.preferred_units,
             email : obj.email,
             username : req.session.username,
-            img_name : obj.picture_uri
+            img_name : obj.picture_uri,
+            page : req.url
         });
     });
 };

@@ -4,7 +4,8 @@ exports.render = function(req, res) {
         res.render("dashboard", {
             name : obj.firstname + " " + obj.lastname,
             username : req.session.username,
-            img_name : obj.picture_uri
+            img_name : obj.picture_uri,
+            page : req.url
         });
     });
 };
