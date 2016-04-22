@@ -86,7 +86,8 @@ exports.validate = function(req,res,next){
 
 exports.indexRedir = function(req,res,next){
     if(req.session.loggedin){
-        res.redirect("/dashboard");
+        if(req.session.loggedin == true)
+            res.redirect("/dashboard");
     } else {
         next();
     }
