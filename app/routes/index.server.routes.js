@@ -34,12 +34,15 @@ module.exports = function(app) {
     var login = require("../controllers/login.server.controller");
     var data = require("../controllers/data.server.controller");
     var perform = require("../controllers/perform.server.controller");
+    //needs to be renamed
+    var armsday = require("../controllers/armsday.server.controller");
 
     app.get("/", login.indexRedir, index.render);
     app.get("/logout", login.validate, login.logout);
     app.get("/register", register.render);
     app.get("/dashboard", login.validate, dashboard.render);
     app.get("/preferences", login.validate, preferences.render);
+    app.get("arm")
     app.get("/changepassword", login.validate, changepassword.render);
     app.get("/workouts", login.validate, workouts.render);
     app.get("/perform", login.validate, perform.render);
@@ -48,6 +51,9 @@ module.exports = function(app) {
     app.get("/data/getWorkout", login.validate, data.getWorkout);
     app.get("/data/getMostRecentPerformance", login.validate, data.getMostRecentPerformance);
     app.get("/data/getAllPerformances", login.validate, data.getAllPerformances);
+    //needs to be renamed
+    app.get("/armsday", login.validate, armsday.render);
+
 
     app.post("/login", login.login);
     app.post("/logout", login.validate, login.logout);
