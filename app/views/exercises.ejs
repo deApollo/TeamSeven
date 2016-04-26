@@ -11,8 +11,14 @@
 
 	<title>Team Seven</title>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
+
+	
+
+	
+
+
+	<!-- jQuery-ui -->
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -68,8 +74,7 @@
 					</div>
 					<div class="panel-body">
 
-
-
+					<ul ui-sortable="sortableOptions" ng-model="workout.exercises">
 						<div ng-repeat="exercise in workout.exercises">
 							<div class="row" ng-if="exercise.type == 'Interval' ">
 								<form class="form-horizontal">
@@ -101,6 +106,7 @@
 
 								</form>
 							</div>
+
 							<div class="row" ng-if="exercise.type == 'Reps' " id="exerciseInputBlock">
 								<form class="form-horizontal">
 									<div class="form-group col-xs-3">
@@ -136,46 +142,13 @@
 										<button class="btn btn-default" ng-click="removeExercise(workouts[wIndex],exercise)">Remove</button>
 									</div>
 							</div>
-							</form>
+							
 						</div>
+					</ul>
 
-						<form class="form-horizontal">
-							<div class="row">
 
-								<span class="input-group-addon" id="basic-addon1">Auto Increase Interval Exercise: </span>
-								<div class="form-group col-xs-1"></div>
-								<div class="form-group col-xs-2">
-									<label for="increase_interval.sets">Sets:</label>
-									<input type="number" pattern="[0-9]" class="form-control" id="numSets" ng-model="exercise.data.sets" placeholder="0" ng-blur="modify(exercise)">
-								</div>
-								<div class="form-group col-xs-1"></div>
-								<div class="form-group col-xs-2">
-									<label for="increase_interval.interval">Interval</label>
-									<input type="number" pattern="[0-9]" class="form-control" id="numSets" ng-model="exercise.data.sets" placeholder="0" ng-blur="modify(exercise)">
-								</div>
-							</div>
-						</form>
 
-						<form class="form-horizontal">
-							<div class="row">
-								<span class="input-group-addon" id="basic-addon1">Auto Increase Rep Exercise: </span>
-								<div class="form-group col-xs-1"></div>
-								<div class="form-group col-xs-2">
-									<label for="exerciseName">Sets  </label>
-									<input type="number" pattern="[0-9]" class="form-control" id="numSets" ng-model="exercise.data.sets" placeholder="0" ng-blur="modify(exercise)">
-								</div>
-								<div class="form-group col-xs-1"></div>
-								<div class="form-group col-xs-2">
-									<label for="exerciseName">Reps</label>
-									<input type="number" pattern="[0-9]" class="form-control" id="numSets" ng-model="exercise.data.sets" placeholder="0" ng-blur="modify(exercise)">
-								</div>
-								<div class="form-group col-xs-1"></div>
-								<div class="form-group col-xs-2">
-									<label for="exerciseName">Weight</label>
-									<input type="number" pattern="[0-9]" class="form-control" id="numSets" ng-model="exercise.data.sets" placeholder="0" ng-blur="modify(exercise)">
-								</div>
-							</div>
-						</form>
+						
 						<br>
 						<div class="activitySelect">
 							<select class="form-control" id="dropdown" ng-model="selectionType">
@@ -204,8 +177,22 @@
 	<!-- jQuery -->
 	<script src="js/jquery.js"></script>
 
+	<!-- jQuery-ui -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+	<!-- Angular -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
+
+	<!-- sortable-ui -->
+	<script type="text/javascript" src="js/sortable.min.js"></script>
+
+
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
+
+
+	
 
 </body>
 <script src="js/exercises.js"></script>
