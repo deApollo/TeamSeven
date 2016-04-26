@@ -1,4 +1,4 @@
-var app = angular.module("Workout", ["ngRoute"]);
+var app = angular.module("Workout", ["ngRoute", "ui.sortable"]);
 
 app.controller("WorkoutCtrl", function($scope, $http){
     $scope.workouts = [];
@@ -7,6 +7,12 @@ app.controller("WorkoutCtrl", function($scope, $http){
     $scope.serverMsg = "";
 
     angular.element(document).ready(getWorkouts);
+
+    $scope.sortableOptions = {
+        update: function(e, ui){
+            $scope.workout.modified = true; 
+        },
+    };
 
     function getWorkouts(){
         $http({
@@ -117,6 +123,12 @@ app.controller("WorkoutCtrl", function($scope, $http){
     }
 
     function updateWorkout(workout, workoutIndex){
+        // Makes sure exercise name matches id
+        var newEids = [];
+        for (e in workout.exercises){
+            newEids.push(workout.exercises[e].id);
+        }
+        
         $http({
             method: "POST",
             url: "/data/updateWorkout",
@@ -124,7 +136,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
                 id : workout.id,
                 workoutName: workout.name,
                 activityDesc : "",
-                exercises: workout.eids
+                exercises: newEids
             }
         }).then(function successCallback(response) {
             if(response.data.responseCode == 1){
@@ -215,4 +227,10 @@ app.controller("WorkoutCtrl", function($scope, $http){
     $scope.doOverview = function(){
         $scope.overview = true;
     };
+
+    
+
+    
+
+
 });
