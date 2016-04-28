@@ -34,14 +34,11 @@
             <li class="user-side-name">
                 <h3><%=name%></h3>
             </li>
-            <li <% if(page == "/preferences") { %> class="active" <% } %>>
-                <a href="/preferences"><i class="fa fa-fw fa-edit"></i> Preferences</a>
-            </li>
-            <li>
-                <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Progress</a>
-            </li>
             <li <% if(page == "/workouts") { %> class="active" <% } %>>
                 <a href="/workouts"><i class="fa fa-fw fa-table"></i> Workouts</a>
+            </li>
+            <li <% if(page == "/preferences") { %> class="active" <% } %>>
+                <a href="/preferences"><i class="fa fa-fw fa-edit"></i> Preferences</a>
             </li>
         </ul>
     </div>
