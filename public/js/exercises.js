@@ -5,14 +5,9 @@ app.controller("WorkoutCtrl", function($scope, $http){
     $scope.workout = {};
     $scope.overview = true;
     $scope.serverMsg = "";
+    $scope.editingOff = true;
 
     angular.element(document).ready(getWorkouts);
-
-    $scope.sortableOptions = {
-        update: function(e, ui){
-            $scope.workout.modified = true; 
-        },
-    };
 
     function getWorkouts(){
         $http({
@@ -123,12 +118,6 @@ app.controller("WorkoutCtrl", function($scope, $http){
     }
 
     function updateWorkout(workout, workoutIndex){
-        // Makes sure exercise name matches id
-        var newEids = [];
-        for (e in workout.exercises){
-            newEids.push(workout.exercises[e].id);
-        }
-        
         $http({
             method: "POST",
             url: "/data/updateWorkout",
@@ -136,7 +125,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
                 id : workout.id,
                 workoutName: workout.name,
                 activityDesc : "",
-                exercises: newEids
+                exercises: workout.exercises
             }
         }).then(function successCallback(response) {
             if(response.data.responseCode == 1){
@@ -199,7 +188,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
         var index = $scope.workouts.length;
         var increaseInterval = {sets: 0, interval: 0};
         var increaseReps = {sets: 0, reps: 0, weight: 0};
-        $scope.workouts.push({name : "New Workout", id : null, eids: [], exercises : [], modified : false, 
+        $scope.workouts.push({name : "New Workout", id : null, eids: [], exercises : [], modified : false,
             increase_interval: increaseInterval, increase_reps: increaseReps});
         $scope.editWorkout(index);
     };
@@ -228,9 +217,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
         $scope.overview = true;
     };
 
-    
-
-    
-
-
+    $scope.toggleEdit = function(){
+        $scope.editingOff = !$scope.editingOff;
+    };
 });

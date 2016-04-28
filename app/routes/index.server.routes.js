@@ -28,7 +28,6 @@ module.exports = function(app) {
     var index = require("../controllers/index.server.controller");
     var preferences = require("../controllers/preferences.server.controller");
     var register = require("../controllers/register.server.controller");
-    var dashboard = require("../controllers/dashboard.server.controller");
     var workouts = require("../controllers/workouts.server.controller");
     var changepassword = require("../controllers/changepassword.server.controller");
     var login = require("../controllers/login.server.controller");
@@ -38,7 +37,6 @@ module.exports = function(app) {
     app.get("/", login.indexRedir, index.render);
     app.get("/logout", login.validate, login.logout);
     app.get("/register", register.render);
-    app.get("/dashboard", login.validate, dashboard.render);
     app.get("/preferences", login.validate, preferences.render);
     app.get("/changepassword", login.validate, changepassword.render);
     app.get("/workouts", login.validate, workouts.render);
