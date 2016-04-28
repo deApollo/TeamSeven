@@ -1,10 +1,11 @@
-var app = angular.module("Workout", ["ngRoute"]);
+var app = angular.module("Workout", ["ngRoute", "ui.sortable"]);
 
 app.controller("WorkoutCtrl", function($scope, $http){
     $scope.workouts = [];
     $scope.workout = {};
     $scope.overview = true;
     $scope.serverMsg = "";
+    $scope.editingOff = true;
 
     angular.element(document).ready(getWorkouts);
 
@@ -124,7 +125,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
                 id : workout.id,
                 workoutName: workout.name,
                 activityDesc : "",
-                exercises: workout.eids
+                exercises: workout.exercises
             }
         }).then(function successCallback(response) {
             if(response.data.responseCode == 1){
@@ -185,7 +186,10 @@ app.controller("WorkoutCtrl", function($scope, $http){
 
     $scope.newWorkout = function (){
         var index = $scope.workouts.length;
-        $scope.workouts.push({name : "New Workout", id : null, eids: [], exercises : [], modified : false});
+        var increaseInterval = {sets: 0, interval: 0};
+        var increaseReps = {sets: 0, reps: 0, weight: 0};
+        $scope.workouts.push({name : "New Workout", id : null, eids: [], exercises : [], modified : false,
+            increase_interval: increaseInterval, increase_reps: increaseReps});
         $scope.editWorkout(index);
     };
 
@@ -207,9 +211,13 @@ app.controller("WorkoutCtrl", function($scope, $http){
     $scope.editWorkout = function(index){
         $scope.overview = false;
         $scope.workout = $scope.workouts[index];
-    }
+    };
 
     $scope.doOverview = function(){
         $scope.overview = true;
-    }
+    };
+
+    $scope.toggleEdit = function(){
+        $scope.editingOff = !$scope.editingOff;
+    };
 });
