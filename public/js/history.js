@@ -34,9 +34,9 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 };
                 exerciseArr.push(jsonObj);
                 eids.push(curE._id);
-                getPerformanceData(curE.exercisename, curE._id);
+                getPerformanceData(curE.exercisename, curE._id, exerciseArr[j].data.sets);
             }
-            // console.log(exerciseArr);
+            console.log(exerciseArr);
             $scope.workout = {
                 name: curW.workoutname,
                 id: curW._id,
@@ -48,7 +48,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
         });
     }
 
-    function getPerformanceData(exerciseName, exerciseID) {
+    function getPerformanceData(exerciseName, exerciseID, exerciseSets) {
         $http({
             method: "GET",
             url: "/data/getAllPerformances?wid=" + exerciseID
@@ -58,10 +58,10 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 actualData.push(JSON.parse(response.data.data[i].pdata));
             }
             for (var i = 0; i < actualData.length; ++i) {
-                for (var j = 0; j < actualData[i].length; ++j) {
+                for (var j = 0; j < exerciseSets - 1; ++j) {
                     var chartItem = {
                         type: exerciseName,
-                        sets: 0,
+                        sets: exerciseSets,
                         repTime: 0,
                         weight: 0
                     };
