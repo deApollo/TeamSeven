@@ -1,5 +1,35 @@
 var app = angular.module("history", []);
 
+app.directive('linechart', function() {
+
+    return {
+
+        // required to make it work as an element
+        restrict: 'E',
+        template: '<div></div>',
+        replace: true,
+        // observe and manipulate the DOM
+        link: function($scope, element, attrs) {
+
+            var data = $scope[attrs.data],
+                xkey = $scope[attrs.xkey],
+                ykeys= $scope[attrs.ykeys],
+                labels= $scope[attrs.labels];
+
+            Morris.Line({
+                    element: element,
+                    data: data,
+                    xkey: xkey,
+                    ykeys: ykeys,
+                    labels: labels
+                });
+
+        }
+
+    };
+
+});
+
 app.controller("historyCtrl", function($scope, $http, $location) {
     $scope.workout = {
         name: "",
@@ -11,6 +41,22 @@ app.controller("historyCtrl", function($scope, $http, $location) {
     $scope.serverMsg = "";
     $scope.headers = ["Type", "Sets", "Reps/Time", "Weight"];
     $scope.chartData = [];
+
+    $scope.xkey = 'y';
+  
+    $scope.ykeys = ['a', 'b'];
+      
+    $scope.labels = ['Series A', 'Series B'];
+    
+    $scope.myModel = [
+      { y: '2006', a: 100, b: 90 },
+      { y: '2007', a: 75,  b: 65 },
+      { y: '2008', a: 50,  b: 40 },
+      { y: '2009', a: 75,  b: 65 },
+      { y: '2010', a: 50,  b: 40 },
+      { y: '2011', a: 75,  b: 65 },
+      { y: '2012', a: 100, b: 90 }
+    ];
 
     angular.element(document).ready(getWorkout);
 
@@ -57,17 +103,18 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             for(var i = 0; i < response.data.data.length; i++){
                 actualData.push(JSON.parse(response.data.data[i].pdata));
             }
-            for (var i = 0; i < actualData.length; ++i) {
-                for (var j = 0; j < exerciseSets - 1; ++j) {
+            console.log(actualData.length);
+            // for (var i = 0; i < actualData.length; ++i) {
+                for (var j = 0; j < exerciseSets; ++j) {
                     var chartItem = {
                         type: exerciseName,
                         sets: exerciseSets,
-                        repTime: 0,
-                        weight: 0
+                        repTime: actualData[0][j].time + " seconds",
+                        weight: actualData[0][j].weight
                     };
+                    $scope.chartData.push(chartItem);
                 }
-                $scope.chartData.push(chartItem);
-            }
+            // }
             console.log(actualData);
         });
     }
