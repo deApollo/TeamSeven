@@ -80,7 +80,8 @@ app.controller("performance", function($scope, $http, $location) {
     function populateNextBest(exercise, mostrecent) {
         if (mostrecent.responseCode == 1 && mostrecent.data) {
             exercise.last.avail = true;
-            exercise.last.data = JSON.parse(mostrecent.data.pdata);
+            var tempParse = JSON.parse(mostrecent.data.pdata);
+            exercise.last.data = tempParse.data;
         }
     }
 
@@ -90,7 +91,7 @@ app.controller("performance", function($scope, $http, $location) {
             url: "/data/addPerformance",
             data: {
                 wid: exercise.id,
-                pdata: exercise.performances
+                pdata: {date : Date.now(), data: exercise.performances}
             }
         }).then(function successCallback(response) {
             console.log(response.data);
