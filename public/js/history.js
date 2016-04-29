@@ -9,6 +9,8 @@ app.controller("historyCtrl", function($scope, $http, $location) {
         modified: false
     };
     $scope.serverMsg = "";
+    $scope.headers = ["Type", "Sets", "Reps/Time", "Weight"];
+    $scope.chartData = [];
 
     angular.element(document).ready(getWorkout);
 
@@ -18,7 +20,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             method: "GET",
             url: "/data/getWorkout?wid=" + workoutID
         }).then(function successCallback(response) {
-            console.log(response.data);
+            // console.log(response.data);
             var curW = response.data.data;
             var exerciseArr = [];
             var eids = [];
@@ -32,8 +34,9 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 };
                 exerciseArr.push(jsonObj);
                 eids.push(curE._id);
-                getPerformanceData(curE._id);
+                getPerformanceData(curE.exercisename, curE._id);
             }
+            // console.log(exerciseArr);
             $scope.workout = {
                 name: curW.workoutname,
                 id: curW._id,
@@ -45,14 +48,25 @@ app.controller("historyCtrl", function($scope, $http, $location) {
         });
     }
 
-    function getPerformanceData(exerciseID) {
+    function getPerformanceData(exerciseName, exerciseID) {
         $http({
             method: "GET",
             url: "/data/getAllPerformances?wid=" + exerciseID
         }).then(function successCallback(response) {
-            var actualData = []
+            var actualData = [];
             for(var i = 0; i < response.data.data.length; i++){
                 actualData.push(JSON.parse(response.data.data[i].pdata));
+            }
+            for (var i = 0; i < actualData.length; ++i) {
+                for (var j = 0; j < actualData[i].length; ++j) {
+                    var chartItem = {
+                        type: exerciseName,
+                        sets: 0,
+                        repTime: 0,
+                        weight: 0
+                    };
+                }
+                $scope.chartData.push(chartItem);
             }
             console.log(actualData);
         });

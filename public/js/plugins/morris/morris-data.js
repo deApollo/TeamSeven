@@ -4,7 +4,7 @@ $(function() {
 
     // Area Chart
     Morris.Area({
-        element: 'arms-day',
+        element: 'history',
         data: [{
             date: '2016-01-15',
             squat: 4750,
