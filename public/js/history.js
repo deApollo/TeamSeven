@@ -46,7 +46,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
   
     $scope.ykeys = ['a', 'b'];
       
-    $scope.labels = ['Series A', 'Series B'];
+    $scope.labels = [];
     
     $scope.myModel = [
       { y: '2006', a: 100, b: 90 },
@@ -81,6 +81,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 exerciseArr.push(jsonObj);
                 eids.push(curE._id);
                 getPerformanceData(curE.exercisename, curE._id, exerciseArr[j].data.sets);
+                $scope.labels.push(exerciseArr[j].type);
             }
             console.log(exerciseArr);
             $scope.workout = {
