@@ -202,6 +202,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
 
     $scope.saveWorkouts = function(){
         saveHelper(0,0);
+        $scope.editingOff = true;
     };
 
     $scope.modify = function(item){
@@ -211,6 +212,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
     $scope.editWorkout = function(index){
         $scope.overview = false;
         $scope.workout = $scope.workouts[index];
+        $scope.editingOff = false;
     };
 
     $scope.doOverview = function(){
