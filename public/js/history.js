@@ -89,13 +89,16 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                         var month = '' + (d.getMonth() + 1);
                         var day = '' + d.getDate();
                         var year = d.getFullYear();
+                        var hours = d.getHours();
+                        var minutes = d.getMinutes();
+                        var seconds = d.getSeconds();
                         if (month.length < 2) month = '0' + month;
                         if (day.length < 2) day = '0' + day;
                         var intChartItem = {
                             type: exerciseName,
-                            sets: actualData[i].data[j].sets,
+                            sets: exerciseSets,
                             time: actualData[i].data[j].time,
-                            date: [year, month, day].join('-')
+                            date: [hours, minutes, seconds].join(':') + " " + [month, day, year].join('-') 
                             // instance: i
                         };
                         $scope.intChartData.push(intChartItem);
@@ -111,6 +114,9 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                         var month = '' + (d.getMonth() + 1);
                         var day = '' + d.getDate();
                         var year = d.getFullYear();
+                        var hours = d.getHours();
+                        var minutes = d.getMinutes();
+                        var seconds = d.getSeconds();
                         if (month.length < 2) month = '0' + month;
                         if (day.length < 2) day = '0' + day;
                         var repChartItem = {
@@ -118,7 +124,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                             sets: exerciseSets,
                             reps: actualData[i].data[j].reps,
                             weight: actualData[i].data[j].weight,
-                            date: [year, month, day].join('-')
+                            date: [hours, minutes, seconds].join(':') + " " + [month, day, year].join('-')
                         };
                         $scope.repChartData.push(repChartItem);
                     }
