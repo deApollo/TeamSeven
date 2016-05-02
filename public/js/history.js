@@ -42,13 +42,21 @@ app.controller("historyCtrl", function($scope, $http, $location) {
     $scope.headers = ["Type", "Sets", "Reps/Time", "Weight"];
     $scope.chartData = [];
 
-    $scope.xkey = 'y';
+    $scope.xkeyRep = 'y';
   
-    $scope.ykeys = ['a', 'b'];
+    $scope.ykeysRep = ['weight'];
       
-    $scope.labels = [];
+    $scope.labelsRep = [];
+
+    $scope.xkeyInt = 'y';
+  
+    $scope.ykeysInt = ['a', 'b'];
+      
+    $scope.labelsInt = [];
+
+
     
-    $scope.myModel = [
+    $scope.intData = [
       { y: '2006', a: 100, b: 90 },
       { y: '2007', a: 75,  b: 65 },
       { y: '2008', a: 50,  b: 40 },
@@ -80,8 +88,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 };
                 exerciseArr.push(jsonObj);
                 eids.push(curE._id);
-                getPerformanceData(curE.exercisename, curE._id, exerciseArr[j].data.sets);
-                $scope.labels.push(exerciseArr[j].type);
+                getPerformanceData(curE.exercisename, curE._id, exerciseArr[j].data.sets, exerciseArr[j].type);
             }
             console.log(exerciseArr);
             $scope.workout = {
@@ -95,7 +102,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
         });
     }
 
-    function getPerformanceData(exerciseName, exerciseID, exerciseSets) {
+    function getPerformanceData(exerciseName, exerciseID, exerciseSets, exerciseType) {
         $http({
             method: "GET",
             url: "/data/getAllPerformances?wid=" + exerciseID
@@ -117,6 +124,17 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 }
             // }
             console.log(actualData);
+            if (exerciseType = "Reps") {
+                $scope.labelsRep.push("Weight");
+                $scope.repData = [{y: '2016', weight: 300}, {y: '2017', weight: 320}];
+
+                // var realWeight = actualData[0][0].weight;
+                // console.log(actualData[0][0].weight);
+                
+            }
+            // $scope.repData.push({y: '2016', weight: 300});
+            // $scope.repData.push({y: '2017', weight: 320});
+            console.log($scope.repData);
         });
     }
 });
