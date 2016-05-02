@@ -1,8 +1,7 @@
 var app = angular.module("history", []);
 
 app.controller("historyCtrl", function($scope, $http, $location) {
-    repData = []
-    
+    repData = [] 
     intData = [];
 
     var myRepGraph = Morris.Line({
@@ -30,13 +29,11 @@ app.controller("historyCtrl", function($scope, $http, $location) {
     angular.element(document).ready(getWorkout);
 
     function getWorkout() {
-        var count = 0;
         var workoutID = $location.search().wid;
         $http({
             method: "GET",
             url: "/data/getWorkout?wid=" + workoutID
         }).then(function successCallback(response) {
-            // console.log(response.data);
             var curW = response.data.data;
             var exerciseArr = [];
             var eids = [];
@@ -50,12 +47,8 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 };
                 exerciseArr.push(jsonObj);
                 eids.push(curE._id);
-                getPerformanceData(curE.exercisename, curE._id, exerciseArr[j].data.sets, exerciseArr[j].type, repData, intData, count);
+                getPerformanceData(curE.exercisename, curE._id, exerciseArr[j].data.sets, exerciseArr[j].type, repData, intData);
             }
-            console.log("FIRST REP DATA");
-            console.log(repData);
-            
-            console.log(exerciseArr);
             $scope.workout = {
                 name: curW.workoutname,
                 id: curW._id,
@@ -67,21 +60,15 @@ app.controller("historyCtrl", function($scope, $http, $location) {
         });
     }
 
-    function getPerformanceData(exerciseName, exerciseID, exerciseSets, exerciseType, repData, intData, count) {
+    function getPerformanceData(exerciseName, exerciseID, exerciseSets, exerciseType, repData, intData) {
         $http({
             method: "GET",
             url: "/data/getAllPerformances?wid=" + exerciseID
         }).then(function successCallback(response) {
             var actualData = [];
-            console.log(exerciseType);
             for(var i = 0; i < response.data.data.length; i++){
                 actualData.push(JSON.parse(response.data.data[i].pdata));
             }
-            console.log("PDATA");
-            console.log(actualData.length);
-            console.log(actualData);
-            console.log(exerciseSets);
-            console.log("STOP");
             if (exerciseType == "Interval") {
                 for (var i = 0; i < actualData.length; ++i) {
                     for (var j = 0; j < exerciseSets; ++j) {
@@ -105,8 +92,6 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                     }
                 }
             }
-            console.log("HERE'S WHAT WE GOT FOR INTERVALS");
-            console.log($scope.intChartData);
             if (exerciseType == "Reps") {
                 for (var i = 0; i < actualData.length; ++i) {
                     for (var j = 0; j < exerciseSets; ++j) {
@@ -131,9 +116,6 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                     }
                 }
             }
-            console.log("HERE'S WHAT WE GOT FOR INTS");
-            console.log($scope.intChartData);
-
             var intFormat = $scope.intChartData.length;
             
             var intString = [];
@@ -153,75 +135,6 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             }
             intString.push({y: intFirstDate, a: intBestTime});
 
-
-
-
-            // var i = 0;
-            // var dateSort = [];
-            // var totalDates = []
-            // for (var i = 0; i < intFormat; ++i) {
-            //     if (firstDate == $scope.intChartData[i].numdate) {
-            //         dateSort.push($scope.intChartData[i]);
-            //     }
-            //     else {
-            //         firstDate = $scope.intChartData[i].numdate;
-            //         totalDates.push(dateSort);
-            //         dateSort = [];
-            //     }
-            // }
-
-            // console.log("TOTALDATES");
-            // console.log(totalDates);
-
-            // for (var i = 1; i < intFormat; ++i) {
-            //     console.log(firstDate);
-            //     if (firstDate == $scope.intChartData[i].numdate) {
-            //         var intDate = $scope.intChartData[i].numdate;
-            //         var intTime = $scope.intChartData[i].time;
-            //         if (intTime > bestTime) {
-            //             bestTime = intTime;
-            //         }
-            //     }
-            //     else {
-            //         intString.push({y: firstDate, a: bestTime});
-            //         bestTime = $scope.intChartData[i].time;
-            //     }
-            //     firstDate = $scope.intChartData[i-1].numdate;
-            // }
-            // var count = (intFormat / exerciseSets);
-            // console.log(count);
-
-            // for (var i = 0; i < exerciseSets; ++i) {
-
-            // }
-            // for (var i = 1; i < intFormat; ++i) {
-            //     if (firstDate == $scope.intChartData[i].date) {
-            //         count++;
-            //     }
-            //     else {
-            //         setNum.push(count);
-            //         count = 1;
-            //     }
-            // }
-            // console.log("SETNUM ARRAY");
-            // console.log(setNum);
-            //     // console.log(lastDate);
-            //     while (firstDate == $scope.intChartData[i].date) {
-            //         var intDate = $scope.intChartData[i].date;
-            //         var intType = $scope.intChartData[i].type;
-            //         var intTime = $scope.intChartData[i].time;
-            //         if (intTime > bestTime) {
-            //             bestTime = intTime;
-            //             bestDate = intDate;
-            //         }
-            //         // if (lastDate != intDate) {
-            //             intString.push({y: bestDate, a: bestTime});
-            //             bestTime = 0;
-            //             // lastDate = intDate;
-            //         // }
-            //         // lastDate = intDate;
-            //     }
-            // }
             intData = intString;
 
             var repFormat = $scope.repChartData.length;
@@ -241,10 +154,8 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 }
             }
             repString.push({y: repFirstDate, a: repBestWeight});
-
             repData = repString;
-            console.log("HERE IS REPDATA");
-            console.log(repData);
+
             updateGraph(repData, intData, myRepGraph, myIntGraph);
         });
     }
