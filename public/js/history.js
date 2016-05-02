@@ -98,8 +98,8 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                             type: exerciseName,
                             sets: exerciseSets,
                             time: actualData[i].data[j].time,
-                            date: [hours, minutes, seconds].join(':') + " " + [month, day, year].join('-') 
-                            // instance: i
+                            date: [hours, minutes, seconds].join(':') + " " + [month, day, year].join('-'),
+                            numdate: actualData[i].date
                         };
                         $scope.intChartData.push(intChartItem);
                     }
@@ -124,7 +124,8 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                             sets: exerciseSets,
                             reps: actualData[i].data[j].reps,
                             weight: actualData[i].data[j].weight,
-                            date: [hours, minutes, seconds].join(':') + " " + [month, day, year].join('-')
+                            date: [hours, minutes, seconds].join(':') + " " + [month, day, year].join('-'),
+                            numdate: actualData[i].date
                         };
                         $scope.repChartData.push(repChartItem);
                     }
@@ -134,52 +135,59 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             console.log($scope.intChartData);
 
             var intFormat = $scope.intChartData.length;
-            // var setNum = 0;
-            // for (var i = 0; i < intFormat; ++i) {
-            //     if ($scope.intChartData[i].instance > setNum) {
-            //         setNum = $scope.intChartData[i].instance;
-            //     }
-            // }
-            // console.log("SETNUM");
-            // console.log(setNum);
+            
             var intString = [];
-            var setNum = [];
-            var firstDate = $scope.intChartData[0].date;
-            // var firstInstance = $scope.intChartData[0].instance;
-            var bestDate = $scope.intChartData[0].date;
-            var bestTime = $scope.intChartData[0].time;
-            var i = 0;
-            var dateSort = [];
-            var totalDates = []
-            for (var i = 0; i < intFormat; ++i) {
-                if (firstDate == $scope.intChartData[i].date) {
-                    dateSort.push($scope.intChartData[i]);
-                }
-                else {
-                    firstDate = $scope.intChartData[i].date;
-                    totalDates.push(dateSort);
-                    dateSort = [];
-                }
-            }
-
-            console.log("TOTALDATES");
-            console.log(totalDates);
+            var intFirstDate = $scope.intChartData[0].numdate;
+            var intBestTime = $scope.intChartData[0].time;
 
             for (var i = 1; i < intFormat; ++i) {
-                console.log(firstDate);
-                if (firstDate == $scope.intChartData[i].date) {
-                    var intDate = $scope.intChartData[i].date;
-                    var intTime = $scope.intChartData[i].time;
-                    if (intTime > bestTime) {
-                        bestTime = intTime;
-                    }
+                console.log(intBestTime);
+                if (intFirstDate != $scope.intChartData[i].numdate) {
+                    intString.push({y: intFirstDate, a: intBestTime});
+                    intFirstDate = $scope.intChartData[i].numdate;
+                    intBestTime = $scope.intChartData[i].time;
                 }
-                else {
-                    intString.push({y: firstDate, a: bestTime});
-                    bestTime = $scope.intChartData[i].time;
+                if (intBestTime < $scope.intChartData[i].time) {
+                    intBestTime = $scope.intChartData[i].time;
                 }
-                firstDate = $scope.intChartData[i-1].date;
             }
+            intString.push({y: intFirstDate, a: intBestTime});
+
+
+
+
+            // var i = 0;
+            // var dateSort = [];
+            // var totalDates = []
+            // for (var i = 0; i < intFormat; ++i) {
+            //     if (firstDate == $scope.intChartData[i].numdate) {
+            //         dateSort.push($scope.intChartData[i]);
+            //     }
+            //     else {
+            //         firstDate = $scope.intChartData[i].numdate;
+            //         totalDates.push(dateSort);
+            //         dateSort = [];
+            //     }
+            // }
+
+            // console.log("TOTALDATES");
+            // console.log(totalDates);
+
+            // for (var i = 1; i < intFormat; ++i) {
+            //     console.log(firstDate);
+            //     if (firstDate == $scope.intChartData[i].numdate) {
+            //         var intDate = $scope.intChartData[i].numdate;
+            //         var intTime = $scope.intChartData[i].time;
+            //         if (intTime > bestTime) {
+            //             bestTime = intTime;
+            //         }
+            //     }
+            //     else {
+            //         intString.push({y: firstDate, a: bestTime});
+            //         bestTime = $scope.intChartData[i].time;
+            //     }
+            //     firstDate = $scope.intChartData[i-1].numdate;
+            // }
             // var count = (intFormat / exerciseSets);
             // console.log(count);
 
@@ -215,19 +223,24 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             //     }
             // }
             intData = intString;
-            console.log("HERE IS INTDATA");
-            console.log(intData);
 
             var repFormat = $scope.repChartData.length;
             var repString = [];
+
+            var repFirstDate = $scope.repChartData[0].numdate;
+            var repBestWeight = $scope.repChartData[0].weight;
+
             for (var i = 0; i < repFormat; ++i) {
-                var repDate = $scope.repChartData[i].date;
-                // var repReps = $scope.repChartData[i].reps;
-                // var repSets = $scope.repChartData[i].sets;
-                // var repType = $scope.repChartData[i].type;
-                var repWeight = $scope.repChartData[i].weight;
-                repString.push({y: repDate, a: repWeight});
+                if (repFirstDate != $scope.repChartData[i].numdate) {
+                    repString.push({y: repFirstDate, a: repBestWeight});
+                    repFirstDate = $scope.repChartData[i].numdate;
+                    repBestWeight = $scope.repChartData[i].weight;
+                }
+                if (repBestWeight < $scope.repChartData[i].weight) {
+                    repBestWeight = $scope.repChartData[i].weight;
+                }
             }
+            repString.push({y: repFirstDate, a: repBestWeight});
 
             repData = repString;
             console.log("HERE IS REPDATA");
@@ -248,3 +261,9 @@ app.controller("historyCtrl", function($scope, $http, $location) {
         myIntGraph.setData(intData);
     }
 });
+
+app.filter('reverse', function() {
+    return function(items) {
+        return items.slice().reverse();
+    }
+})
