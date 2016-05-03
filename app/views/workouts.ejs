@@ -70,7 +70,7 @@
 									{{exercise.name}}
 								</li>
 							</ul>
-							<button ng-click="editWorkout($index)">Edit</button>
+							<button class="btn btn-default" ng-click="editWorkout($index)">Edit</button>
 							<button class="btn btn-default" ng-click="removeWorkout(workout)">Remove</button>
 							<a ng-href="/perform?wid={{workout.id}}" class="btn btn-default" ng-if="workout.id != null">Perform</a>
 							<a ng-href="/history#?wid={{workout.id}}" class="btn btn-default" ng-if="workout.id != null">History</a>
