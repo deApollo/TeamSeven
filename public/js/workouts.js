@@ -141,7 +141,6 @@ app.controller("WorkoutCtrl", function($scope, $http){
             }
         }).then(function successCallback(response) {
             if(response.data.responseCode == 1){
-                $scope.workouts[workoutIndex].id = response.data.id;
                 $scope.serverMsg += "\nWorkout '" + workout.name + "' modified successfully!";
             } else {
                 $scope.serverMsg += "\nThere was an issue modifying the workout '" + workout.name + "'!";
