@@ -1,23 +1,23 @@
 var app = angular.module("history", []);
 
 app.controller("historyCtrl", function($scope, $http, $location) {
-    repData = [] 
-    intData = [];
+    var repData = [];
+    var intData = [];
 
     var myRepGraph = Morris.Line({
-      element: 'repGraph',
-      data: repData,
-      xkey: 'y',
-      ykeys: ['a'],
-      labels: ['Weight']
+        element: "repGraph",
+        data: repData,
+        xkey: "y",
+        ykeys: ["a"],
+        labels: ["Weight"]
     });
 
     var myIntGraph = Morris.Line({
-      element: 'intGraph',
-      data: intData,
-      xkey: 'y',
-      ykeys: ['a'],
-      labels: ['Time']
+        element: "intGraph",
+        data: intData,
+        xkey: "y",
+        ykeys: ["a"],
+        labels: ["Time"]
     });
 
     $scope.serverMsg = "";
@@ -66,26 +66,26 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             url: "/data/getAllPerformances?wid=" + exerciseID
         }).then(function successCallback(response) {
             var actualData = [];
-            for(var i = 0; i < response.data.data.length; i++){
+            for (var i = 0; i < response.data.data.length; i++) {
                 actualData.push(JSON.parse(response.data.data[i].pdata));
             }
             if (exerciseType == "Interval") {
                 for (var i = 0; i < actualData.length; ++i) {
                     for (var j = 0; j < exerciseSets; ++j) {
                         var d = new Date(actualData[i].date);
-                        var month = '' + (d.getMonth() + 1);
-                        var day = '' + d.getDate();
+                        var month = "" + (d.getMonth() + 1);
+                        var day = "" + d.getDate();
                         var year = d.getFullYear();
                         var hours = d.getHours();
                         var minutes = d.getMinutes();
                         var seconds = d.getSeconds();
-                        if (month.length < 2) month = '0' + month;
-                        if (day.length < 2) day = '0' + day;
+                        if (month.length < 2) month = "0" + month;
+                        if (day.length < 2) day = "0" + day;
                         var intChartItem = {
                             type: exerciseName,
                             sets: exerciseSets,
                             time: actualData[i].data[j].time,
-                            date: [hours, minutes, seconds].join(':') + " " + [month, day, year].join('-'),
+                            date: [hours, minutes, seconds].join(":") + " " + [month, day, year].join("-"),
                             numdate: actualData[i].date
                         };
                         $scope.intChartData.push(intChartItem);
@@ -96,8 +96,8 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 for (var i = 0; i < actualData.length; ++i) {
                     for (var j = 0; j < exerciseSets; ++j) {
                         var d = new Date(actualData[i].date);
-                        var month = '' + (d.getMonth() + 1);
-                        var day = '' + d.getDate();
+                        var month = "" + (d.getMonth() + 1);
+                        var day = "" + d.getDate();
                         var year = d.getFullYear();
                         var hours = d.getHours();
                         var minutes = d.getMinutes();
@@ -109,7 +109,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                             sets: exerciseSets,
                             reps: actualData[i].data[j].reps,
                             weight: actualData[i].data[j].weight,
-                            date: [hours, minutes, seconds].join(':') + " " + [month, day, year].join('-'),
+                            date: [hours, minutes, seconds].join(":") + " " + [month, day, year].join("-"),
                             numdate: actualData[i].date
                         };
                         $scope.repChartData.push(repChartItem);
@@ -117,7 +117,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 }
             }
             var intFormat = $scope.intChartData.length;
-            
+
             var intString = [];
             var intFirstDate = $scope.intChartData[0].numdate;
             var intBestTime = $scope.intChartData[0].time;
@@ -125,7 +125,10 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             for (var i = 1; i < intFormat; ++i) {
                 console.log(intBestTime);
                 if (intFirstDate != $scope.intChartData[i].numdate) {
-                    intString.push({y: intFirstDate, a: intBestTime});
+                    intString.push({
+                        y: intFirstDate,
+                        a: intBestTime
+                    });
                     intFirstDate = $scope.intChartData[i].numdate;
                     intBestTime = $scope.intChartData[i].time;
                 }
@@ -133,7 +136,10 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                     intBestTime = $scope.intChartData[i].time;
                 }
             }
-            intString.push({y: intFirstDate, a: intBestTime});
+            intString.push({
+                y: intFirstDate,
+                a: intBestTime
+            });
 
             intData = intString;
 
@@ -145,7 +151,10 @@ app.controller("historyCtrl", function($scope, $http, $location) {
 
             for (var i = 0; i < repFormat; ++i) {
                 if (repFirstDate != $scope.repChartData[i].numdate) {
-                    repString.push({y: repFirstDate, a: repBestWeight});
+                    repString.push({
+                        y: repFirstDate,
+                        a: repBestWeight
+                    });
                     repFirstDate = $scope.repChartData[i].numdate;
                     repBestWeight = $scope.repChartData[i].weight;
                 }
@@ -153,7 +162,10 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                     repBestWeight = $scope.repChartData[i].weight;
                 }
             }
-            repString.push({y: repFirstDate, a: repBestWeight});
+            repString.push({
+                y: repFirstDate,
+                a: repBestWeight
+            });
             repData = repString;
 
             updateGraph(repData, intData, myRepGraph, myIntGraph);
@@ -173,8 +185,8 @@ app.controller("historyCtrl", function($scope, $http, $location) {
     }
 });
 
-app.filter('reverse', function() {
+app.filter("reverse", function() {
     return function(items) {
         return items.slice().reverse();
-    }
-})
+    };
+});

@@ -32,7 +32,7 @@ exports.register = function(req, res) {
                     console.log("Added user " + user + " with password " + pword + " hashed as "  + pwordHash);
                     req.session.loggedin = true;
                     req.session.username = user;
-                    res.redirect("/workouts");
+                    res.redirect("/dashboard");
                 }
             });
         }
@@ -53,7 +53,7 @@ exports.login = function(req, res) {
                 req.session.loggedin = true;
                 req.session.username = user;
                 req.session.message = "You have been successfully logged in!";
-                res.redirect("/workouts");
+                res.redirect("/dashboard");
             } else {
                 req.session.loggedin = false;
                 req.session.message = "Invalid username or password!";
@@ -87,7 +87,7 @@ exports.validate = function(req,res,next){
 exports.indexRedir = function(req,res,next){
     if(req.session.loggedin){
         if(req.session.loggedin == true)
-            res.redirect("/workouts");
+            res.redirect("/dashboard");
     } else {
         next();
     }

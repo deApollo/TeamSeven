@@ -4,6 +4,8 @@ app.controller("performance", function($scope, $http, $location) {
     $scope.workout = {
         name: "",
         id: "",
+        timesp: 0,
+        datelp: -1,
         eids: [],
         exercises: [],
         modified: false
@@ -11,6 +13,9 @@ app.controller("performance", function($scope, $http, $location) {
     $scope.prevBest = null;
     $scope.currentExercise = 0;
     $scope.serverMsg = "";
+
+    var workoutTimeUpdated = false;
+    var contentLoaded = false;
 
     angular.element(document).ready(getWorkout);
 
@@ -49,8 +54,11 @@ app.controller("performance", function($scope, $http, $location) {
                 id: curW._id,
                 eids: eids,
                 exercises: exerciseArr,
+                timesp: curW.timesperformed,
+                datelp: curW.lastperformed,
                 modified: false
             };
+            contentLoaded = true;
         }, function errorCallback(response) {
             console.log(response);
         });
@@ -129,6 +137,22 @@ app.controller("performance", function($scope, $http, $location) {
         });
     }
 
+    function updateWorkout() {
+        $http({
+            method: "POST",
+            url: "/data/updateWorkoutPerformed",
+            data: {
+                wid : $scope.workout.id,
+                times : $scope.workout.timesp+1,
+                last : Date.now()
+            }
+        }).then(function successCallback(response) {
+            console.log(response.data);
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+    }
+
     $scope.addPerformance = function(exercise) {
         var failed = false;
         var pkeyCount = 0;
@@ -163,6 +187,10 @@ app.controller("performance", function($scope, $http, $location) {
 
     $scope.isDone = function() {
         if ($scope.currentExercise >= $scope.workout.exercises.length) {
+            if(!workoutTimeUpdated && contentLoaded){
+                workoutTimeUpdated = true;
+                updateWorkout();
+            }
             return true;
         }
         return false;

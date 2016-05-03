@@ -194,6 +194,8 @@ exports.addWorkout = function(req, res) {
     workout.workoutname = wName;
     workout.workoutdesc = wDesc;
     workout.username = req.session.username;
+    workout.timesperformed = 0;
+    workout.lastperformed = -1;
     for (var i = 0; i < wExer.length; i++) {
         workout.exercises.push(mongoose.Types.ObjectId(wExer[i]));
     }
@@ -237,6 +239,8 @@ exports.updateWorkout = function(req, res){
     var wName = req.body.workoutName;
     var wDesc = req.body.activityDesc;
     var wExer = req.body.exercises;
+    var wTimes= req.body.times;
+    var wDate = req.body.date;
 
     console.log("Attempting to update workout with id: " + wID + "name: " + wName + " description: " + wDesc + " exercises: " + wExer);
 
@@ -246,7 +250,30 @@ exports.updateWorkout = function(req, res){
     }
 
     Workout.update({ _id: mongoose.Types.ObjectId(wID) },
-        { workoutname : wName, workoutdesc : wDesc, exercises : objIDArr},
+        { workoutname : wName, workoutdesc : wDesc, exercises : objIDArr, timesperformed : wTimes, lastperformed: wDate},
+        {},
+        function (err) {
+            if (err) {
+                res.json({
+                    responseCode: 0,
+                    error: err
+                });
+            } else {
+                res.json({
+                    responseCode: 1
+                });
+            }
+        }
+    );
+};
+
+exports.updateWorkoutPerformed = function(req, res){
+    var wID = req.body.wid;
+    var newTimes = req.body.times;
+    var newLast = req.body.last;
+    console.log("Attempting to update record for workout with id " + wID + " performed " + newTimes + " at time " + newLast);
+    Workout.update({ _id: mongoose.Types.ObjectId(wID) },
+        { timesperformed : newTimes, lastperformed: newLast},
         {},
         function (err) {
             if (err) {

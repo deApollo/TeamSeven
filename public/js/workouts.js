@@ -21,7 +21,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
                 var eids = [];
                 for(var j = 0; j < curW.exercises.length; j++){
                     var curE = curW.exercises[j];
-                    exerciseArr.push({name : curE.exercisename, id : curE._id, type: curE.exercisetype, data : JSON.parse(curE.exercisedesc), modified : false});
+                    exerciseArr.push({name : curE.exercisename, id : curE._id, type: curE.exercisetype, data : JSON.parse(curE.exercisedesc), modified : false, timesp : curE.timesperformed, datelp : curE.lastperformed});
                     eids.push(curE._id);
                 }
                 $scope.workouts.push({name : curW.workoutname, id : curW._id, eids: eids, exercises : exerciseArr, modified : false});
@@ -125,7 +125,9 @@ app.controller("WorkoutCtrl", function($scope, $http){
                 id : workout.id,
                 workoutName: workout.name,
                 activityDesc : "",
-                exercises: workout.exercises
+                exercises: workout.exercises,
+                times : workout.timesp,
+                date : workout.lastlp
             }
         }).then(function successCallback(response) {
             if(response.data.responseCode == 1){

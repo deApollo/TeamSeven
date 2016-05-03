@@ -45,6 +45,8 @@ var Exercise = mongoose.model("Exercise", ExerciseSchema);
 var WorkoutSchema = new mongoose.Schema({
     workoutname : String,
     workoutdesc : String,
+    timesperformed : Number,
+    lastperformed : Number,
     username : String,
     exercises : [{type : mongoose.Schema.Types.ObjectId, ref : "Exercise"}]
 });

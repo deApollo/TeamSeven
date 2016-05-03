@@ -34,10 +34,12 @@ module.exports = function(app) {
     var data = require("../controllers/data.server.controller");
     var perform = require("../controllers/perform.server.controller");
     var history = require("../controllers/history.server.controller");
+    var dashboard = require("../controllers/dashboard.server.controller");
 
     app.get("/", login.indexRedir, index.render);
     app.get("/logout", login.validate, login.logout);
     app.get("/register", register.render);
+    app.get("/dashboard", login.validate, dashboard.render);
     app.get("/preferences", login.validate, preferences.render);
     app.get("/changepassword", login.validate, changepassword.render);
     app.get("/workouts", login.validate, workouts.render);
@@ -62,4 +64,5 @@ module.exports = function(app) {
     app.post("/data/changeUserPreference", login.validate, data.changeUserPreference);
     app.post("/data/changeUserPicture", login.validate, deleteOldPicture, upload.single("avatar"), data.changeUserPicture);
     app.post("/data/addPerformance", login.validate, data.addPerformance);
+    app.post("/data/updateWorkoutPerformed", login.validate, data.updateWorkoutPerformed);
 };
