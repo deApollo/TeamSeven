@@ -96,6 +96,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
             console.log(response.data);
             if(response.data.responseCode == 1) {
                 $scope.workouts[workoutIndex].eids.push(response.data.id);
+                exercise.id = response.data.id;
                 $scope.serverMsg += "\nExercise '" + exercise.name + "' saved succesfully!";
                 saveHelper(workoutIndex,eIndex+1);
             } else {
@@ -173,8 +174,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
     };
 
     $scope.removeExercise = function(workout,exercise){
-        var wIndex = $scope.workouts.indexOf(workout);
-        var eIndex = $scope.workouts[wIndex].exercises.indexOf(exercise);
+        var eIndex = $scope.workout.exercises.indexOf(exercise);
         if(exercise.id){
             $http({
                 method: "POST",
@@ -192,7 +192,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
                 console.log(response);
             });
         }
-        $scope.workouts[wIndex].exercises.splice(eIndex,1);
+        $scope.workout.exercises.splice(eIndex,1);
     };
 
     $scope.newWorkout = function (){
