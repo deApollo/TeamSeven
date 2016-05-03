@@ -3,6 +3,7 @@ var app = angular.module("history", []);
 app.controller("historyCtrl", function($scope, $http, $location) {
     var repData = [];
     var intData = [];
+    var intKeys = [];
 
     var myRepGraph = Morris.Line({
         element: "repGraph",
@@ -118,30 +119,27 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             }
             var intFormat = $scope.intChartData.length;
 
-            var intKeys = [];
-
-            for (var i = 0; i < intFormat.length; ++i) {
-                console.log(intKeys.length);
+            for (var i = 0; i < intFormat; ++i) {
                 var found = false;
-                if (intKeys.length != 0) {
-                    for (var j = 0; j < intKeys.length; ++j) {
-                        if ($scope.intChartData[i].type == intKeys[j]) {
-                            found = true;
-                        }
+                for (var j = 0; j < intKeys.length; ++j) {
+                    if ($scope.intChartData[i].type == intKeys[j]) {
+                        found = true;
+                        console.log("here");
+                        break;
                     }
                 }
+                
                 if (!found) {
-                    intKeys.push('"' + $scope.intChartData[i].type + '"');
+                    intKeys.push($scope.intChartData[i].type);
                 }
             }
-
-            console.log(intKeys);
 
             var intString = [];
 
             if ($scope.intChartData.length != 0) {
                 var intFirstDate = $scope.intChartData[0].numdate;
                 var intBestTime = $scope.intChartData[0].time;
+                // var intType = $scope.intChartData[0].type;
 
                 for (var i = 1; i < intFormat; ++i) {
                     if (intFirstDate != $scope.intChartData[i].numdate) {
@@ -151,6 +149,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                         });
                         intFirstDate = $scope.intChartData[i].numdate;
                         intBestTime = $scope.intChartData[i].time;
+                        // intType = $scope.intChartData[i].type;
                     }
                     if (intBestTime < $scope.intChartData[i].time) {
                         intBestTime = $scope.intChartData[i].time;
@@ -191,7 +190,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 repData = repString;
             }
 
-            updateGraph(repData, intData, myRepGraph, myIntGraph);
+            updateGraph(repData, myRepGraph, intData, myIntGraph);
         });
     }
     $scope.workout = {
@@ -202,10 +201,24 @@ app.controller("historyCtrl", function($scope, $http, $location) {
         modified: false
     };
 
-    function updateGraph(repData, intData, myRepGraph, myIntGraph) {
+    // var iData = intData,
+    //     iConfig = {
+    //         data: iData,
+    //         xkey: 'y',
+    //         ykeys: intKeys,
+    //         labels: ["Time"]
+    //     };
+    // iConfig.element = 'intGraph';
+    // var myIntGraph = Morris.Line(iConfig);
+
+    function updateGraph(repData, myRepGraph, intData, myIntGraph) {
         myRepGraph.setData(repData);
         myIntGraph.setData(intData);
     }
+
+    // function drawGraphs(repData, intData, intKeys) {
+
+    // }
 });
 
 app.filter("reverse", function() {
