@@ -7,6 +7,16 @@ app.controller("WorkoutCtrl", function($scope, $http){
     $scope.serverMsg = "";
     $scope.editingOff = true;
 
+     $scope.sortableOptions = {
+         stop: function(e, ui) {
+             $scope.workout.modified = true;
+             $scope.workout.eids = [];
+             for(var i = 0; i < $scope.workout.exercises.length; i++){
+                 $scope.workout.eids.push($scope.workout.exercises[i].id);
+             }
+         }
+     };
+
     angular.element(document).ready(getWorkouts);
 
     function getWorkouts(){
@@ -21,10 +31,10 @@ app.controller("WorkoutCtrl", function($scope, $http){
                 var eids = [];
                 for(var j = 0; j < curW.exercises.length; j++){
                     var curE = curW.exercises[j];
-                    exerciseArr.push({name : curE.exercisename, id : curE._id, type: curE.exercisetype, data : JSON.parse(curE.exercisedesc), modified : false, timesp : curE.timesperformed, datelp : curE.lastperformed});
+                    exerciseArr.push({name : curE.exercisename, id : curE._id, type: curE.exercisetype, data : JSON.parse(curE.exercisedesc), modified : false});
                     eids.push(curE._id);
                 }
-                $scope.workouts.push({name : curW.workoutname, id : curW._id, eids: eids, exercises : exerciseArr, modified : false});
+                $scope.workouts.push({name : curW.workoutname, id : curW._id, eids: eids, exercises : exerciseArr, modified : false, timesp : curW.timesperformed, datelp : curW.lastperformed});
             }
         }, function errorCallback(response) {
             console.log(response);
@@ -127,7 +137,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
                 activityDesc : "",
                 exercises: workout.exercises,
                 times : workout.timesp,
-                date : workout.lastlp
+                date : workout.datelp
             }
         }).then(function successCallback(response) {
             if(response.data.responseCode == 1){

@@ -242,11 +242,11 @@ exports.updateWorkout = function(req, res){
     var wTimes= req.body.times;
     var wDate = req.body.date;
 
-    console.log("Attempting to update workout with id: " + wID + "name: " + wName + " description: " + wDesc + " exercises: " + wExer);
+    console.log("Attempting to update workout with id: " + wID + " name: " + wName + " description: " + wDesc + " exercises: " + wExer);
 
     var objIDArr = [];
     for (var i = 0; i < wExer.length; i++) {
-        objIDArr.push(mongoose.Types.ObjectId(wExer[i]));
+        objIDArr.push(mongoose.Types.ObjectId(wExer[i].id));
     }
 
     Workout.update({ _id: mongoose.Types.ObjectId(wID) },

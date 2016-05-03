@@ -2,7 +2,7 @@ var app = angular.module("dashboard", []);
 
 app.controller("dashboard-controller", function($scope, $http) {
     $scope.workouts = [];
-    $scope.headers = ["Name" , "Times performed", "Date last performed"];
+    $scope.headers = ["Workout" , "Times performed", "Date last performed"];
 
     $scope.viewHistory = function(id){
         window.location = "/history#?wid=" + id;
@@ -31,18 +31,18 @@ app.controller("dashboard-controller", function($scope, $http) {
                     });
                     eids.push(curE._id);
                 }
-                var lastP = "never performed!";
+                var lastP = "Never performed";
                 if( curW.lastperformed != -1){
                     lastP = new Date(curW.lastperformed);
                     var now = Date.now();
                     var timeDiff = Math.abs(lastP - now);
                     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-                    if(diffDays > 1)
+                    if(new Date().getDate() == lastP.getDate())
+                        lastP = "Today"
+                    else if(diffDays > 1)
                         lastP = diffDays + " days ago";
                     else if (diffDays == 1)
                         lastP = "1 day ago";
-                    else
-                        lastP = "Today";
                 }
                 $scope.workouts.push({
                     name: curW.workoutname,

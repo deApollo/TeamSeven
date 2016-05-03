@@ -1,6 +1,35 @@
 var User = require("./../schema.js").User;
 var passwordHash = require("password-hash");
 
+function validateInputs(req){
+    if(!req.body.username || req.body.username == ""){
+        req.session.message = "Please enter a valid username";
+        return false;
+    }
+    if(!req.body.password || req.body.password == ""){
+        req.session.message = "Please enter a valid password";
+        return false;
+    }
+    if(!req.body.fname || req.body.fname == ""){
+        req.session.message = "Please enter a valid first name";
+        return false;
+    }
+    if(!req.body.lname || req.body.lname == ""){
+        req.session.message = "Please enter a valid last name";
+        return false;
+    }
+    var email_pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var email_valid = email_pattern.test(req.body.email);
+    if(!email_valid){
+        req.session.message = "Please enter a valid email address";
+        return false;
+    }
+    if(!req.body.units){
+        req.session.message = "Please select your units";
+    }
+    return true;
+}
+
 exports.register = function(req, res) {
     var fname = req.body.fname;
     var lname = req.body.lname;
@@ -8,11 +37,7 @@ exports.register = function(req, res) {
     var pword = req.body.password;
     var uemail = req.body.email;
     var upreferred_units = req.body.units;
-    var email_pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    var email_valid = email_pattern.test(uemail);
-    if(!email_valid){
-        req.session.loggedin = false;
-        req.session.message = "Please enter a valid email address";
+    if(!validateInputs(req)){
         res.redirect("/register");
         return;
     }
