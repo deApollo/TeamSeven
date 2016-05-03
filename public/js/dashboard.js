@@ -2,7 +2,7 @@ var app = angular.module("dashboard", []);
 
 app.controller("dashboard-controller", function($scope, $http) {
     $scope.workouts = [];
-    $scope.headers = ["Workout" , "Times performed", "Date last performed"];
+    $scope.headers = ["Workout" , "Times performed", "Date last performed", "View"];
 
     $scope.viewHistory = function(id){
         window.location = "/history#?wid=" + id;
