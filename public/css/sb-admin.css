@@ -181,6 +181,11 @@ ul.alert-dropdown {
     width: 200px;
 }
 
+.scroll {
+    overflow: scroll;
+    height: 400px;
+}
+
 /* Side Navigation */
 
 @media(min-width:768px) {
