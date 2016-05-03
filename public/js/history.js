@@ -118,54 +118,78 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             }
             var intFormat = $scope.intChartData.length;
 
-            var intString = [];
-            var intFirstDate = $scope.intChartData[0].numdate;
-            var intBestTime = $scope.intChartData[0].time;
+            var intKeys = [];
 
-            for (var i = 1; i < intFormat; ++i) {
-                if (intFirstDate != $scope.intChartData[i].numdate) {
-                    intString.push({
-                        y: intFirstDate,
-                        a: intBestTime
-                    });
-                    intFirstDate = $scope.intChartData[i].numdate;
-                    intBestTime = $scope.intChartData[i].time;
+            for (var i = 0; i < intFormat.length; ++i) {
+                console.log(intKeys.length);
+                var found = false;
+                if (intKeys.length != 0) {
+                    for (var j = 0; j < intKeys.length; ++j) {
+                        if ($scope.intChartData[i].type == intKeys[j]) {
+                            found = true;
+                        }
+                    }
                 }
-                if (intBestTime < $scope.intChartData[i].time) {
-                    intBestTime = $scope.intChartData[i].time;
+                if (!found) {
+                    intKeys.push('"' + $scope.intChartData[i].type + '"');
                 }
             }
-            intString.push({
-                y: intFirstDate,
-                a: intBestTime
-            });
 
-            intData = intString;
+            console.log(intKeys);
+
+            var intString = [];
+
+            if ($scope.intChartData.length != 0) {
+                var intFirstDate = $scope.intChartData[0].numdate;
+                var intBestTime = $scope.intChartData[0].time;
+
+                for (var i = 1; i < intFormat; ++i) {
+                    if (intFirstDate != $scope.intChartData[i].numdate) {
+                        intString.push({
+                            y: intFirstDate,
+                            a: intBestTime
+                        });
+                        intFirstDate = $scope.intChartData[i].numdate;
+                        intBestTime = $scope.intChartData[i].time;
+                    }
+                    if (intBestTime < $scope.intChartData[i].time) {
+                        intBestTime = $scope.intChartData[i].time;
+                    }
+                }
+                intString.push({
+                    y: intFirstDate,
+                    a: intBestTime
+                });
+                intData = intString;
+            }
 
             var repFormat = $scope.repChartData.length;
             var repString = [];
 
-            var repFirstDate = $scope.repChartData[0].numdate;
-            var repBestWeight = $scope.repChartData[0].weight;
+            if ($scope.repChartData.length != 0) {
+                var repFirstDate = $scope.repChartData[0].numdate;
+                var repBestWeight = $scope.repChartData[0].weight;
+            
 
-            for (var i = 0; i < repFormat; ++i) {
-                if (repFirstDate != $scope.repChartData[i].numdate) {
-                    repString.push({
-                        y: repFirstDate,
-                        a: repBestWeight
-                    });
-                    repFirstDate = $scope.repChartData[i].numdate;
-                    repBestWeight = $scope.repChartData[i].weight;
+                for (var i = 0; i < repFormat; ++i) {
+                    if (repFirstDate != $scope.repChartData[i].numdate) {
+                        repString.push({
+                            y: repFirstDate,
+                            a: repBestWeight
+                        });
+                        repFirstDate = $scope.repChartData[i].numdate;
+                        repBestWeight = $scope.repChartData[i].weight;
+                    }
+                    if (repBestWeight < $scope.repChartData[i].weight) {
+                        repBestWeight = $scope.repChartData[i].weight;
+                    }
                 }
-                if (repBestWeight < $scope.repChartData[i].weight) {
-                    repBestWeight = $scope.repChartData[i].weight;
-                }
+                repString.push({
+                    y: repFirstDate,
+                    a: repBestWeight
+                });
+                repData = repString;
             }
-            repString.push({
-                y: repFirstDate,
-                a: repBestWeight
-            });
-            repData = repString;
 
             updateGraph(repData, intData, myRepGraph, myIntGraph);
         });
