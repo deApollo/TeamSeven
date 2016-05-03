@@ -123,7 +123,6 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             var intBestTime = $scope.intChartData[0].time;
 
             for (var i = 1; i < intFormat; ++i) {
-                console.log(intBestTime);
                 if (intFirstDate != $scope.intChartData[i].numdate) {
                     intString.push({
                         y: intFirstDate,
