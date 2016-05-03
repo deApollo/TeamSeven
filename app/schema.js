@@ -51,6 +51,13 @@ var WorkoutSchema = new mongoose.Schema({
     exercises : [{type : mongoose.Schema.Types.ObjectId, ref : "Exercise"}]
 });
 
+WorkoutSchema.pre("remove", function(next){
+    for(var i = 0; i < this.exercises.length; i++){
+        Exercise.remove({_id : this.exercises[i]}).exec();
+    }
+    next();
+});
+
 var Workout = mongoose.model("Workout", WorkoutSchema);
 
 var PerformanceSchema = new mongoose.Schema({
