@@ -1,4 +1,4 @@
-var app = angular.module("performer", []);
+var app = angular.module("performer", ["ngAnimate"]);
 
 app.controller("performance", function($scope, $http, $location) {
     $scope.workout = {
