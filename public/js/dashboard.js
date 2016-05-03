@@ -31,19 +31,18 @@ app.controller("dashboard-controller", function($scope, $http) {
                     });
                     eids.push(curE._id);
                 }
-                var today = "never performed!";
+                var lastP = "never performed!";
                 if( curW.lastperformed != -1){
-                    today = new Date(curW.lastperformed);
-                    var dd = today.getDate();
-                    var mm = today.getMonth() + 1;
-                    var yyyy = today.getFullYear();
-                    if (dd < 10) {
-                        dd = "0" + dd;
-                    }
-                    if (mm < 10) {
-                        mm = "0" + mm;
-                    }
-                    today = mm + "/" + dd + "/" + yyyy;
+                    lastP = new Date(curW.lastperformed);
+                    var now = Date.now();
+                    var timeDiff = Math.abs(lastP - now);
+                    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                    if(diffDays > 1)
+                        lastP = diffDays + " days ago";
+                    else if (diffDays == 1)
+                        lastP = "1 day ago";
+                    else
+                        lastP = "Today";
                 }
                 $scope.workouts.push({
                     name: curW.workoutname,
@@ -52,7 +51,7 @@ app.controller("dashboard-controller", function($scope, $http) {
                     exercises: exerciseArr,
                     modified: false,
                     timesp: curW.timesperformed,
-                    datelp: today
+                    datelp: lastP
                 });
             }
         }, function errorCallback(response) {
