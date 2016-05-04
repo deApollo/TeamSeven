@@ -13,9 +13,14 @@ app.controller("performance", function($scope, $http, $location) {
     $scope.prevBest = null;
     $scope.currentExercise = 0;
     $scope.serverMsg = "";
+    $scope.shSeconds = 0;
+    $scope.stSeconds = 0;
+    $scope.sSeconds = 0;
+    $scope.sMinutes = 0;
 
     var workoutTimeUpdated = false;
     var contentLoaded = false;
+    var swiID;
 
     angular.element(document).ready(getWorkout);
 
@@ -62,6 +67,44 @@ app.controller("performance", function($scope, $http, $location) {
         }, function errorCallback(response) {
             console.log(response);
         });
+    }
+
+    $scope.startStopwatch = function() {
+        swiID = setInterval(runStopwatch,10);
+    };
+
+    $scope.stopStopwatch = function(performances) {
+        clearInterval(swiID);
+        for(var i = 0; i < performances.length; i++){
+            if(!performances[i].time || [i].time == ""){
+                performances[i].time = $scope.sMinutes * 60 + $scope.sSeconds + $scope.stSeconds / 10 + $scope.shSeconds / 100;
+                return;
+            }
+        }
+    };
+
+    $scope.resetStopwatch = function () {
+        $scope.shSeconds = 0;
+        $scope.stSeconds = 0;
+        $scope.sSeconds = 0;
+        $scope.sMinutes = 0;
+    }
+
+    function runStopwatch() {
+        $scope.shSeconds += 1;
+        if($scope.shSeconds == 10){
+            $scope.stSeconds += 1;
+            $scope.shSeconds = 0;
+        }
+        if($scope.stSeconds == 10){
+            $scope.sSeconds += 1;
+            $scope.stSeconds = 0;
+        }
+        if($scope.sSeconds == 60){
+            $scope.sMinutes += 1;
+            $scope.sSeconds = 0;
+        }
+        $scope.$apply();
     }
 
     function updateExercise(exercise){
@@ -169,8 +212,13 @@ app.controller("performance", function($scope, $http, $location) {
         }
         if (pkeyCount < 2) {
             $scope.serverMsg += "You haven\'t filled things in!";
-        } else if (!failed)
+        } else if (!failed){
+            $scope.shSeconds = 0;
+            $scope.stSeconds = 0;
+            $scope.sSeconds = 0;
+            $scope.sMinutes = 0;
             submitPerformance(exercise);
+        }
     };
 
     $scope.stageCheck = function(exercise) {
