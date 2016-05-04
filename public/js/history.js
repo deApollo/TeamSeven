@@ -8,71 +8,9 @@ app.controller("historyCtrl", function($scope, $http, $location) {
     $scope.intChartData = [];
     $scope.repChartData = [];
 
-    angular.element(document).ready(getWorkout);
-
-    function getWorkout() {
-        var workoutID = $location.search().wid;
-        $http({
-            method: "GET",
-            url: "/data/getWorkout?wid=" + workoutID
-        }).then(function successCallback(response) {
-            var myRepGraph = Morris.Line({
-                element: "repGraph",
-                data: repData,
-                xkey: "y",
-                ykeys: ["a"],
-                labels: ["Weight"]
-            });
-
-            var myIntGraph = Morris.Line({
-                element: "intGraph",
-                data: intData,
-                xkey: "y",
-                ykeys: ["a"],
-                labels: ["Time"]
-            });           
-            var curW = response.data.data;
-            var exerciseArr = [];
-            var eids = [];
-            var repData = [];
-            var intData = [];
-            var intKeys = [];
-            var jsonObj;
-            for (var j = 0; j < curW.exercises.length; j++) {
-                var curE = curW.exercises[j];
-                jsonObj = {
-                    name: curE.exercisename,
-                    id: curE._id,
-                    type: curE.exercisetype,
-                    data: JSON.parse(curE.exercisedesc)
-                };
-                exerciseArr.push(jsonObj);
-                eids.push(curE._id);
-                getPerformanceData(curE.exercisename, curE._id, exerciseArr[j].data.sets, exerciseArr[j].type, repData, intData, myRepGraph, myIntGraph);
-                            console.log(repData);
-
-            }
-            for (var i = 0; i < exerciseArr.length; ++i) {
-                var found = false;
-                for (var j = 0; j < intKeys.length; ++j) {
-                    if (exerciseArr[i].name == intKeys[j]) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    intKeys.push(exerciseArr[i].name);
-                }
-            }
-            $scope.workout = {
-                name: curW.workoutname,
-                id: curW._id,
-                eids: eids,
-                exercises: exerciseArr
-            };
-        }, function errorCallback(response) {
-            console.log(response);
-        });
+    function updateGraph(repData, myRepGraph, intData, myIntGraph) {
+        myRepGraph.setData(repData);
+        myIntGraph.setData(intData);
     }
 
     function getPerformanceData(exerciseName, exerciseID, exerciseSets, exerciseType, repData, intData, myRepGraph, myIntGraph) {
@@ -87,20 +25,32 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             if (exerciseType == "Interval") {
                 for (var i = 0; i < actualData.length; ++i) {
                     for (var j = 0; j < exerciseSets; ++j) {
+                        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                         var d = new Date(actualData[i].date);
-                        var month = "" + (d.getMonth() + 1);
-                        var day = "" + d.getDate();
+                        var month = months[d.getMonth()];
+                        var day = d.getDate();
                         var year = d.getFullYear();
-                        var hours = d.getHours();
                         var minutes = d.getMinutes();
-                        var seconds = d.getSeconds();
-                        if (month.length < 2) month = "0" + month;
-                        if (day.length < 2) day = "0" + day;
+                        var hours = d.getHours();
+                        if (hours > 12) {
+                            hours -= 12;
+                            minutes += ' pm';
+                        }
+                        else if (hours == 0) {
+                            hours = 12;
+                            minutes += ' am';
+                        }
+                        else if (hours == 12) {
+                            minutes += ' pm';
+                        }
+                        else {
+                            minutes += ' am';
+                        }
                         var intChartItem = {
                             type: exerciseName,
                             sets: exerciseSets,
                             time: actualData[i].data[j].time,
-                            date: [hours, minutes, seconds].join(":") + " " + [month, day, year].join("-"),
+                            date: month + ' ' + day + ', ' + year + ' ' + hours + ':' + minutes,
                             numdate: actualData[i].date
                         };
                         $scope.intChartData.push(intChartItem);
@@ -110,21 +60,33 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             if (exerciseType == "Reps") {
                 for (var i = 0; i < actualData.length; ++i) {
                     for (var j = 0; j < exerciseSets; ++j) {
+                        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                         var d = new Date(actualData[i].date);
-                        var month = "" + (d.getMonth() + 1);
-                        var day = "" + d.getDate();
+                        var month = months[d.getMonth()];
+                        var day = d.getDate();
                         var year = d.getFullYear();
-                        var hours = d.getHours();
                         var minutes = d.getMinutes();
-                        var seconds = d.getSeconds();
-                        if (month.length < 2) month = '0' + month;
-                        if (day.length < 2) day = '0' + day;
+                        var hours = d.getHours();
+                        if (hours > 12) {
+                            hours -= 12;
+                            minutes += ' pm';
+                        }
+                        else if (hours == 0) {
+                            hours = 12;
+                            minutes += ' am';
+                        }
+                        else if (hours == 12) {
+                            minutes += ' pm';
+                        }
+                        else {
+                            minutes += ' am';
+                        }
                         var repChartItem = {
                             type: exerciseName,
                             sets: exerciseSets,
                             reps: actualData[i].data[j].reps,
                             weight: actualData[i].data[j].weight,
-                            date: [hours, minutes, seconds].join(":") + " " + [month, day, year].join("-"),
+                            date: month + ' ' + day + ', ' + year + ' ' + hours + ':' + minutes,
                             numdate: actualData[i].date
                         };
                         $scope.repChartData.push(repChartItem);
@@ -224,14 +186,79 @@ app.controller("historyCtrl", function($scope, $http, $location) {
     // iConfig.element = 'intGraph';
     // var myIntGraph = Morris.Line(iConfig);
 
-    function updateGraph(repData, myRepGraph, intData, myIntGraph) {
-        myRepGraph.setData(repData);
-        myIntGraph.setData(intData);
-    }
+    
 
     // function drawGraphs(repData, intData, intKeys) {
 
     // }
+
+    function getWorkout() {
+        var workoutID = $location.search().wid;
+        $http({
+            method: "GET",
+            url: "/data/getWorkout?wid=" + workoutID
+        }).then(function successCallback(response) {
+            var myRepGraph = Morris.Line({
+                element: "repGraph",
+                data: repData,
+                xkey: "y",
+                ykeys: ["a"],
+                labels: ["Weight"]
+            });
+
+            var myIntGraph = Morris.Line({
+                element: "intGraph",
+                data: intData,
+                xkey: "y",
+                ykeys: ["a"],
+                labels: ["Time"]
+            });           
+            var curW = response.data.data;
+            var exerciseArr = [];
+            var eids = [];
+            var repData = [];
+            var intData = [];
+            var intKeys = [];
+            var jsonObj;
+            for (var j = 0; j < curW.exercises.length; j++) {
+                var curE = curW.exercises[j];
+                jsonObj = {
+                    name: curE.exercisename,
+                    id: curE._id,
+                    type: curE.exercisetype,
+                    data: JSON.parse(curE.exercisedesc)
+                };
+                exerciseArr.push(jsonObj);
+                eids.push(curE._id);
+                getPerformanceData(curE.exercisename, curE._id, exerciseArr[j].data.sets, exerciseArr[j].type, repData, intData, myRepGraph, myIntGraph);
+                console.log(repData);
+            }
+            for (var i = 0; i < exerciseArr.length; ++i) {
+                var found = false;
+                for (var j = 0; j < intKeys.length; ++j) {
+                    if (exerciseArr[i].name == intKeys[j]) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    intKeys.push(exerciseArr[i].name);
+                }
+            }
+            $scope.workout = {
+                name: curW.workoutname,
+                id: curW._id,
+                eids: eids,
+                exercises: exerciseArr
+            };
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+    }
+
+    angular.element(document).ready(getWorkout);
+
+    
 });
 
 app.filter("reverse", function() {
