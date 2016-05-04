@@ -7,7 +7,6 @@ USAGE:
 
 1. Clone the repo
 2. Run "npm install" in the cloned repo directory
-3. Navigate to the "app" folder
 4. Run "node server"
 5. Navigate to "localhost:1337"
 
