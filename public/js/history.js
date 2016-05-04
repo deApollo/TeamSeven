@@ -1,24 +1,6 @@
 var app = angular.module("history", []);
 
 app.controller("historyCtrl", function($scope, $http, $location) {
-    var repData = [];
-    var intData = [];
-
-    var myRepGraph = Morris.Line({
-        element: "repGraph",
-        data: repData,
-        xkey: "y",
-        ykeys: ["a"],
-        labels: ["Weight"]
-    });
-
-    var myIntGraph = Morris.Line({
-        element: "intGraph",
-        data: intData,
-        xkey: "y",
-        ykeys: ["a"],
-        labels: ["Time"]
-    });
 
     $scope.serverMsg = "";
     $scope.repHeaders = ["Date", "Type", "Sets", "Reps", "Weight"];
@@ -34,12 +16,31 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             method: "GET",
             url: "/data/getWorkout?wid=" + workoutID
         }).then(function successCallback(response) {
+            var myRepGraph = Morris.Line({
+                element: "repGraph",
+                data: repData,
+                xkey: "y",
+                ykeys: ["a"],
+                labels: ["Weight"]
+            });
+
+            var myIntGraph = Morris.Line({
+                element: "intGraph",
+                data: intData,
+                xkey: "y",
+                ykeys: ["a"],
+                labels: ["Time"]
+            });           
             var curW = response.data.data;
             var exerciseArr = [];
             var eids = [];
+            var repData = [];
+            var intData = [];
+            var intKeys = [];
+            var jsonObj;
             for (var j = 0; j < curW.exercises.length; j++) {
                 var curE = curW.exercises[j];
-                var jsonObj = {
+                jsonObj = {
                     name: curE.exercisename,
                     id: curE._id,
                     type: curE.exercisetype,
@@ -47,7 +48,21 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 };
                 exerciseArr.push(jsonObj);
                 eids.push(curE._id);
-                getPerformanceData(curE.exercisename, curE._id, exerciseArr[j].data.sets, exerciseArr[j].type, repData, intData);
+                getPerformanceData(curE.exercisename, curE._id, exerciseArr[j].data.sets, exerciseArr[j].type, repData, intData, myRepGraph, myIntGraph);
+                            console.log(repData);
+
+            }
+            for (var i = 0; i < exerciseArr.length; ++i) {
+                var found = false;
+                for (var j = 0; j < intKeys.length; ++j) {
+                    if (exerciseArr[i].name == intKeys[j]) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    intKeys.push(exerciseArr[i].name);
+                }
             }
             $scope.workout = {
                 name: curW.workoutname,
@@ -60,7 +75,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
         });
     }
 
-    function getPerformanceData(exerciseName, exerciseID, exerciseSets, exerciseType, repData, intData) {
+    function getPerformanceData(exerciseName, exerciseID, exerciseSets, exerciseType, repData, intData, myRepGraph, myIntGraph) {
         $http({
             method: "GET",
             url: "/data/getAllPerformances?wid=" + exerciseID
@@ -118,56 +133,77 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             }
             var intFormat = $scope.intChartData.length;
 
+            // for (var i = 0; i < intFormat; ++i) {
+            //     var found = false;
+            //     for (var j = 0; j < intKeys.length; ++j) {
+            //         if ($scope.intChartData[i].type == intKeys[j]) {
+            //             found = true;
+            //             break;
+            //         }
+            //     }
+                
+            //     if (!found) {
+            //         intKeys.push($scope.intChartData[i].type);
+            //     }
+            // }
+
             var intString = [];
-            var intFirstDate = $scope.intChartData[0].numdate;
-            var intBestTime = $scope.intChartData[0].time;
 
-            for (var i = 1; i < intFormat; ++i) {
-                if (intFirstDate != $scope.intChartData[i].numdate) {
-                    intString.push({
-                        y: intFirstDate,
-                        a: intBestTime
-                    });
-                    intFirstDate = $scope.intChartData[i].numdate;
-                    intBestTime = $scope.intChartData[i].time;
+            if ($scope.intChartData.length != 0) {
+                var intFirstDate = $scope.intChartData[0].numdate;
+                var intBestTime = $scope.intChartData[0].time;
+                // var intType = $scope.intChartData[0].type;
+
+                for (var i = 1; i < intFormat; ++i) {
+                    if (intFirstDate != $scope.intChartData[i].numdate) {
+                        intString.push({
+                            y: intFirstDate,
+                            a: intBestTime
+                        });
+                        intFirstDate = $scope.intChartData[i].numdate;
+                        intBestTime = $scope.intChartData[i].time;
+                        // intType = $scope.intChartData[i].type;
+                    }
+                    if (intBestTime < $scope.intChartData[i].time) {
+                        intBestTime = $scope.intChartData[i].time;
+                    }
                 }
-                if (intBestTime < $scope.intChartData[i].time) {
-                    intBestTime = $scope.intChartData[i].time;
-                }
+                intString.push({
+                    y: intFirstDate,
+                    a: intBestTime
+                });
+                intData = intString;
             }
-            intString.push({
-                y: intFirstDate,
-                a: intBestTime
-            });
-
-            intData = intString;
 
             var repFormat = $scope.repChartData.length;
             var repString = [];
 
-            var repFirstDate = $scope.repChartData[0].numdate;
-            var repBestWeight = $scope.repChartData[0].weight;
+            if ($scope.repChartData.length != 0) {
+                var repFirstDate = $scope.repChartData[0].numdate;
+                var repBestWeight = $scope.repChartData[0].weight;
+            
 
-            for (var i = 0; i < repFormat; ++i) {
-                if (repFirstDate != $scope.repChartData[i].numdate) {
-                    repString.push({
-                        y: repFirstDate,
-                        a: repBestWeight
-                    });
-                    repFirstDate = $scope.repChartData[i].numdate;
-                    repBestWeight = $scope.repChartData[i].weight;
+                for (var i = 0; i < repFormat; ++i) {
+                    if (repFirstDate != $scope.repChartData[i].numdate) {
+                        repString.push({
+                            y: repFirstDate,
+                            a: repBestWeight
+                        });
+                        repFirstDate = $scope.repChartData[i].numdate;
+                        repBestWeight = $scope.repChartData[i].weight;
+                    }
+                    if (repBestWeight < $scope.repChartData[i].weight) {
+                        repBestWeight = $scope.repChartData[i].weight;
+                    }
                 }
-                if (repBestWeight < $scope.repChartData[i].weight) {
-                    repBestWeight = $scope.repChartData[i].weight;
-                }
+                repString.push({
+                    y: repFirstDate,
+                    a: repBestWeight
+                });
+                repData = repString;
             }
-            repString.push({
-                y: repFirstDate,
-                a: repBestWeight
-            });
-            repData = repString;
 
-            updateGraph(repData, intData, myRepGraph, myIntGraph);
+            updateGraph(repData, myRepGraph, intData, myIntGraph);
         });
     }
     $scope.workout = {
@@ -178,10 +214,24 @@ app.controller("historyCtrl", function($scope, $http, $location) {
         modified: false
     };
 
-    function updateGraph(repData, intData, myRepGraph, myIntGraph) {
+    // var iData = intData,
+    //     iConfig = {
+    //         data: iData,
+    //         xkey: 'y',
+    //         ykeys: intKeys,
+    //         labels: ["Time"]
+    //     };
+    // iConfig.element = 'intGraph';
+    // var myIntGraph = Morris.Line(iConfig);
+
+    function updateGraph(repData, myRepGraph, intData, myIntGraph) {
         myRepGraph.setData(repData);
         myIntGraph.setData(intData);
     }
+
+    // function drawGraphs(repData, intData, intKeys) {
+
+    // }
 });
 
 app.filter("reverse", function() {
