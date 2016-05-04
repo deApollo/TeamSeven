@@ -1,25 +1,6 @@
 var app = angular.module("history", []);
 
 app.controller("historyCtrl", function($scope, $http, $location) {
-    var repData = [];
-    var intData = [];
-    var intKeys = [];
-
-    var myRepGraph = Morris.Line({
-        element: "repGraph",
-        data: repData,
-        xkey: "y",
-        ykeys: ["a"],
-        labels: ["Weight"]
-    });
-
-    var myIntGraph = Morris.Line({
-        element: "intGraph",
-        data: intData,
-        xkey: "y",
-        ykeys: ["a"],
-        labels: ["Time"]
-    });
 
     $scope.serverMsg = "";
     $scope.repHeaders = ["Date", "Type", "Sets", "Reps", "Weight"];
@@ -35,12 +16,31 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             method: "GET",
             url: "/data/getWorkout?wid=" + workoutID
         }).then(function successCallback(response) {
+            var myRepGraph = Morris.Line({
+                element: "repGraph",
+                data: repData,
+                xkey: "y",
+                ykeys: ["a"],
+                labels: ["Weight"]
+            });
+
+            var myIntGraph = Morris.Line({
+                element: "intGraph",
+                data: intData,
+                xkey: "y",
+                ykeys: ["a"],
+                labels: ["Time"]
+            });           
             var curW = response.data.data;
             var exerciseArr = [];
             var eids = [];
+            var repData = [];
+            var intData = [];
+            var intKeys = [];
+            var jsonObj;
             for (var j = 0; j < curW.exercises.length; j++) {
                 var curE = curW.exercises[j];
-                var jsonObj = {
+                jsonObj = {
                     name: curE.exercisename,
                     id: curE._id,
                     type: curE.exercisetype,
@@ -48,7 +48,21 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 };
                 exerciseArr.push(jsonObj);
                 eids.push(curE._id);
-                getPerformanceData(curE.exercisename, curE._id, exerciseArr[j].data.sets, exerciseArr[j].type, repData, intData);
+                getPerformanceData(curE.exercisename, curE._id, exerciseArr[j].data.sets, exerciseArr[j].type, repData, intData, myRepGraph, myIntGraph);
+                            console.log(repData);
+
+            }
+            for (var i = 0; i < exerciseArr.length; ++i) {
+                var found = false;
+                for (var j = 0; j < intKeys.length; ++j) {
+                    if (exerciseArr[i].name == intKeys[j]) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    intKeys.push(exerciseArr[i].name);
+                }
             }
             $scope.workout = {
                 name: curW.workoutname,
@@ -61,7 +75,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
         });
     }
 
-    function getPerformanceData(exerciseName, exerciseID, exerciseSets, exerciseType, repData, intData) {
+    function getPerformanceData(exerciseName, exerciseID, exerciseSets, exerciseType, repData, intData, myRepGraph, myIntGraph) {
         $http({
             method: "GET",
             url: "/data/getAllPerformances?wid=" + exerciseID
@@ -119,20 +133,19 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             }
             var intFormat = $scope.intChartData.length;
 
-            for (var i = 0; i < intFormat; ++i) {
-                var found = false;
-                for (var j = 0; j < intKeys.length; ++j) {
-                    if ($scope.intChartData[i].type == intKeys[j]) {
-                        found = true;
-                        console.log("here");
-                        break;
-                    }
-                }
+            // for (var i = 0; i < intFormat; ++i) {
+            //     var found = false;
+            //     for (var j = 0; j < intKeys.length; ++j) {
+            //         if ($scope.intChartData[i].type == intKeys[j]) {
+            //             found = true;
+            //             break;
+            //         }
+            //     }
                 
-                if (!found) {
-                    intKeys.push($scope.intChartData[i].type);
-                }
-            }
+            //     if (!found) {
+            //         intKeys.push($scope.intChartData[i].type);
+            //     }
+            // }
 
             var intString = [];
 
