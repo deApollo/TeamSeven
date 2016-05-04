@@ -77,7 +77,7 @@ app.controller("performance", function($scope, $http, $location) {
         clearInterval(swiID);
         for(var i = 0; i < performances.length; i++){
             if(!performances[i].time || [i].time == ""){
-                performances[i].time = $scope.sMinutes * 60 + $scope.sSeconds + $scope.stSeconds / 10 + $scope.shSeconds / 100;
+                performances[i].time = ($scope.sMinutes * 60 + $scope.sSeconds + $scope.stSeconds / 10 + $scope.shSeconds / 100).toFixed(2);
                 return;
             }
         }
