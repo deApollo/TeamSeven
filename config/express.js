@@ -2,7 +2,7 @@ var express = require("express");
 module.exports = function() {
     var app = express();
 
-    app.set("views", "../app/views");
+    app.set("views", "./app/views");
     app.set("view engine", "ejs"); //Define view renderer
 
     var bodyParser = require("body-parser"); //Handles POST body parsing
@@ -10,7 +10,7 @@ module.exports = function() {
     var MongoStore = require("connect-mongo")(session); //Helps with session tracking
     var mongoose = require("mongoose"); //Handles interacting with mongodb
 
-    app.use(express.static("../public")); //Static resources folder
+    app.use(express.static("./public")); //Static resources folder
     app.use(bodyParser.urlencoded({
         extended: false
     }));
