@@ -1,6 +1,13 @@
 var User = require("./../schema.js").User;
 var passwordHash = require("password-hash");
 
+/**
+ * Function that validates the form input for the registration form.
+ * Sets the appropriate error message in the users session if something is invalid
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ */
 function validateInputs(req){
     if(!req.body.username || req.body.username == ""){
         req.session.message = "Please enter a valid username";
@@ -30,6 +37,14 @@ function validateInputs(req){
     return true;
 }
 
+/**
+ * Backend endpoint for registering a user
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.register = function(req, res) {
     var fname = req.body.fname;
     var lname = req.body.lname;
@@ -64,6 +79,14 @@ exports.register = function(req, res) {
     });
 };
 
+/**
+ * Backend endpoint for logging a user in
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.login = function(req, res) {
     var user = req.body.username;
     var pword = req.body.password;
@@ -92,6 +115,14 @@ exports.login = function(req, res) {
     });
 };
 
+/**
+ * Backend endpoint for logging a user out
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.logout = function(req, res){
     req.session.loggedin = false;
     req.session.message = "You have been logged out!";
@@ -99,6 +130,14 @@ exports.logout = function(req, res){
     res.redirect("/");
 };
 
+/**
+ * Backend endpoint for validating a users session
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.validate = function(req,res,next){
     if(req.session.loggedin){
         console.log("Login validated for user: " + req.session.username);
@@ -109,6 +148,15 @@ exports.validate = function(req,res,next){
     }
 };
 
+/**
+ * Function which redirects a user to the dashboard from the index if they are
+ * already logged in.
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.indexRedir = function(req,res,next){
     if(req.session.loggedin){
         if(req.session.loggedin == true)

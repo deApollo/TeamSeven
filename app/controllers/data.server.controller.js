@@ -1,9 +1,25 @@
+/**
+ * This file is the main backend endpoint for the application.  It handles all
+ * of the database interaction logic.
+ */
+
 var mongoose = require("mongoose");
 var User = require("./../schema.js").User;
 var Exercise = require("./../schema.js").Exercise;
 var Workout = require("./../schema.js").Workout;
 var Performance = require("./../schema.js").Performance;
 
+/**
+ * Backend endpoint for changing the user profile picture
+ *
+ * Updates the users profile picture to the supplied image
+ * Image downloading is handled via a middleware function in the router
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.changeUserPicture = function(req,res){
     User.update({username : req.session.username}, { $set: {picture_uri : req.session.username}},function(err, obj){
         if(err) {
@@ -20,6 +36,14 @@ exports.changeUserPicture = function(req,res){
     });
 };
 
+/**
+ * Backend endpoint for getting user preferences
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.getUserPreferences = function(req, res){
     User.findOne({username : req.session.username}, "firstname lastname profile_url preferred_units email", function(err, obj){
         if(err) {
@@ -36,6 +60,15 @@ exports.getUserPreferences = function(req, res){
     });
 };
 
+
+/**
+ * Backend endpoint for changing a dynamically assigned user preference
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.changeUserPreference = function(req, res){
     var field = req.body.field;
     var value = req.body.value;
@@ -57,6 +90,14 @@ exports.changeUserPreference = function(req, res){
     });
 };
 
+/**
+ * Backend endpoint for getting the exercises for a given user
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.getExercises = function(req, res) {
     console.log("Getting list of exercises for user: " + req.session.username);
     Exercise.find({
@@ -76,6 +117,14 @@ exports.getExercises = function(req, res) {
     });
 };
 
+/**
+ * Backend endpoint for adding exercises for a given user
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.addExercise = function(req, res) {
     var exName = req.body.exerciseName;
     var exDesc = req.body.exerciseDesc;
@@ -101,6 +150,14 @@ exports.addExercise = function(req, res) {
     });
 };
 
+/**
+ * Backend endpoint for removing exercises for a given user
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.removeExercise = function(req, res) {
     var eID = req.body.id;
     console.log("Attempting to remove an exercise with id: " + eID);
@@ -121,6 +178,14 @@ exports.removeExercise = function(req, res) {
     });
 };
 
+/**
+ * Backend endpoint for updating exercises for a given user
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.updateExercise = function(req, res) {
     var eID = req.body.id;
     var exName = req.body.exerciseName;
@@ -144,6 +209,14 @@ exports.updateExercise = function(req, res) {
     );
 };
 
+/**
+ * Backend endpoint for getting all workouts associated with a given user
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.getWorkouts = function(req, res) {
     console.log("Attempting to get list of workouts for user: " + req.session.username);
     Workout.find({ username: req.session.username })
@@ -163,6 +236,14 @@ exports.getWorkouts = function(req, res) {
     });
 };
 
+/**
+ * Backend endpoint for getting a specific workout for a given user
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.getWorkout = function(req, res){
     var workoutID = req.query.wid;
     console.log("Attempting to find workout with ID: " + workoutID + " for user: "+ req.session.username);
@@ -183,6 +264,14 @@ exports.getWorkout = function(req, res){
     });
 };
 
+/**
+ * Backend endpoint for adding a workout to a given user
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.addWorkout = function(req, res) {
     var wName = req.body.workoutName;
     var wDesc = req.body.activityDesc;
@@ -214,6 +303,14 @@ exports.addWorkout = function(req, res) {
     });
 };
 
+/**
+ * Backend endpoint for removing a workout from a given user
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.removeWorkout = function(req, res) {
     var wID = req.body.id;
     console.log("Attempting to remove workout with id: " + wID);
@@ -234,6 +331,14 @@ exports.removeWorkout = function(req, res) {
     });
 };
 
+/**
+ * Backend endpoint for updating a workout for a given user
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.updateWorkout = function(req, res){
     var wID = req.body.id;
     var wName = req.body.workoutName;
@@ -267,6 +372,14 @@ exports.updateWorkout = function(req, res){
     );
 };
 
+/**
+ * Backend endpoint for updating the last time a workout was performed
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.updateWorkoutPerformed = function(req, res){
     var wID = req.body.wid;
     var newTimes = req.body.times;
@@ -290,6 +403,14 @@ exports.updateWorkoutPerformed = function(req, res){
     );
 };
 
+/**
+ * Backend endpoint for adding performance data for an exercise for a given user
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.addPerformance = function(req, res){
     var exerciseID = req.body.wid;
     var performanceData = req.body.pdata;
@@ -312,6 +433,14 @@ exports.addPerformance = function(req, res){
     });
 };
 
+/**
+ * Backend endpoint for getting the most recent performance of a given exercise
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.getMostRecentPerformance = function(req, res){
     var exerciseID = mongoose.Types.ObjectId(req.query.wid);
     console.log("Attempting to get most recent performance for exercise: " + exerciseID);
@@ -332,6 +461,14 @@ exports.getMostRecentPerformance = function(req, res){
     });
 };
 
+/**
+ * Backend endpoint for getting all performances for an exercise for a given user
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
 exports.getAllPerformances = function(req, res){
     var exerciseID = mongoose.Types.ObjectId(req.query.wid);
     console.log("Attempting to get all performances for exercise: " + exerciseID);
