@@ -10,13 +10,35 @@
     background-color: #ECE4E4;
 }
 
+.whiteW {
+    color: white;
+}
+
 /* perform page */
-.exerciseBlock {
-    line-height: 20px;
+#middle {
+    padding-left: 15px;
+}
+
+.stopwatch{
+    display: inline-block;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    margin-left: 50px;
+}
+
+.stopwatch h1{
+    display: inline-block;
+    font-size: 60px;
+}
+
+.clock{
+    display: inline-block;
+    margin-left: -20px;
 }
 
 .exerciseInput {
-    padding-bottom: 10px;
+    margin-bottom: 20px;
+    color: black;
 }
 
 /* workouts page */
@@ -219,10 +241,6 @@ body {
     padding: 15px;
 }
 
-.navbar-inverse {
-    background-color: black;
-}
-
 #dropdown {
     width: 100px;
     display: inline-block;
@@ -386,6 +404,10 @@ ul.alert-dropdown {
     color: #5A5A5A;
     margin-left: 15px;
 }
+}
+
+.navbar-inverse .navbar-toggle{
+    background-color: #B35F5F;
 }
 
 .navbar-inverse .navbar-brand{
