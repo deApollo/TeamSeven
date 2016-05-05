@@ -73,7 +73,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             xkey: 'y',
             ykeys: intKeys,
             labels: intLabels,
-            hideHover: "auto"
+            hideHover: "always"
         };
         iConfig.element = 'intGraph';
 
@@ -83,7 +83,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             xkey: 'y',
             ykeys: repKeys,
             labels: repLabels,
-            hideHover: "auto"
+            hideHover: "always"
         }
         rConfig.element = 'repGraph';
 
