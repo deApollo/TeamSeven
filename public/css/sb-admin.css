@@ -6,6 +6,140 @@
 
 /* Global Styles */
 
+
+/* workouts page */
+.titleName {
+    border-width: 0px;
+    font-size: 20px;
+}
+
+.backLink:hover {
+    color: #959595;
+    cursor: pointer; cursor: hand;
+}
+
+.btn-secondary {
+    background-color: white;
+    border-color: #ccc;
+}
+
+.backLink {
+    color: #BDBDBD !important;
+    cursor: pointer; cursor: hand;
+    width: 60px;
+}
+
+.small {
+    width: 60px !important;
+}
+
+.ng-not-empty {
+    padding-left: 0px;
+}
+
+.form-inline .form-control{
+    padding-left: 5px;
+}
+
+label {
+    font-weight: 400;
+    padding-left: 20px;
+    padding-right: 10px;
+}
+
+.buttonBar{
+    padding-top: 10px;
+    float: right;
+    display: inline-block;
+}
+
+.fa-play-circle-o{
+    color: #7B986D !important;
+}
+.fa-play-circle-o:hover{
+    color: #6BB911 !important;
+}
+
+.fa-trash-o{
+    color: #986D6D !important;
+}
+
+.fa-trash-o:hover{
+    color: #F3001E !important;
+}
+
+.fa{
+    color: #BDBDBD;
+    cursor: pointer; cursor: hand;
+    letter-spacing: 15px;
+}
+
+.fa-2x{
+    font-size: 1.5em !important;
+}
+
+.fa:hover{
+    color: #959595;
+}
+
+#floatRight{
+    float: right;
+    display: inline-block;
+}
+
+.overview {
+    border-top-width: 1px;
+    border-top-color: #535353;
+    border-top-style: solid;
+    margin-bottom: 5px;
+}
+
+.chartPanel {
+    background-color: #ECECEC;
+    padding-left: 30px;
+    padding-right: 10px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-bottom: 5px;
+    overflow: hidden;
+}
+
+.addWorkout {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #F5F5F5;
+    color: #4A4A4A;
+}
+
+.addWorkout2 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #F5F5F5;
+    color: #4A4A4A;
+}
+
+.addWorkout:hover{
+    background-color: #F7F7F7;
+    cursor: pointer; cursor: hand;
+}
+
+li {
+    list-style: none;
+}
+
+.info {
+    display: inline-block;
+    padding-left: 10%;
+}
+
+.exerciseList {
+    display: inline-block;
+}
+
+.workoutName {
+    display: inline-block;
+}
+
 body {
     margin-top: 100px;
     background-color: #FFF;
@@ -71,9 +205,6 @@ body {
     line-height: 15px;
     border-radius: 10px;
     padding: 15px;
-}
-.ng-scope {
-    padding: 5px;
 }
 
 .navbar-inverse {
@@ -260,66 +391,6 @@ ul.alert-dropdown {
 .flot-chart-content {
     width: 100%;
     height: 100%;
-}
-
-/* Custom Colored Panels */
-
-.huge {
-    font-size: 40px;
-}
-
-.panel-green {
-    border-color: #5cb85c;
-}
-
-.panel-green > .panel-heading {
-    border-color: #5cb85c;
-    color: #fff;
-    background-color: #5cb85c;
-}
-
-.panel-green > a {
-    color: #5cb85c;
-}
-
-.panel-green > a:hover {
-    color: #3d8b3d;
-}
-
-.panel-red {
-    border-color: #d9534f;
-}
-
-.panel-red > .panel-heading {
-    border-color: #d9534f;
-    color: #fff;
-    background-color: #d9534f;
-}
-
-.panel-red > a {
-    color: #d9534f;
-}
-
-.panel-red > a:hover {
-    color: #b52b27;
-}
-
-.panel-yellow {
-    border-color: #f0ad4e;
-}
-
-.panel-yellow > .panel-heading {
-    border-color: #f0ad4e;
-    color: #fff;
-    background-color: #f0ad4e;
-}
-
-.panel-yellow > a {
-    color: #f0ad4e;
-}
-
-.panel-yellow > a:hover {
-    color: #df8a13;
 }
 
 /* Preferences Page */
