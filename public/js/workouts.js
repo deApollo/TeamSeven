@@ -8,14 +8,14 @@ app.controller("WorkoutCtrl", function($scope, $http){
     $scope.editingOff = true;
 
     $scope.sortableOptions = {
-         stop: function(e, ui) {
-             $scope.workout.modified = true;
-             $scope.workout.eids = [];
-             for(var i = 0; i < $scope.workout.exercises.length; i++){
-                 $scope.workout.eids.push($scope.workout.exercises[i].id);
-             }
-         }
-     };
+        stop: function() {
+            $scope.workout.modified = true;
+            $scope.workout.eids = [];
+            for(var i = 0; i < $scope.workout.exercises.length; i++){
+                $scope.workout.eids.push($scope.workout.exercises[i].id);
+            }
+        }
+    };
 
     angular.element(document).ready(getWorkouts);
 
@@ -128,7 +128,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
         });
     }
 
-    function updateWorkout(workout, workoutIndex){
+    function updateWorkout(workout){
         $http({
             method: "POST",
             url: "/data/updateWorkout",
