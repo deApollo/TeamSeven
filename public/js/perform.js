@@ -210,7 +210,7 @@ app.controller("performance", function($scope, $http, $location) {
                 }
             }
         }
-        if (pkeyCount < 2) {
+        if (pkeyCount < 1) {
             $scope.serverMsg += "You haven\'t filled things in!";
         } else if (!failed){
             $scope.shSeconds = 0;
