@@ -236,7 +236,7 @@ body {
 
 @media(min-width:768px) {
     #wrapper {
-        padding-left: 225px;
+        padding-left: 300px;
     }
 
     #page-wrapper {
@@ -319,20 +319,27 @@ ul.alert-dropdown {
 
 /* Side Navigation */
 
+.blaq{
+    color: #5A5A5A !important;
+}
+
 @media(min-width:768px) {
     .side-nav {
         position: fixed;
         top: 51px;
         left: 225px;
-        width: 225px;
+        width: 300px;
         margin-left: -225px;
-        border: none;
+        border-right-width: 2px;
+        border-right-color: #979797;
+        border-right-style: solid;
         border-radius: 0;
         overflow-y: auto;
-        background-color: #222;
+        background-color: #D8D8D8;
         bottom: 0;
         overflow-x: hidden;
         padding-bottom: 40px;
+        color: #5A5A5A;
     }
 
     .side-nav>li>a {
@@ -342,8 +349,54 @@ ul.alert-dropdown {
     .side-nav li a:hover,
     .side-nav li a:focus {
         outline: none;
-        background-color: #000 !important;
+        background-color: #C7C7C7 !important;
     }
+
+    .navbar-nav>li{
+        margin-left: 35px;
+    }
+
+    .user-side-image img{
+        margin-left: 70px;
+        margin-top: 70px;
+    }
+}
+
+.navbar-inverse{
+    background-color: #4D4D4D;
+    border-color: #4D4D4D;
+    color: black;
+}
+
+.navbar-brand {
+    color: #5A5A5A;
+}
+
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{
+    border-color: #D8D8D8;
+}
+
+.navbar-inverse .navbar-nav>.active>a, 
+.navbar-inverse .navbar-nav>.active>a:focus, 
+.navbar-inverse .navbar-nav>.active>a:hover{
+    background-color: #979797;
+    color: #5A5A5A;
+}
+
+.navbar-inverse .navbar-nav>li>a:focus, 
+.navbar-inverse .navbar-nav>li>a:hover,
+.navbar-inverse .navbar-nav>li>a{
+    color: #5A5A5A;
+    float: center;
+}
+
+.navbar-nav>li{
+    text-align: center;
+}
+
+.side-nav>li{
+    color: #5A5A5A;
+    font-weight: 800;
 }
 
 .side-nav>li>ul {
@@ -354,16 +407,16 @@ ul.alert-dropdown {
     display: block;
     padding: 10px 15px 10px 38px;
     text-decoration: none;
-    color: #999;
+    color: #5A5A5A;
 }
 
 .side-nav>li>ul>li>a:hover {
-    color: #fff;
+    color: #5A5A5A;
 }
 
 .user-side-image {
     margin-top: 40px;
-    margin-left: 60px;
+    margin-left: 40px;
     margin-bottom: 20px;
 }
 
@@ -373,8 +426,8 @@ ul.alert-dropdown {
 }
 
 .user-side-name h3 {
-    color: white;
-    margin-left: 49px;
+    color: #5A5A5A;
+    margin-left: 15px;
 }
 
 .user-side-name {

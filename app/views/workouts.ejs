@@ -77,10 +77,10 @@
 							
 							<div class="buttonBar">
 							<i class="fa fa-pencil-square-o fa-2x" aria-hidden="true" ng-click="editWorkout($index)"></i>
-							<i class="fa fa-line-chart fa-2x" aria-hidden="true" ng-if="workout.id != null"></i>
+							<a ng-href="/history#?wid={{workout.id}}" ><i class="fa fa-line-chart fa-2x" aria-hidden="true" ng-if="workout.id != null"></i></a>
 
 							<a ng-href="/perform?wid={{workout.id}}" ng-if="workout.id != null"><i class="fa fa-play-circle-o fa-2x" aria-hidden="true" ></i></a>
-							<a ng-href="/history#?wid={{workout.id}}" ng-click="removeWorkout(workout)"><i class="fa fa-trash-o fa-2x" aria-hidden="true" ></i></a>
+							<i class="fa fa-trash-o fa-2x" aria-hidden="true" ng-click="removeWorkout(workout)" ></i>
 							</div>
 
 						</div>
@@ -172,7 +172,7 @@
 						</div>
 					</div>
 					<!-- workout creation -->
-					<p>{{serverMsg}}</p>
+					
 
 				</div>
 
