@@ -73,7 +73,14 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             xkey: 'y',
             ykeys: intKeys,
             labels: intLabels,
-            hideHover: "always"
+            hideHover: "always",
+            xLabelFormat: function(x) {
+                var IndexToMonth = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+                var month = IndexToMonth[ x.getMonth() ];
+                var year = x.getFullYear();
+                var day = x.getDate();
+                return month + ' ' + day + ', ' + year;
+            }
         };
         iConfig.element = 'intGraph';
 
@@ -83,7 +90,14 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             xkey: 'y',
             ykeys: repKeys,
             labels: repLabels,
-            hideHover: "always"
+            hideHover: "always",
+            xLabelFormat: function(x) {
+                var IndexToMonth = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+                var month = IndexToMonth[ x.getMonth() ];
+                var year = x.getFullYear();
+                var day = x.getDate();
+                return month + ' ' + day + ', ' + year;
+            }
         }
         rConfig.element = 'repGraph';
 
