@@ -73,7 +73,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             xkey: 'y',
             ykeys: intKeys,
             labels: intLabels,
-            hideHover: "auto"
+            hideHover: "always"
         };
         iConfig.element = 'intGraph';
 
@@ -83,7 +83,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             xkey: 'y',
             ykeys: repKeys,
             labels: repLabels,
-            hideHover: "auto"
+            hideHover: "always"
         }
         rConfig.element = 'repGraph';
 
@@ -263,6 +263,9 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                         var year = d.getFullYear();
                         var minutes = d.getMinutes();
                         var hours = d.getHours();
+                        if (minutes < 10) {
+                            minutes = '0' + minutes;
+                        }
                         if (hours > 12) {
                             hours -= 12;
                             minutes += ' pm';
@@ -277,6 +280,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                         else {
                             minutes += ' am';
                         }
+                        console.log(minutes);
                         var repChartItem = {
                             type: exerciseName,
                             sets: exerciseSets,
