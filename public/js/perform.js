@@ -276,6 +276,3 @@ app.controller("performance", function($scope, $http, $location) {
     };
 
 });
-app.config(function($locationProvider) {
-    $locationProvider.html5Mode(true).hashPrefix("!");
-});

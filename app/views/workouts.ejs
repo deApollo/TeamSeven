@@ -74,12 +74,12 @@
 							<div class="exerciseList" ng-repeat="exercise in workout.exercises"> {{exercise.name}} x{{exercise.data.sets}} &nbsp;</div>
 
 							</div>
-							
+
 							<div class="buttonBar">
 							<i class="fa fa-pencil-square-o fa-2x" aria-hidden="true" ng-click="editWorkout($index)"></i>
 							<a ng-href="/history#?wid={{workout.id}}" ><i class="fa fa-line-chart fa-2x" aria-hidden="true" ng-if="workout.id != null"></i></a>
 
-							<a ng-href="/perform?wid={{workout.id}}" ng-if="workout.id != null"><i class="fa fa-play-circle-o fa-2x" aria-hidden="true" ></i></a>
+							<a ng-href="/perform#?wid={{workout.id}}" ng-if="workout.id != null"><i class="fa fa-play-circle-o fa-2x" aria-hidden="true" ></i></a>
 							<i class="fa fa-trash-o fa-2x" aria-hidden="true" ng-click="removeWorkout(workout)" ></i>
 							</div>
 
@@ -93,20 +93,20 @@
 
 					<!-- Editing interface -->
 					<div ng-hide="overview">
-						
+
 						<div class ="backLink" ng-click="doOverview()"><i class="fa fa-arrow-left" aria-hidden="true"></i>Back </div>
-						
+
 						<input type="text" class="form-control titleName" placeholder="Leg Day" aria-describedby="basic-addon1" ng-model="workout.name" ng-blur="modify(workouts[wIndex])">
-						
+
 
 						<div class="overview">
 							<ul ui-sortable="sortableOptions" ng-model="workout.exercises">
 								<div ng-repeat="exercise in workout.exercises">
-									
+
 									<div class="chartPanel" ng-if="exercise.type == 'Interval' ">
-										<form class="form-inline">	
-											
-											
+										<form class="form-inline">
+
+
 											<div class="form-group">
 											<label for="exerciseName">Name</label>
 											<input type="text" class="form-control" id="exerciseName" ng-model="exercise.name" ng-blur="modify(exercise)" ng-disabled="editingOff">
@@ -125,12 +125,12 @@
 										</form>
 
 										<i class="fa fa-times fa-2x" id="floatRight" aria-hidden="true" ng-click="removeExercise(workouts[wIndex],exercise)"></i>
-								
+
 									</div>
-									
+
 									<div class="chartPanel" ng-if="exercise.type == 'Reps' " id="exerciseInputBlock">
 										<form class="form-inline">
-											
+
 											<div class="form-group">
 											<label for="exerciseName2">Name</label>
 											<input type="text" class="form-control" id="exerciseName2" ng-model="exercise.name" placeholder="Front Squat" ng-blur="modify(exercise)" ng-disabled="editingOff">
@@ -149,6 +149,7 @@
 											<div class="form-group">
 											<label for="startWeight">Weight</label>
 											<input type="text" class="form-control small" id="startWeight" ng-model="exercise.data.weight" placeholder="145" ng-blur="modify(exercise)" ng-disabled="editingOff">
+											<%=units%>
 											</div>
 
 										</form>
@@ -157,7 +158,7 @@
 									</div>
 								</div>
 							</ul>
-						
+
 						<div class="chartPanel addWorkout2">
 						<select class="form-control" id="dropdown" ng-model="selectionType">
 							<option>Interval</option>
@@ -172,7 +173,7 @@
 						</div>
 					</div>
 					<!-- workout creation -->
-					
+
 
 				</div>
 
