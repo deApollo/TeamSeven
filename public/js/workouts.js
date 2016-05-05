@@ -7,7 +7,7 @@ app.controller("WorkoutCtrl", function($scope, $http){
     $scope.serverMsg = "";
     $scope.editingOff = true;
 
-     $scope.sortableOptions = {
+    $scope.sortableOptions = {
          stop: function(e, ui) {
              $scope.workout.modified = true;
              $scope.workout.eids = [];

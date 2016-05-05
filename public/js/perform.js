@@ -88,7 +88,7 @@ app.controller("performance", function($scope, $http, $location) {
         $scope.stSeconds = 0;
         $scope.sSeconds = 0;
         $scope.sMinutes = 0;
-    }
+    };
 
     function runStopwatch() {
         $scope.shSeconds += 1;

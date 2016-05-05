@@ -43,10 +43,6 @@
                             <div ng-repeat="exercise in workout.exercises" ng-show="stageCheck(exercise)" class="animate-show">
                                 <h4>{{exercise.name}}</h4>
                                 <div ng-if="exercise.type == 'Interval'">
-<<<<<<< HEAD
-                                    <p ng-if="!exercise.last.avail">Your goal is {{exercise.data.sets}} sets in {{exercise.data.time}} time.</p>
-                                    <p ng-if="exercise.last.avail">Your last best time was {{getBestInterval(exercise.last.data)}} time.</p>
-=======
                                     <p ng-if="!exercise.last.avail">Your goal is {{exercise.data.sets}} sets in {{exercise.data.time}} time</p>
                                     <p ng-if="exercise.last.avail">Your last best time was {{getBestInterval(exercise.last.data)}} time</p>
                                     <h3>Stopwatch</h3>
@@ -54,10 +50,6 @@
                                     <button ng-click="startStopwatch()">Start</button>
                                     <button ng-click="stopStopwatch(exercise.performances)">Stop</button>
                                     <button ng-click="resetStopwatch()">Reset</button>
-<<<<<<< Updated upstream
-=======
->>>>>>> origin/master
->>>>>>> Stashed changes
                                     <div ng-repeat="i in getNumber(exercise.data.sets)">
                                         <div class="input-group">
                                             <span class="input-group-addon" ng-attr-id="'set-desc-' + {{i}}">Set {{i+1}}</span>
