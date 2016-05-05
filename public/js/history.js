@@ -111,9 +111,43 @@ app.controller("historyCtrl", function($scope, $http, $location) {
     }
 
     function combineData(myIntData, myRepData, myIntGraph, myRepGraph) {
-        var finalIntData = myIntData;
-        // console.log("hereahgliha");
-        console.log(myIntData);
+        var finalIntData = [];
+        var myIntDataTmp = myIntData;
+        var intDates = [];
+        for (var i = 0; i < myIntData.length; ++i) {
+            var found = false;
+            for (var j = 0; j < intDates.length; ++j) {
+                if (myIntData[i].y == intDates[j]) {
+                    found = true;
+                }
+            }
+            if (!found) {
+                intDates.push(myIntData[i].y);
+            }
+        }
+        console.log(intDates);
+        // console.log(myIntData);
+
+        for (var i = 0; i < intDates.length; ++i) {
+            var tmp = new Object();
+            tmp.y = intDates[i];
+            for (var j = 0; j < myIntDataTmp.length; ++j) {
+                if (intDates[i] == myIntDataTmp[j].y) {
+                    for (var k = 0; k < intKeys.length; ++k) {
+                        if (myIntDataTmp[j][intKeys[k]] != null) {
+                            tmp[intKeys[k]] = myIntDataTmp[j][intKeys[k]];
+                            console.log(intKeys[k]);
+                            console.log(myIntDataTmp[j][intKeys[k]]);
+                            // console.log(tmp[intKeys[k]]);
+                        }
+                    }
+                }
+            }
+            console.log(tmp);
+            // console.log(tmp);
+            finalIntData.push(tmp);
+            
+        }
         // for (var i = 0, j = 1; j < myIntData.length - 1;) {
         //     var tmp = myIntData[i].y;
         //     // for (var j = 1; j < myIntData.length;) {
