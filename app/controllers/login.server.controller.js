@@ -140,10 +140,8 @@ exports.logout = function(req, res){
  */
 exports.validate = function(req,res,next){
     if(req.session.loggedin){
-        console.log("Login validated for user: " + req.session.username);
         next();
     } else {
-        console.log("Login validation failed!");
         res.redirect("/");
     }
 };
