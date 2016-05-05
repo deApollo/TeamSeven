@@ -32,17 +32,19 @@
     <body ng-app="performer">
         <div id="wrapper">
         <% include sidebar %>
+
             <div class="panel panel-default">
                 <div ng-controller="performance">
-                    <div class="panel panel-default">
+                    
             			<div class="panel-heading">
             				<h3 class="panel-title">{{workout.name}}</h3>
             			</div>
-            			<div class="panel-body">
-                            <p>{{serverMsg}}</p>
+            			
+                        <div class="panel-body">
                             <div ng-repeat="exercise in workout.exercises" ng-show="stageCheck(exercise)" class="animate-show">
                                 <h4>{{exercise.name}}</h4>
-                                <div ng-if="exercise.type == 'Interval'">
+                                
+                                <div class = "exerciseBlock" ng-if="exercise.type == 'Interval'">
                                     <p ng-if="!exercise.last.avail">Your goal is {{exercise.data.sets}} sets in {{exercise.data.time}} time</p>
                                     <p ng-if="exercise.last.avail">Your last best time was {{getBestInterval(exercise.last.data)}} time</p>
                                     <h3>Stopwatch</h3>
@@ -57,16 +59,22 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div ng-if="exercise.type == 'Reps'">
+                                
+                                <div class = "exerciseBlock" ng-if="exercise.type == 'Reps'">
                                     <p ng-if="!exercise.last.avail">Your goal is {{exercise.data.sets}} sets of {{exercise.data.reps}} reps with {{exercise.data.weight}} weight.</p>
+                                    
                                     <p ng-if="exercise.last.avail">Last time you did {{exercise.last.data.reps}} sets of {{exercise.last.data[0].reps}} reps with {{exercise.last.data[0].weight}} weight.</p>
-                                    <div ng-repeat="i in getNumber(exercise.data.sets)">
+                                    
+                                    <div class = "exerciseInput" ng-repeat="i in getNumber(exercise.data.sets)">
                                         Set {{i+1}}
                                         <input type="number" ng-model="exercise.performances[i].reps" placeholder="Actual reps">
                                         <input type="number" ng-model="exercise.performances[i].weight" placeholder="Actual Weight">
                                     </div>
+
                                 </div>
+                                
                                 <button class="btn btn-default" ng-click="addPerformance(exercise)">Submit Performance</button>
+
                             </div>
                             <div ng-show="isDone()">
                                 <p>You're all done!</p>
@@ -74,7 +82,6 @@
                             </div>
             			</div>
             		</div>
-                </div>
             </div>
         </div>
     </body>

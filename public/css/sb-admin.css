@@ -6,6 +6,18 @@
 
 /* Global Styles */
 
+.panel-default>.panel-heading{
+    background-color: #ECE4E4;
+}
+
+/* perform page */
+.exerciseBlock {
+    line-height: 20px;
+}
+
+.exerciseInput {
+    padding-bottom: 10px;
+}
 
 /* workouts page */
 .titleName {
@@ -261,7 +273,7 @@ body {
     padding-top: 15px;
     padding-bottom: 15px;
     line-height: 20px;
-    color: #999;
+    color: white;
 }
 
 .top-nav>li>a:hover,
@@ -270,7 +282,7 @@ body {
 .top-nav>.open>a:hover,
 .top-nav>.open>a:focus {
     color: #fff;
-    background-color: #000;
+    background-color: #A15454;
 }
 
 .top-nav>.open>.dropdown-menu {
@@ -333,7 +345,7 @@ ul.alert-dropdown {
         width: 300px;
         margin-left: -225px;
         border-right-width: 2px;
-        border-right-color: #979797;
+        border-right-color: #B35F5F;
         border-right-style: solid;
         border-radius: 0;
         overflow-y: auto;
@@ -376,6 +388,10 @@ ul.alert-dropdown {
 }
 }
 
+.navbar-inverse .navbar-brand{
+    color: white;
+}
+
 .navbar-inverse .navbar-nav>li>a:focus, 
 .navbar-inverse .navbar-nav>li>a:hover,
 .navbar-inverse .navbar-nav>li>a{
@@ -384,8 +400,8 @@ ul.alert-dropdown {
 }
 
 .navbar-inverse{
-    background-color: #4D4D4D;
-    border-color: #4D4D4D;
+    background-color: #B35F5F;
+    border-color: #B35F5F;
     color: black;
 }
 
