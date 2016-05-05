@@ -2,7 +2,7 @@ var multer = require("multer");
 var fs = require("fs");
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, "./../public/images/userimages");
+        cb(null, "./public/images/userimages");
     },
     filename: function(req, file, cb) {
         if (req.body.username) {
@@ -14,9 +14,11 @@ var storage = multer.diskStorage({
 });
 
 function deleteOldPicture(req, res, next) {
-    fs.stat("foo.txt", function(err) {
-        if (err == null)
-            fs.unlinkSync("./../public/images/userimages/" + req.session.username + ".jpg");
+    fs.stat("./public/images/userimages/" + req.session.username + ".jpg", function(err, stats) {
+        if (err == null){
+            if(stats.isFile())
+                fs.unlinkSync("./public/images/userimages/" + req.session.username + ".jpg");
+        }
         next();
     });
 }
