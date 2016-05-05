@@ -67,4 +67,5 @@ module.exports = function(app) {
     app.post("/data/changeUserPicture", login.validate, deleteOldPicture, upload.single("avatar"), data.changeUserPicture);
     app.post("/data/addPerformance", login.validate, data.addPerformance);
     app.post("/data/updateWorkoutPerformed", login.validate, data.updateWorkoutPerformed);
+    app.post("/changepassword", login.validate, login.changepassword);
 };

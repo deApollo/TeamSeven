@@ -116,6 +116,51 @@ exports.login = function(req, res) {
 };
 
 /**
+ * Backend endpoint for changing a users password
+ *
+ * @param {object} req
+ *   The express HTTP request containing the information require for the function
+ * @param {object} res
+ *   The express HTTP response to be sent back to the requester
+ */
+exports.changepassword = function(req, res) {
+    var user = req.session.username;
+    var oldpword = req.body.oldpword;
+    var pword = req.body.pword;
+    var pwordverif = req.body.pwordverif;
+    if(pword != pwordverif) {
+        req.session.message = "New passwords do not match!";
+        res.redirect("/changepassword");
+    }
+    console.log("Attempting to change password for user " + user + " with password " + pword);
+    User.findOne({username : user} , "password", function(err, person){
+        if(err){
+            req.session.message = "An error occured changing your password";
+            res.redirect("/changepassword");
+        } else if(person != null){
+            if(passwordHash.verify(oldpword, person.password)){
+                var pwordHash = passwordHash.generate(pword);
+                User.update({username : user}, {password : pwordHash}, {}, function(err2){
+                    if(err2){
+                        req.session.message = "An error occured changing your password";
+                        res.redirect("/changepassword");
+                    } else {
+                        req.session.message = "Password changed successfully!";
+                        res.redirect("/changepassword");
+                    }
+                });
+            } else {
+                req.session.message = "Invalid current password!";
+                res.redirect("/changepassword");
+            }
+        } else {
+            req.session.message = "Invalid current password!";
+            res.redirect("/changepassword");
+        }
+    });
+};
+
+/**
  * Backend endpoint for logging a user out
  *
  * @param {object} req
