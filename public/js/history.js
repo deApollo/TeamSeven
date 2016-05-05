@@ -73,14 +73,14 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             xkey: 'y',
             ykeys: intKeys,
             labels: intLabels,
-            hideHover: "always",
-            xLabelFormat: function(x) {
-                var IndexToMonth = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
-                var month = IndexToMonth[ x.getMonth() ];
-                var year = x.getFullYear();
-                var day = x.getDate();
-                return month + ' ' + day + ', ' + year;
-            }
+            hideHover: "always"
+            // xLabelFormat: function(x) {
+            //     var IndexToMonth = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+            //     var month = IndexToMonth[ x.getMonth() ];
+            //     var year = x.getFullYear();
+            //     var day = x.getDate();
+            //     return month + ' ' + day + ', ' + year;
+            // }
         };
         iConfig.element = 'intGraph';
 
@@ -90,14 +90,14 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             xkey: 'y',
             ykeys: repKeys,
             labels: repLabels,
-            hideHover: "always",
-            xLabelFormat: function(x) {
-                var IndexToMonth = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
-                var month = IndexToMonth[ x.getMonth() ];
-                var year = x.getFullYear();
-                var day = x.getDate();
-                return month + ' ' + day + ', ' + year;
-            }
+            hideHover: "always"
+            // xLabelFormat: function(x) {
+            //     var IndexToMonth = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+            //     var month = IndexToMonth[ x.getMonth() ];
+            //     var year = x.getFullYear();
+            //     var day = x.getDate();
+            //     return month + ' ' + day + ', ' + year;
+            // }
         }
         rConfig.element = 'repGraph';
 
@@ -241,6 +241,9 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                         var year = d.getFullYear();
                         var minutes = d.getMinutes();
                         var hours = d.getHours();
+                        if (minutes < 10) {
+                            minutes = '0' + minutes;
+                        }
                         if (hours > 12) {
                             hours -= 12;
                             minutes += ' pm';
