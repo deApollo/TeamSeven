@@ -193,9 +193,7 @@ body {
 
 #loginPage{
     background-image: url("/images/backgroundimage.jpg");
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-position: center center;
+
 }
 
 .headerLogin {
