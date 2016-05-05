@@ -89,6 +89,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
 
         var myIntGraph = Morris.Line(iConfig);
         var myRepGraph = Morris.Line(rConfig);
+        
         angular.element(document).ready(getWorkout(myIntGraph, myRepGraph));
     });
 
@@ -99,6 +100,14 @@ app.controller("historyCtrl", function($scope, $http, $location) {
         for (var i = 0; i < repNewData.length; ++i) {
             myRepData.push(repNewData[i]);
         }
+        // if (intNewData.length != 0) {
+        //     document.getElementById("intGraphWhole").style.display = "";
+        //     document.getElementById("intChartWhole").style.display = "";
+        // }
+        // else if (repNewData.length != 0) {
+        //     document.getElementById("repGraphWhole").style.display = "";
+        //     document.getElementById("repChartWhole").style.display = "";
+        // }
     }
 
     function combineData(myIntData, myRepData, myIntGraph, myRepGraph) {
