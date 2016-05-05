@@ -1,12 +1,16 @@
 var app = angular.module("Workout", ["ngRoute", "ui.sortable"]);
 
 app.controller("WorkoutCtrl", function($scope, $http){
-    $scope.workouts = [];
-    $scope.workout = {};
-    $scope.overview = true;
-    $scope.serverMsg = "";
-    $scope.editingOff = true;
+    $scope.workouts = []; //A list of all workouts - stored as JSON objects
+    $scope.workout = {}; //The currently active workout in the edit div
+    $scope.overview = true; //Whether or not to display the edit div or the overview
+    $scope.serverMsg = ""; //Used to display strings to the user
+    $scope.editingOff = true; //Whether or not the fields in the editing screen are enabled
 
+    //Options variable for the ui.sortable plugin
+    //Defines a function to call once a sortable element has finished moving
+    //In this case, the function updates a list of exercise ids stored in the
+    //workout to reflect the current actual ordering
     $scope.sortableOptions = {
         stop: function() {
             $scope.workout.modified = true;
@@ -19,6 +23,13 @@ app.controller("WorkoutCtrl", function($scope, $http){
 
     angular.element(document).ready(getWorkouts);
 
+    /**
+     * Function that makes a GET request to a backend endpoint to retrieve
+     * all workouts for the currently logged in user
+     *
+     * Upon a successful response, it populates the angular scope variables with
+     * the data needed to render the UI
+     */
     function getWorkouts(){
         $http({
             method: "GET",
@@ -41,6 +52,17 @@ app.controller("WorkoutCtrl", function($scope, $http){
         });
     }
 
+    /**
+     * Recursive function used to dynamically save changed exercises and workouts
+     *
+     * Recurses through all workouts and sub exercises saving/adding ones marked
+     * by a modified flag
+     *
+     * @param {integer} wIndex
+     *   The index of the current workout in the recursion
+     * @param {integer} eIndex
+     *   The index of the current exercise for a given workout in the recursion
+     */
     function saveHelper(wIndex,eIndex){
         var wLocal = $scope.workouts;
         var curW = wLocal[wIndex];
@@ -61,6 +83,19 @@ app.controller("WorkoutCtrl", function($scope, $http){
         }
     }
 
+    /**
+     * Helper function to saveHelper used to update an exercise
+     *
+     * Makes a POST request to the backend update exercise endpoint and then
+     * calls saveHelper again to continue the recursion
+     *
+     * @param {object} exercise
+     *   The current exercise in the recursion to be updated
+     * @param {integer} workoutIndex
+     *   The index of that workout in the global workout array
+     * @param {integer} eIndex
+     *   The index of that exercise in the exercise array for that workout
+     */
     function updateExercise(exercise, workoutIndex, eIndex){
         $http({
             method: "POST",
@@ -83,6 +118,19 @@ app.controller("WorkoutCtrl", function($scope, $http){
         });
     }
 
+    /**
+     * Helper function to saveHelper used to add a new exercise
+     *
+     * Makes a POST request to the backend add exercise endpoint and then
+     * calls saveHelper again to continue the recursion
+     *
+     * @param {object} exercise
+     *   The current exercise in the recursion to be updated
+     * @param {integer} workoutIndex
+     *   The index of that workout in the global workout array
+     * @param {integer} eIndex
+     *   The index of that exercise in the exercise array for that workout
+     */
     function addExercise(exercise, workoutIndex, eIndex){
         $http({
             method: "POST",
@@ -107,6 +155,16 @@ app.controller("WorkoutCtrl", function($scope, $http){
         });
     }
 
+    /**
+     * Function used to add a new workout for a given user
+     *
+     * Makes a POST request to the backend add workout endpoint
+     *
+     * @param {object} workout
+     *   The current workout to be updated
+     * @param {integer} workoutIndex
+     *   The index of that workout in the global workout array
+     */
     function addWorkout(workout, workoutIndex){
         $http({
             method: "POST",
@@ -128,6 +186,14 @@ app.controller("WorkoutCtrl", function($scope, $http){
         });
     }
 
+    /**
+     * Function used to update a workout for a given user
+     *
+     * Makes a POST request to the backend update workout endpoint
+     *
+     * @param {object} workout
+     *   The current workout to be updated
+     */
     function updateWorkout(workout){
         $http({
             method: "POST",
@@ -151,7 +217,14 @@ app.controller("WorkoutCtrl", function($scope, $http){
         });
     }
 
-
+    /**
+     * Function used to remove a workout for a given user
+     *
+     * Makes a POST request to the backend remove workout endpoint
+     *
+     * @param {object} workout
+     *   The current workout to be removed
+     */
     $scope.removeWorkout = function(workout){
         if(workout.id){
             $http({
@@ -173,6 +246,16 @@ app.controller("WorkoutCtrl", function($scope, $http){
         $scope.workouts.splice($scope.workouts.indexOf(workout),1);
     };
 
+    /**
+     * Function used to remove an exercise for a given user
+     *
+     * Makes a POST request to the backend remove exercise endpoint
+     *
+     * @param {object} workout
+     *   The workout to be updated
+     * @param {object} exercise
+     *   The exercise to be removed
+     */
     $scope.removeExercise = function(workout,exercise){
         var eIndex = $scope.workout.exercises.indexOf(exercise);
         if(exercise.id){
@@ -195,6 +278,11 @@ app.controller("WorkoutCtrl", function($scope, $http){
         $scope.workout.exercises.splice(eIndex,1);
     };
 
+    /**
+     * Angular global function used to create a new empty workout object
+     *
+     * The workout is not added to the database until the user hits save
+     */
     $scope.newWorkout = function (){
         var index = $scope.workouts.length;
         var increaseInterval = {sets: 0, interval: 0};
@@ -204,6 +292,16 @@ app.controller("WorkoutCtrl", function($scope, $http){
         $scope.editWorkout(index);
     };
 
+    /**
+     * Angular global function used to create a new empty exercise object
+     *
+     * The exercise is not added to the database until the user hits save
+     *
+     * @param {object} workout
+     *   The workout to be updated
+     * @param {string} wtype
+     *   The exercise type to be added
+     */
     $scope.newExercise = function (workout, wtype){
         if(wtype){
             workout.exercises.push({name : "", id : null, type: wtype, data : {}, modified : false});
@@ -211,25 +309,46 @@ app.controller("WorkoutCtrl", function($scope, $http){
         }
     };
 
+    /**
+     * Angular global function used to begin the saving process
+     */
     $scope.saveWorkouts = function(){
         saveHelper(0,0);
         $scope.editingOff = true;
     };
 
+    /**
+     * Angular global function used to mark an object as modified
+     *
+     * @param {object} item
+     *   The item to be marked as modified
+     */
     $scope.modify = function(item){
         item.modified = true;
     };
 
+    /**
+     * Angular global function used to enable editing
+     *
+     * @param {integer} index
+     *   The index of the workout to edit
+     */
     $scope.editWorkout = function(index){
         $scope.overview = false;
         $scope.workout = $scope.workouts[index];
         $scope.editingOff = false;
     };
 
+    /**
+     * Angular global function used to enable overview mode
+     */
     $scope.doOverview = function(){
         $scope.overview = true;
     };
 
+    /**
+     * Angular global function used to toggle edit mode
+     */
     $scope.toggleEdit = function(){
         $scope.editingOff = !$scope.editingOff;
     };

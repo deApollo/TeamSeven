@@ -8,6 +8,16 @@ function handleUpdateFailure(response) {
     location.reload();
 }
 
+/**
+ * Function used to update a given user preference field
+ *
+ * Makes a POST request to the backend change user preference endpoint
+ *
+ * @param {string} fieldname
+ *   The user preference field name
+ * @param {string} fieldval
+ *   The user preference field value
+ */
 function updateField(fieldname, fieldval) {
     $.ajax({
         url: "data/changeUserPreference",
@@ -21,6 +31,14 @@ function updateField(fieldname, fieldval) {
     });
 }
 
+/**
+ * Function used to upload a users new profile picture
+ *
+ * Makes a POST request to the backend change user picture endpoint
+ *
+ * @param {picture} picture
+ *   The picture object
+ */
 function updatePicture(picture) {
     var fd = new FormData();
     fd.append("avatar", picture);
@@ -37,6 +55,9 @@ function updatePicture(picture) {
 
 var curVal;
 
+/**
+ * Legacy jquery code please forgive me ;_;
+ */
 $(document).ready(function() {
     curVal = $("input:radio[name='optionsRadios']").val();
     $("#submitButton").click(function() {

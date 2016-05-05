@@ -9,21 +9,30 @@ app.controller("performance", function($scope, $http, $location) {
         eids: [],
         exercises: [],
         modified: false
-    };
+    }; //Object to hold information about the currently loaded workout
     $scope.prevBest = null;
-    $scope.currentExercise = 0;
-    $scope.serverMsg = "";
+    $scope.currentExercise = 0; //Index of the current exercise being recorded
+    $scope.serverMsg = ""; //message to display to the user
+
+    //Variables used for the stopwatch
     $scope.shSeconds = 0;
     $scope.stSeconds = 0;
     $scope.sSeconds = 0;
     $scope.sMinutes = 0;
 
     var workoutTimeUpdated = false;
-    var contentLoaded = false;
-    var swiID;
+    var contentLoaded = false; //Has the workout content been loaded
+    var swiID; //The stopwatch js interval id
 
     angular.element(document).ready(getWorkout);
 
+    /**
+     * Function that makes a GET request to a backend endpoint to retrieve
+     * the requested workout for the currently logged in user
+     *
+     * Upon a successful response, it populates the angular scope variables with
+     * the data needed to render the UI
+     */
     function getWorkout() {
         var workoutID = $location.search().wid;
         $http({
@@ -69,10 +78,19 @@ app.controller("performance", function($scope, $http, $location) {
         });
     }
 
+    /**
+     * Angular global function used to start the stopwatch
+     */
     $scope.startStopwatch = function() {
         swiID = setInterval(runStopwatch,10);
     };
 
+    /**
+     * Angular global function used to stop the stopwatch
+     *
+     * @param {object} performances
+     *   The performances array to be updated with the time from the stopwatch
+     */
     $scope.stopStopwatch = function(performances) {
         clearInterval(swiID);
         for(var i = 0; i < performances.length; i++){
@@ -83,6 +101,9 @@ app.controller("performance", function($scope, $http, $location) {
         }
     };
 
+    /**
+     * Angular global function used to reset the stopwatch
+     */
     $scope.resetStopwatch = function () {
         $scope.shSeconds = 0;
         $scope.stSeconds = 0;
@@ -90,6 +111,9 @@ app.controller("performance", function($scope, $http, $location) {
         $scope.sMinutes = 0;
     };
 
+    /**
+     * Actual driver function for the stopwatch
+     */
     function runStopwatch() {
         $scope.shSeconds += 1;
         if($scope.shSeconds == 10){
@@ -107,6 +131,14 @@ app.controller("performance", function($scope, $http, $location) {
         $scope.$apply();
     }
 
+    /**
+     * Function to update an exercise
+     *
+     * Makes a POST request to the backend update exercise endpoint
+     *
+     * @param {object} exercise
+     *   The current exercise to be updated
+     */
     function updateExercise(exercise){
         $http({
             method: "POST",
@@ -128,6 +160,16 @@ app.controller("performance", function($scope, $http, $location) {
         });
     }
 
+    /**
+     * Function used to populate the last best performance for an exercise
+     *
+     * Makes a POST request to the backend update exercise endpoint
+     *
+     * @param {object} exercise
+     *   The current exercise to get the last best for
+     * @param {object} mostrecent
+     *   The mostrecent performance data
+     */
     function populateNextBest(exercise, mostrecent) {
         if (mostrecent.responseCode == 1 && mostrecent.data) {
             exercise.last.avail = true;
@@ -136,6 +178,14 @@ app.controller("performance", function($scope, $http, $location) {
         }
     }
 
+    /**
+     * Function used to submit performance data for the current exercise
+     *
+     * Makes a POST request to the backend add performance endpoint
+     *
+     * @param {object} exercise
+     *   The exercise containing the performance data to be submitted
+     */
     function submitPerformance(exercise) {
         $http({
             method: "POST",
@@ -167,6 +217,16 @@ app.controller("performance", function($scope, $http, $location) {
         });
     }
 
+    /**
+     * Function used to get the most recent performance data for a given workout
+     *
+     * Makes a GET request to the backend get most recent performance endpoint
+     *
+     * @param {object} exercise
+     *   The exercise whose performance data we are trying to get
+     * @param {function} callback
+     *   The callback to pass the response data to
+     */
     function getMostRecentPerformance(exercise, callback) {
         var exerciseID = exercise.id;
         $http({
@@ -180,6 +240,12 @@ app.controller("performance", function($scope, $http, $location) {
         });
     }
 
+    /**
+     * Function used to update the last performed information for the workout
+     *
+     * Makes a POST request to the backend update workout performed endpoint
+     *
+     */
     function updateWorkout() {
         $http({
             method: "POST",
@@ -196,6 +262,14 @@ app.controller("performance", function($scope, $http, $location) {
         });
     }
 
+    /**
+     * Angular global function used to start the add performance data process
+     *
+     * Validates that the user has filled in the performance data
+     *
+     * @param {object} exercise
+     *   The exercise whose performance data we are trying to submit
+     */
     $scope.addPerformance = function(exercise) {
         var failed = false;
         var pkeyCount = 0;
@@ -221,6 +295,15 @@ app.controller("performance", function($scope, $http, $location) {
         }
     };
 
+    /**
+     * Angular global function used to check what exercise for that workout to
+     * display at a given moment
+     *
+     * If it's the current exercises turn it gets the performance data for it
+     *
+     * @param {object} exercise
+     *   The exercise whose performance data we are trying to submit
+     */
     $scope.stageCheck = function(exercise) {
         var eIndex = $scope.workout.exercises.indexOf(exercise);
         if ($scope.currentExercise == eIndex) {
@@ -233,6 +316,10 @@ app.controller("performance", function($scope, $http, $location) {
         return false;
     };
 
+    /**
+     * Angular global function used to check whether all exercises have been
+     * completed
+     */
     $scope.isDone = function() {
         if ($scope.currentExercise >= $scope.workout.exercises.length) {
             if(!workoutTimeUpdated && contentLoaded){
@@ -244,6 +331,9 @@ app.controller("performance", function($scope, $http, $location) {
         return false;
     };
 
+    /**
+     * Angular global function used to generate a list of numbers
+     */
     $scope.getNumber = function(num){
         var ml = [];
         for(var i = 0; i < num; i++){
@@ -252,6 +342,13 @@ app.controller("performance", function($scope, $http, $location) {
         return ml;
     };
 
+    /**
+     * Angular global function used to get the best interval performance for a
+     * given exercises set of performance data
+     *
+     * @param {object} idata
+     *   The performance data
+     */
     $scope.getBestInterval = function(idata){
         var bestTime = 10000;
         for(var i = 0; i < idata.length; i++){
@@ -261,6 +358,13 @@ app.controller("performance", function($scope, $http, $location) {
         return bestTime;
     };
 
+    /**
+     * Angular global function used to get the best rep performance for a
+     * given exercises set of performance data
+     *
+     * @param {object} idata
+     *   The performance data
+     */
     $scope.getBestRep = function(rdata){
         var bestRep = {reps: 0 , weight : 0};
         for(var i = 0; i < rdata.length; i++){

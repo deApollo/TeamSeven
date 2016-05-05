@@ -10,6 +10,13 @@ app.controller("dashboard-controller", function($scope, $http) {
 
     angular.element(document).ready(getWorkouts);
 
+    /**
+     * Function that makes a GET request to a backend endpoint to retrieve
+     * all workouts for the currently logged in user
+     *
+     * Upon a successful response, it populates the angular scope variables with
+     * the data needed to render the UI
+     */
     function getWorkouts() {
         $http({
             method: "GET",
