@@ -236,7 +236,9 @@ body {
 
 @media(min-width:768px) {
     #wrapper {
-        padding-left: 300px;
+        padding-left: 310px;
+        padding-right: 10px;
+        padding-top: 10px;
     }
 
     #page-wrapper {
@@ -379,7 +381,7 @@ ul.alert-dropdown {
 .navbar-inverse .navbar-nav>.active>a, 
 .navbar-inverse .navbar-nav>.active>a:focus, 
 .navbar-inverse .navbar-nav>.active>a:hover{
-    background-color: #979797;
+    background-color: #B7B7B7;
     color: #5A5A5A;
 }
 
