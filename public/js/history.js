@@ -17,17 +17,19 @@ app.controller("historyCtrl", function($scope, $http, $location) {
     var myIntData = [];
 
     var workoutID = $location.search().wid;
+    //gets the workout
     $http({
         method: "GET",
         url: "/data/getWorkout?wid=" + workoutID
     }).then(function successCallback(response1) {        
         var curW = response1.data.data;
+        //for each exercise in the workout
         for (var i = 0; i < curW.exercises.length; i++) {
             var curE = curW.exercises[i];
-            // console.log("curE");
-            // console.log(curE);
             var found = false;
+            //if it's an interval workout
             if (curW.exercises[i].exercisetype == "Interval") {
+                //populate the keys and labels for the graph
                 for (var j = 0; j < intKeys.length; ++j) {
                     if (curE._id == intKeys[j]) {
                         found = true;
@@ -38,9 +40,10 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                     intKeys.push(curE._id);
                     intLabels.push(curE.exercisename);
                 }
-                // console.log(intKeys);
             }
+            //if it's a rep workout
             else  {
+                //populate the keys and labels for the graph
                 for (var j = 0; j < repKeys.length; ++j) {
                     if (curE._id == repKeys[j]) {
                         found = true;
@@ -53,9 +56,10 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 }
             }
         }
-
+        //for every exercise
         for (var i = 0; i < curW.exercises.length; i++) {
             var name = curW.exercises[i].exercisename;
+            //get the performance data for each exercise
             $http({
                 method: "GET",
                 url: "/data/getAllPerformances?wid=" + curW.exercises[i]._id
@@ -67,6 +71,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             });
         }
         
+        //configuration for interval graph
         var iData = [];
         var iConfig = {
             data: iData,
@@ -74,16 +79,11 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             ykeys: intKeys,
             labels: intLabels,
             hideHover: "always"
-            // xLabelFormat: function(x) {
-            //     var IndexToMonth = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
-            //     var month = IndexToMonth[ x.getMonth() ];
-            //     var year = x.getFullYear();
-            //     var day = x.getDate();
-            //     return month + ' ' + day + ', ' + year;
-            // }
         };
+
         iConfig.element = 'intGraph';
 
+        //configuration for rep graph
         var rData = [];
         var rConfig = {
             data: rData,
@@ -91,16 +91,11 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             ykeys: repKeys,
             labels: repLabels,
             hideHover: "always"
-            // xLabelFormat: function(x) {
-            //     var IndexToMonth = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
-            //     var month = IndexToMonth[ x.getMonth() ];
-            //     var year = x.getFullYear();
-            //     var day = x.getDate();
-            //     return month + ' ' + day + ', ' + year;
-            // }
         }
+
         rConfig.element = 'repGraph';
 
+        //creates the graphs
         var myIntGraph = Morris.Line(iConfig);
         var myRepGraph = Morris.Line(rConfig);
         
@@ -108,113 +103,24 @@ app.controller("historyCtrl", function($scope, $http, $location) {
     });
 
     function dataCollection(intNewData, repNewData) {
+        //pushes all of the performance data for each interval exercise into one array
         for (var i = 0; i < intNewData.length; ++i) {
             myIntData.push(intNewData[i]);
         }
+        //pushes all of the performance data for each rep exercise into one array
         for (var i = 0; i < repNewData.length; ++i) {
             myRepData.push(repNewData[i]);
         }
-        // if (intNewData.length != 0) {
-        //     document.getElementById("intGraphWhole").style.display = "";
-        //     document.getElementById("intChartWhole").style.display = "";
-        // }
-        // else if (repNewData.length != 0) {
-        //     document.getElementById("repGraphWhole").style.display = "";
-        //     document.getElementById("repChartWhole").style.display = "";
-        // }
-    }
-
-    function combineData(myIntData, myRepData, myIntGraph, myRepGraph) {
-        var finalIntData = [];
-        var myIntDataTmp = myIntData;
-        var intDates = [];
-        for (var i = 0; i < myIntData.length; ++i) {
-            var found = false;
-            for (var j = 0; j < intDates.length; ++j) {
-                if (myIntData[i].y == intDates[j]) {
-                    found = true;
-                }
-            }
-            if (!found) {
-                intDates.push(myIntData[i].y);
-            }
-        }
-        console.log(intDates);
-        // console.log(myIntData);
-
-        for (var i = 0; i < intDates.length; ++i) {
-            var tmp = new Object();
-            tmp.y = intDates[i];
-            for (var j = 0; j < myIntDataTmp.length; ++j) {
-                if (intDates[i] == myIntDataTmp[j].y) {
-                    for (var k = 0; k < intKeys.length; ++k) {
-                        if (myIntDataTmp[j][intKeys[k]] != null) {
-                            tmp[intKeys[k]] = myIntDataTmp[j][intKeys[k]];
-                            console.log(intKeys[k]);
-                            console.log(myIntDataTmp[j][intKeys[k]]);
-                            // console.log(tmp[intKeys[k]]);
-                        }
-                    }
-                }
-            }
-            console.log(tmp);
-            // console.log(tmp);
-            finalIntData.push(tmp);
-            
-        }
-        // for (var i = 0, j = 1; j < myIntData.length - 1;) {
-        //     var tmp = myIntData[i].y;
-        //     // for (var j = 1; j < myIntData.length;) {
-        //         var found = false;
-        //         for (var k = 0; k < intKeys.length; ++k) {
-        //             // console.log(tmp);
-        //             // console.log(intString[j].y);
-        //             if (tmp === myIntData[j].y && i != j) {
-        //                 found = true;
-        //                 // console.log(myIntData[i][intKeys[k]]);
-        //                 if (finalIntData[i][intKeys[k]] == null) {
-        //                     console.log(finalIntData[i][intKeys[k]]);
-        //                     for (val in myIntData[j]) {
-        //                         if (val == [intKeys[k]]) {
-        //                             finalIntData[i][val] = myIntData[j][val];
-        //                         }
-        //                     }
-        //                     // console.log(myIntData[j][intKeys[k]]);
-        //                     // delete myIntData[i][intKeys[k]];
-        //                     // var newTime = myIntData[j][intKeys[k]];
-        //                     // console.log(newTime);
-        //                     // myIntData[i][intKeys[k]] == newTime;
-        //                     console.log(finalIntData[i]);
-        //                 }
-        //                 // console.log(myIntData[i]);
-        //             }
-        //         }
-        //         if (found) {
-        //             // var l = j;
-        //             finalIntData.splice(j, 1);
-        //             ++i;
-        //             j = i + 1;
-        //             // j = l + 1;
-        //         }
-        //         else {
-        //             ++j;
-        //         }
-        //         // else {
-        //         //     ++j;
-        //         // }
-        //     // }
-        // }
-        console.log("please");
-        console.log(finalIntData);
-        updateGraph(myRepData, myRepGraph, myIntData, myIntGraph);
     }
 
     function updateGraph(repData, myRepGraph, intData, myIntGraph) {
+        //puts the data into both graphs
         myRepGraph.setData(repData);
         myIntGraph.setData(intData);
     }
 
     function getPerformanceData(exerciseName, exerciseID, exerciseSets, exerciseType, repData, intData, myRepGraph, myIntGraph, limit, itr) {
+        //get the performance data for each exercise
         $http({
             method: "GET",
             url: "/data/getAllPerformances?wid=" + exerciseID
@@ -224,9 +130,11 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             var repIDs = [];
             for (var i = 0; i < response.data.data.length; i++) {
                 actualData.push(JSON.parse(response.data.data[i].pdata));
+                //gathers the exercise ids for interval exercises
                 if (exerciseType == "Interval") {
                     intIDs.push(exerciseID);
                 }
+                //gathers the exercise ids for rep exercises
                 else {
                     repIDs.push(exerciseID);
                 }
@@ -234,6 +142,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             if (exerciseType == "Interval") {
                 for (var i = 0; i < actualData.length; ++i) {
                     for (var j = 0; j < exerciseSets; ++j) {
+                        //creates objects for the graph and charts for each performance
                         var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                         var d = new Date(actualData[i].date);
                         var month = months[d.getMonth()];
@@ -273,6 +182,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
             if (exerciseType == "Reps") {
                 for (var i = 0; i < actualData.length; ++i) {
                     for (var j = 0; j < exerciseSets; ++j) {
+                        //creates objects for the graph and charts for each performance
                         var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                         var d = new Date(actualData[i].date);
                         var month = months[d.getMonth()];
@@ -297,7 +207,6 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                         else {
                             minutes += ' am';
                         }
-                        console.log(minutes);
                         var repChartItem = {
                             type: exerciseName,
                             sets: exerciseSets,
@@ -318,6 +227,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 var intBestTime = $scope.intChartData[0].time;
                 var id = $scope.intChartData[0].id;
                 
+                //finds the best time for each specific performance (by looking at their dates)
                 for (var i = 1; i < intFormat; ++i) {
                     if (intFirstDate == $scope.intChartData[i].numdate) {
                         if (intBestTime < $scope.intChartData[i].time) {
@@ -339,7 +249,6 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                         intFirstDate = $scope.intChartData[i].numdate;
                         intBestTime = $scope.intChartData[i].time;
                         id = $scope.intChartData[i].id;
-                        // }
                     }
                 }
                 var intObj = new Object();
@@ -347,6 +256,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 intObj[id] = intBestTime;
 
                 intString.push(intObj);
+                //this is the data for the interval graph
                 intData = intString;
             }
 
@@ -359,6 +269,7 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 var id = $scope.repChartData[0].id;           
 
                 for (var i = 1; i < repFormat; ++i) {
+                    //finds the best weight lifted for each specific performance (by looking at their dates)
                     if (repFirstDate == $scope.repChartData[i].numdate) {
                         if (repBestWeight < $scope.repChartData[i].weight) {
                             repBestWeight = $scope.repChartData[i].weight;
@@ -386,14 +297,16 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 repObj[id] = repBestWeight;
 
                 repString.push(repObj);
+                //this is the data for the rep graph
                 repData = repString;
             }
 
+            //gathers all of the data into one array
             dataCollection(intData, repData);
+            //once we're done gathering all of the performance data, put it into the charts and graphs
             if (itr == limit - 1) {
-                combineData(myIntData, myRepData, myIntGraph, myRepGraph);
+                updateGraph(myRepData, myRepGraph, myIntData, myIntGraph);
             }
-            // updateGraph(repData, myRepGraph, intData, myIntGraph, intKeys, repKeys);
         });
     }
     $scope.workout = {
@@ -406,35 +319,20 @@ app.controller("historyCtrl", function($scope, $http, $location) {
 
     function getWorkout(myIntGraph, myRepGraph) {
         var workoutID = $location.search().wid;
+        //gets the workout
         $http({
             method: "GET",
             url: "/data/getWorkout?wid=" + workoutID
-        }).then(function successCallback(response) {
-            // var myRepGraph = Morris.Line({
-            //     element: "repGraph",
-            //     data: repData,
-            //     xkey: "y",
-            //     ykeys: ["a"],
-            //     labels: ["Weight"]
-            // });
-            // console.log(iConfig);
-
-            
-
-            // var myIntGraph = Morris.Line({
-            //     element: "intGraph",
-            //     data: intData,
-            //     xkey: "y",
-            //     ykeys: ["a"],
-            //     labels: ["Time"]
-            // });           
+        }).then(function successCallback(response) {      
             var curW = response.data.data;
             var exerciseArr = [];
             var eids = [];
             var intKeys = [];
             var jsonObj;
+            //for each exercise in the workout
             for (var j = 0; j < curW.exercises.length; j++) {
                 var curE = curW.exercises[j];
+                //grab all of the necessary information of each exercise
                 jsonObj = {
                     name: curE.exercisename,
                     id: curE._id,
@@ -443,27 +341,9 @@ app.controller("historyCtrl", function($scope, $http, $location) {
                 };
                 exerciseArr.push(jsonObj);
                 eids.push(curE._id);
+                //get the performance data for each exercise
                 getPerformanceData(curE.exercisename, curE._id, exerciseArr[j].data.sets, exerciseArr[j].type, repData, intData, myRepGraph, myIntGraph, curW.exercises.length, j);
-                // console.log(repData);
             }
-            for (var i = 0; i < exerciseArr.length; ++i) {
-                var found = false;
-                for (var j = 0; j < intKeys.length; ++j) {
-                    if (exerciseArr[i].name == intKeys[j]) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    intKeys.push(exerciseArr[i].name);
-                }
-            }
-            $scope.workout = {
-                name: curW.workoutname,
-                id: curW._id,
-                eids: eids,
-                exercises: exerciseArr
-            };
         }, function errorCallback(response) {
             console.log(response);
         });
