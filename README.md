@@ -1,4 +1,4 @@
-Team Seven Project
+upLift
 ====================
 
 An exercise planning utility built using the MEAN stack!
